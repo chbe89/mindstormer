@@ -2,6 +2,9 @@ package mindstormer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import movement.Movement;
+import movement.State;
+import movement.Movement.Mode;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.Key;
@@ -9,8 +12,6 @@ import lejos.hardware.KeyListener;
 import lejos.hardware.Sound;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
-import lejos.hardware.motor.Motor;
-import lejos.hardware.motor.NXTRegulatedMotor;
 
 public class Main {
 
@@ -26,17 +27,14 @@ public class Main {
 	final AtomicBoolean forward = new AtomicBoolean(true);
 	Sound.beepSequenceUp();
 
-	final NXTRegulatedMotor left = Motor.A;
-	final NXTRegulatedMotor right = Motor.D;
-	Motor.A.setSpeed(960);// 2 RPM
-	Motor.D.setSpeed(960);// 2 RPM
-	Button.DOWN.addKeyListener(new KeyListener() {
+	
+	
+	Button.UP.addKeyListener(new KeyListener() {
 
 	    @Override
 	    public void keyReleased(Key k) {
-		left.backward();
-		right.backward();
-		forward.set(false);
+	    	Movement.setMode(Movement.Mode.BACKWARD);
+	    	forward.set(false);
 	    }
 
 	    @Override
@@ -45,14 +43,12 @@ public class Main {
 
 	    }
 	});
-	Button.UP.addKeyListener(new KeyListener() {
+	Button.DOWN.addKeyListener(new KeyListener() {
 
 	    @Override
 	    public void keyReleased(Key k) {
-		left.forward();
-		right.forward();
-		forward.set(true);
-
+	    	Movement.setMode(Movement.Mode.FORWARD);
+	    	forward.set(true);
 	    }
 
 	    @Override
@@ -65,15 +61,15 @@ public class Main {
 
 	    @Override
 	    public void keyReleased(Key k) {
-		if (left.isMoving()) {
-		    left.stop();
-		} else {
-		    if (forward.get()) {
-			left.forward();
-		    } else {
-			left.backward();
-		    }
-		}
+			if (State.getModeLeft() != Mode.STOP) {
+				Movement.setModeLeft(Mode.STOP);
+			} else {
+			    if (forward.get()) {
+			    	Movement.setModeLeft(Mode.FORWARD);
+			    } else {
+			    	Movement.setModeLeft(Mode.BACKWARD);
+			    }
+			}
 	    }
 
 	    @Override
@@ -86,15 +82,15 @@ public class Main {
 
 	    @Override
 	    public void keyReleased(Key k) {
-		if (right.isMoving()) {
-		    right.stop();
-		} else {
-		    if (forward.get()) {
-			right.forward();
-		    } else {
-			right.backward();
-		    }
-		}
+	    	if (State.getModeRight() != Mode.STOP) {
+				Movement.setModeRight(Mode.STOP);
+			} else {
+			    if (forward.get()) {
+			    	Movement.setModeRight(Mode.FORWARD);
+			    } else {
+			    	Movement.setModeRight(Mode.BACKWARD);
+			    }
+			}
 	    }
 
 	    @Override
@@ -108,13 +104,11 @@ public class Main {
 
 	    @Override
 	    public void keyReleased(Key k) {
-		if(left.isMoving() || right.isMoving()){
-		    left.stop();
-		    right.stop();
-		} else {
-		    right.forward();
-		    left.forward();
-		}
+			if(State.getModeLeft() != Mode.STOP || State.getModeRight() != Mode.STOP){
+				Movement.setMode(Mode.STOP);
+			} else {
+				Movement.setMode(Mode.FORWARD);
+			}
 	    }
 
 	    @Override
