@@ -54,27 +54,18 @@ public class SensorTest {
 	});
 
 	while (!stop.get()) {
-	    sensor.fetchSample(sample, 0);
-	    Delay.msDelay(50);
-	    g.clear();
-	    g.setFont(Font.getDefaultFont());
-	    g.drawString(String.valueOf(sample[0]) + " + " + String.valueOf(lastValue), SW / 2, SH / 2,
-		    GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
-/*
-	    if (sample[0] > Constants.LINE_COLOR_THRESHOLD) {
-		Movement.move(50, 50);
-	    } else {
-		Movement.moveRight(20, 50, true);
-		while (sample[0] <= Constants.LINE_COLOR_THRESHOLD) {
-		    sensor.fetchSample(sample, 0);
-		}
-		Movement.moveLeft(40, 50, true);
-		while (sample[0] <= Constants.LINE_COLOR_THRESHOLD) {
-		    sensor.fetchSample(sample, 0);
-		}
-	    }*/
-	    lastValue = sample[0];
-	    g.refresh();
+	    Complex.rotate(90, 100);
+	    while (sample[0] < Constants.LINE_COLOR_THRESHOLD && !State.stopped(true, true)) {
+		sensor.fetchSample(sample, 0);
+	    }
+	    Complex.rotate(-180, 100);
+	    while (sample[0] < Constants.LINE_COLOR_THRESHOLD && !State.stopped(true, true)) {
+		sensor.fetchSample(sample, 0);
+	    }
+	    Movement.move(100, 100);
+	    while (sample[0] >= Constants.LINE_COLOR_THRESHOLD) {
+		sensor.fetchSample(sample, 0);
+	    }
 	}
 	// gyro.close();
 	color.close();
