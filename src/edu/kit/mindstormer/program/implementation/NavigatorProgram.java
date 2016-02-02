@@ -32,7 +32,7 @@ public class NavigatorProgram extends AbstractProgram {
 		AbstractStateDependentKeyListener up = new AbstractStateDependentKeyListener() {
 		    @Override
 		    public void released(Key k) {
-		    	Movement.setMode(Movement.Mode.BACKWARD);
+		    	Movement.move(-500, -500);
 		    	forward.set(false);
 		    }
 		    @Override
@@ -45,7 +45,7 @@ public class NavigatorProgram extends AbstractProgram {
 		AbstractStateDependentKeyListener down = new AbstractStateDependentKeyListener() {
 		    @Override
 		    public void released(Key k) {
-		    	Movement.setMode(Movement.Mode.FORWARD);
+		    	Movement.move(500, 500);
 		    	forward.set(true);
 		    }
 
@@ -59,7 +59,7 @@ public class NavigatorProgram extends AbstractProgram {
 		AbstractStateDependentKeyListener left = new AbstractStateDependentKeyListener() {
 		    @Override
 		    public void released(Key k) {
-				if (State.getModeLeft() != Mode.STOP) {
+				/*if (State.getModeLeft() != Mode.STOP) {
 					Movement.setModeLeft(Mode.STOP);
 				} else {
 				    if (forward.get()) {
@@ -67,7 +67,7 @@ public class NavigatorProgram extends AbstractProgram {
 				    } else {
 				    	Movement.setModeLeft(Mode.BACKWARD);
 				    }
-				}
+				}*/
 		    }
 
 		    @Override
@@ -80,7 +80,7 @@ public class NavigatorProgram extends AbstractProgram {
 		AbstractStateDependentKeyListener right = new AbstractStateDependentKeyListener() {
 		    @Override
 		    public void released(Key k) {
-		    	if (State.getModeRight() != Mode.STOP) {
+		    	/*if (State.getModeRight() != Mode.STOP) {
 					Movement.setModeRight(Mode.STOP);
 				} else {
 				    if (forward.get()) {
@@ -88,7 +88,7 @@ public class NavigatorProgram extends AbstractProgram {
 				    } else {
 				    	Movement.setModeRight(Mode.BACKWARD);
 				    }
-				}
+				}*/
 		    }
 
 		    @Override
@@ -103,11 +103,11 @@ public class NavigatorProgram extends AbstractProgram {
 		AbstractStateDependentKeyListener enter = new AbstractStateDependentKeyListener() {
 		    @Override
 		    public void released(Key k) {
-				if(State.getModeLeft() != Mode.STOP || State.getModeRight() != Mode.STOP){
+				/*if(State.getModeLeft() != Mode.STOP || State.getModeRight() != Mode.STOP){
 					Movement.setMode(Mode.STOP);
 				} else {
 					Movement.setMode(Mode.FORWARD);
-				}
+				}*/
 		    }
 		    @Override
 		    public void pressed(Key k) {

@@ -17,7 +17,7 @@ import lejos.utility.Delay;
 
 public class Main {
 
-<<<<<<< HEAD
+
 	final static AtomicBoolean escape = new AtomicBoolean(false);
 	final static GraphicsLCD g = BrickFinder.getDefault().getGraphicsLCD();
 	final static int SW = g.getWidth();
@@ -40,42 +40,6 @@ public class Main {
     	g.drawString("Doge ready!", SW / 2, SH / 2, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
     	g.refresh();
     	Sound.beepSequenceUp();
-=======
-    public static void main(String[] args) {
-		GraphicsLCD g = BrickFinder.getDefault().getGraphicsLCD();
-		int SW = g.getWidth();
-		int SH = g.getHeight();
-		Button.LEDPattern(4);
-		Sound.beepSequenceUp();
-		g.setFont(Font.getDefaultFont());
-		g.drawString("Lejos EV3 - Prototype", SW / 2, SH / 2, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
-		g.refresh();
-		Sound.beepSequenceUp();
-	
-		Complex.rotate(360, 100);
-		Movement.init();
-		final AtomicBoolean exit = new AtomicBoolean(false);
-		
-		Button.ESCAPE.addKeyListener(new KeyListener() {
-
-			@Override
-			public void keyPressed(Key k) {
-				exit.set(true);
-			}
-
-			@Override
-			public void keyReleased(Key k) {
-				
-			}
-			
-		});
-		
-		while(!exit.get()) {
-			
-		}
-		
-		
->>>>>>> origin/master
     }
     
     private static void listenToSensors() {
