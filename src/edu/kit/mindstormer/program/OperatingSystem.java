@@ -44,6 +44,7 @@ public class OperatingSystem implements ProgramContext, Runnable {
 
 	@Override
 	public void run() {
+		displayText("Started OS!");
 		Button.DOWN.addKeyListener(navigationKeyListener);
 		Button.UP.addKeyListener(navigationKeyListener);
 		Button.ENTER.addKeyListener(navigationKeyListener);
@@ -85,8 +86,15 @@ public class OperatingSystem implements ProgramContext, Runnable {
 
 	private void displayCurrentProgram() {
 		Program program = programs.get(pc);
-		display.drawString(program.getName(), width / 2, height / 2,
-				GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
+		if (program == null)
+			return;
+
+		displayText(program.getName());
+	}
+
+	private void displayText(String text) {
+		display.drawString(text, width / 2, height / 2, GraphicsLCD.BASELINE
+				| GraphicsLCD.HCENTER);
 		display.refresh();
 	}
 
