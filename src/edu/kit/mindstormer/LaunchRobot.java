@@ -12,7 +12,12 @@ public class LaunchRobot {
 		Collection<Program> programs = new ArrayList<Program>();
 		
 		OperatingSystem os = OperatingSystem.withPrograms(programs);
-		os.start();
+		Thread t = new Thread(os);
+		t.start();
+		try {
+			t.join();
+		} catch (InterruptedException e) {
+		}
 	}
 
 }

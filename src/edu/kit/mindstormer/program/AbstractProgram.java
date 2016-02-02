@@ -27,8 +27,5 @@ public abstract class AbstractProgram implements Program {
 	@Override
 	public void terminate() {
 		quit.set(true);
-		Program p1 = null;
-		Program p2 = null;
-		
 	}
 }
