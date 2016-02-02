@@ -9,25 +9,21 @@ public class Complex {
 	public static void rotate(float angle, float speed) {
 		int motorAngle = getMotorAngle(angle, true);
     	Movement.stop();
-		Movement.setSpeedLeft(speed);
-		Movement.rotateLeft(-motorAngle, true);
-		Movement.setSpeedRight(speed);
-		Movement.rotateRight(motorAngle, true);
+		Movement.moveLeft(-motorAngle, speed, true);
+		Movement.moveRight(motorAngle, speed, true);
 	}
 	
 	
 	public static void rotateLeft(float angle, float speed) {
 		int motorAngle = getMotorAngle(angle, false);
     	Movement.stop();
-		Movement.setSpeedLeft(speed);
-		Movement.rotateLeft(motorAngle, true);
+    	Movement.moveLeft(motorAngle, speed, true);
 	}
 	
 	public static void rotateRight(float angle, float speed) {
 		int motorAngle = getMotorAngle(angle, false);
     	Movement.stop();
-    	Movement.setSpeedRight(speed);
-		Movement.rotateRight(motorAngle, true);
+    	Movement.moveRight(motorAngle, speed, true);
 	}
 	
 	private static int getMotorAngle(float angle, boolean bothWheels) {
