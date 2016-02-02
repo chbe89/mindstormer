@@ -1,4 +1,4 @@
-package movement;
+package edu.kit.mindstormer.movement;
 
 public final class State {
 	

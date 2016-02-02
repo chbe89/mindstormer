@@ -1,4 +1,4 @@
-package movement;
+package edu.kit.mindstormer.movement;
 
 import lejos.hardware.motor.Motor;
 import lejos.hardware.motor.NXTRegulatedMotor;
@@ -35,6 +35,16 @@ public final class Movement {
 	public static void setSpeed(float speed) {
 		setSpeedLeft(speed);
 		setSpeedRight(speed);
+	}
+	
+	public static void rotateLeft(int angle, boolean immediateReturn) {
+		leftWheel.rotate(angle, immediateReturn);
+		//TODO: STATE
+	}
+	
+	public static void rotateRight(int angle, boolean immediateReturn) {
+		rightWheel.rotate(angle, immediateReturn);
+		//TODO: STATE
 	}
 	
 	public static void setSpeedLeft(float speed) {

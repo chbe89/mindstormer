@@ -16,3 +16,7 @@ hs_err_pid*
 .settings/
 
 .metadata
+
+lib/
+bin/
+.DS_Store

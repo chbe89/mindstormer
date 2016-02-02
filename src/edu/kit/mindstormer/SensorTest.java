@@ -1,4 +1,4 @@
-package mindstormer;
+package edu.kit.mindstormer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
