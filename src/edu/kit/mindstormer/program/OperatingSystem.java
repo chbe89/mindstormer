@@ -3,7 +3,9 @@ package edu.kit.mindstormer.program;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
@@ -16,14 +18,16 @@ public class OperatingSystem implements ProgramContext {
 	private final List<Program> programs;
 
 	private final OsKeyListener navigationKeyListener;
-	private final CountDownLatch latch;
 
 	private final GraphicsLCD display;
 	private final int width;
 	private final int height;
 
 	private int pc = 0;
-
+	
+	private final AtomicBoolean quitOS = new AtomicBoolean(false);
+	private final ArrayList<Program> runningPrograms = new ArrayList<>();
+	
 	public static OperatingSystem withPrograms(Collection<Program> programs) {
 		return new OperatingSystem(new ArrayList<Program>(programs));
 	}
@@ -31,7 +35,6 @@ public class OperatingSystem implements ProgramContext {
 	private OperatingSystem(List<Program> programs) {
 		this.programs = programs;
 		this.navigationKeyListener = new OsKeyListener(this);
-		this.latch = new CountDownLatch(1);
 		this.display = initializeDisplay();
 		this.width = display.getWidth();
 		this.height = display.getHeight();
@@ -51,10 +54,11 @@ public class OperatingSystem implements ProgramContext {
 		Button.ENTER.addKeyListener(navigationKeyListener);
 		Button.ESCAPE.addKeyListener(navigationKeyListener);
 
-		try {
-			latch.await();
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
+		while (!quitOS.get()) {
+			if (runningPrograms.size() > 0) {
+				Program program = runningPrograms.remove(0);
+				startProgram(program);
+			}
 		}
 	}
 
@@ -68,19 +72,24 @@ public class OperatingSystem implements ProgramContext {
 	@Override
 	public void terminateOs() {
 		navigationKeyListener.deactivate();
-		latch.countDown();
+		quitOS.set(true);
 	}
 
 	@Override
-	public void startProgram() {
-		AbstractProgram.quit.set(false);
-		Program program = programs.get(pc);
+	public void startProgram(Program program) {
+		navigationKeyListener.deactivate();
+		Program.quit.set(false);
 		program.run();
-
-		if (!navigationKeyListener.isActive())
-			navigationKeyListener.activate();
+		navigationKeyListener.activate();
+		displayCurrentProgram();
 	}
 
+	@Override
+	public void addProgramToQueue() {
+		Program program = programs.get(pc);
+		runningPrograms.add(program);
+	}
+	
 	@Override
 	public void showNextProgram() {
 		pc = (pc + 1) % programs.size();

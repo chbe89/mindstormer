@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class AbstractProgram implements Program {
 
 	private final String name;
-	public static final AtomicBoolean quit = new AtomicBoolean();
 
 	protected AbstractProgram(String name) {
 		this.name = name;

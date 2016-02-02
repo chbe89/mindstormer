@@ -20,7 +20,7 @@ class OsKeyListener implements KeyListener {
 	}
 
 	public final void deactivate() {
-		isActive.set(true);
+		isActive.set(false);
 	}
 
 	public boolean isActive() {
@@ -42,7 +42,7 @@ class OsKeyListener implements KeyListener {
 				context.showNextProgram();
 		} else if (Button.ENTER.equals(k)) {
 			if (isActive())
-				context.startProgram();
+				context.addProgramToQueue();
 		} else if (Button.ESCAPE.equals(k)) {
 			if (!isActive())
 				context.terminateProgram();
