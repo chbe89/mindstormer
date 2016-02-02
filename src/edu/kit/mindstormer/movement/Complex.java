@@ -9,8 +9,8 @@ public class Complex {
 	public static void rotate(float angle, float speed) {
 		int motorAngle = getMotorAngle(angle, true);
     	Movement.stop();
-		Movement.moveLeft(-motorAngle, speed, true);
-		Movement.moveRight(motorAngle, speed, true);
+		Movement.moveLeft(-motorAngle, speed / 2, true);
+		Movement.moveRight(motorAngle, speed / 2, true);
 	}
 	
 	

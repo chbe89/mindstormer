@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.program.Program;
+import edu.kit.mindstormer.program.implementation.FollowLine;
 import edu.kit.mindstormer.program.implementation.NavigatorProgram;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
+import lejos.hardware.Key;
+import lejos.hardware.KeyListener;
 import lejos.hardware.Sound;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
@@ -31,12 +35,34 @@ public class Main {
 		
 		
 		Sensors.closeSensors();*/
-    	
+    /*
 		Collection<Program> programs = new ArrayList<Program>();
 		programs.add(new NavigatorProgram());
 		
 		OperatingSystem os = OperatingSystem.withPrograms(programs);
-		os.run();
+		os.run();*/
+    	Sound.beepSequenceUp();
+    	Movement.init();
+
+    	g.setFont(Font.getDefaultFont());
+    	final FollowLine followLine = new FollowLine();
+
+    	Button.ESCAPE.addKeyListener(new KeyListener() {
+
+    	    @Override
+    	    public void keyReleased(Key k) {
+    	    	followLine.terminate();
+    	    }
+
+    	    @Override
+    	    public void keyPressed(Key k) {
+    		// TODO Auto-generated method stub
+
+    	    }
+    	});
+    	
+    	
+    	followLine.run();
     }
 
     private static void initEV3() {
