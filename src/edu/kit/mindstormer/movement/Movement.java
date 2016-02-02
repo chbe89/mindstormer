@@ -1,65 +1,53 @@
 package edu.kit.mindstormer.movement;
 
+import edu.kit.mindstormer.Constants;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.motor.NXTRegulatedMotor;
 
 public final class Movement {
-	final static NXTRegulatedMotor leftWheel = Motor.A;
-	final static NXTRegulatedMotor rightWheel = Motor.D;
+	private final static NXTRegulatedMotor leftWheel = Motor.A;
+	private final static NXTRegulatedMotor rightWheel = Motor.D;
+	private final static MotorListener leftMotorListener = new MotorListener();
+	private final static MotorListener rightMotorListener = new MotorListener();
 	
 	private Movement() {};
-		
-	public static void setLeft(Mode mode, float speed) {
-		setMode(Wheel.LEFT, mode);
-		setSpeedLeft(speed);	
+	
+	public static void init() {
+		leftWheel.setAcceleration(Constants.ACCELERATION);
+		rightWheel.setAcceleration(Constants.ACCELERATION);
+		leftWheel.addListener(leftMotorListener);
+		rightWheel.addListener(rightMotorListener);
 	}
 	
-	public static void setRight(Mode mode, float speed) {
-		setMode(Wheel.RIGHT, mode);
-		setSpeedRight(speed);
-	}
-	
-	public static void setMode(Mode mode) {
-		setModeLeft(mode);
-		setModeRight(mode);
-	}
-	
-	public static void setModeLeft(Mode mode) {
-		setMode(Wheel.LEFT, mode);
-	}
-	
-	public static void setModeRight(Mode mode) {
-		setMode(Wheel.RIGHT, mode);
-	}
-	
-	public static void setSpeed(float speed) {
-		setSpeedLeft(speed);
-		setSpeedRight(speed);
-	}
-	
-	public static void rotateLeft(int angle, boolean immediateReturn) {
-		leftWheel.rotate(angle, immediateReturn);
-		//TODO: STATE
-	}
-	
-	public static void rotateRight(int angle, boolean immediateReturn) {
-		rightWheel.rotate(angle, immediateReturn);
-		//TODO: STATE
-	}
-	
-	public static void setSpeedLeft(float speed) {
+	public static void moveLeft(float speed) {
+		setMode(Wheel.LEFT, speed);
 		leftWheel.setSpeed(speed);
-		State.leftSpeed = speed;
 	}
 	
-	public static void setSpeedRight(float speed) {
+	public static void moveRight(float speed) {
+		setMode(Wheel.RIGHT, speed);
 		rightWheel.setSpeed(speed);
-		State.rightSpeed = speed;
 	}
 	
-	public static void set(Mode leftMode, float leftSpeed, Mode rightMode , float rightSpeed) {
-		setLeft(leftMode, leftSpeed);
-		setRight(rightMode, rightSpeed);
+	public static void move(float speed) {
+		moveLeft(speed);
+		moveRight(speed);
+	}
+	
+	public static void moveLeft(int angle, float speed, boolean immediateReturn) {
+		leftWheel.setSpeed(speed);
+		leftWheel.rotate(angle, immediateReturn);
+	}
+	
+	public static void moveRight(int angle, float speed, boolean immediateReturn) {
+		rightWheel.setSpeed(speed);
+		rightWheel.rotate(angle, immediateReturn);
+	}
+	
+	
+	public static void move(float leftSpeed, float rightSpeed) {
+		moveLeft(leftSpeed);
+		moveRight(rightSpeed);
 	}
 	
 	public static void stop() {
@@ -69,12 +57,21 @@ public final class Movement {
 	
 	public static void stopLeft() {
 		leftWheel.stop();
-		State.leftMode = Mode.STOP;
 	}
 	
 	public static void stopRight() {
 		rightWheel.stop();
-		State.rightMode = Mode.STOP;
+	}
+	
+	private static float setMode(Wheel wheel, float speed) {
+		if (speed > 0) {
+			setMode(wheel, Mode.FORWARD);
+		} else if (speed < 0) {
+			setMode(wheel, Mode.BACKWARD);
+		} else {
+			setMode(wheel, Mode.STOP);
+		}
+		return Math.abs(speed);
 	}
 	
 	private static void setMode(Wheel wheel, Mode mode) {
@@ -82,10 +79,8 @@ public final class Movement {
 		
 		if (wheel == Wheel.LEFT) {
 			selectedWheel = leftWheel;
-			State.leftMode = mode;
 		} else {
 			selectedWheel = rightWheel;
-			State.rightMode = mode;
 		}
 		
 		if(Mode.FORWARD == mode) {
