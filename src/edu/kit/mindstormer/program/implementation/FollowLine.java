@@ -3,7 +3,7 @@ import edu.kit.mindstormer.program.AbstractProgram;
 
 public class FollowLine extends AbstractProgram {
 
-	protected FollowLine() {
+	public FollowLine() {
 		super("FollowLine");
 	}
 	

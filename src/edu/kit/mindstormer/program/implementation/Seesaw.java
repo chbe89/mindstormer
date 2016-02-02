@@ -3,7 +3,7 @@ import edu.kit.mindstormer.program.AbstractProgram;
 
 public class Seesaw extends AbstractProgram {
 
-	protected Seesaw() {
+	public Seesaw() {
 		super("Seesaw");
 	}
 	

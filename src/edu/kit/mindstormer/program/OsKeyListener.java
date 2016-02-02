@@ -46,8 +46,10 @@ class OsKeyListener implements KeyListener {
 		} else if (Button.ESCAPE.equals(k)) {
 			if (!isActive())
 				context.terminateProgram();
-			else
-				context.terminateOs();
+			//else
+			//	context.terminateOs();
+		} else if (Button.LEFT.equals(k)) {
+			context.terminateOs();
 		}
 	}
 }

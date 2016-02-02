@@ -3,7 +3,7 @@ import edu.kit.mindstormer.program.AbstractProgram;
 
 public class Bridge extends AbstractProgram {
 
-	protected Bridge() {
+	public Bridge() {
 		super("Bridge");
 	}
 	

@@ -3,7 +3,7 @@ import edu.kit.mindstormer.program.AbstractProgram;
 
 public class RollenBox extends AbstractProgram {
 
-	protected RollenBox() {
+	public RollenBox() {
 		super("RollenBox");
 	}
 	

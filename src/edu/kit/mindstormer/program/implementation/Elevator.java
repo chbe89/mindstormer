@@ -3,7 +3,7 @@ import edu.kit.mindstormer.program.AbstractProgram;
 
 public class Elevator extends AbstractProgram {
 
-	protected Elevator() {
+	public Elevator() {
 		super("Elevator");
 	}
 	

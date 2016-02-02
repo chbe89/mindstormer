@@ -3,7 +3,7 @@ import edu.kit.mindstormer.program.AbstractProgram;
 
 public class Ramp extends AbstractProgram {
 
-	protected Ramp() {
+	public Ramp() {
 		super("Ramp");
 	}
 	
