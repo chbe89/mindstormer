@@ -2,6 +2,7 @@ package mindstormer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import movement.Complex;
 import movement.Movement;
 import movement.State;
 import movement.Movement.Mode;
@@ -27,14 +28,16 @@ public class Main {
 	final AtomicBoolean forward = new AtomicBoolean(true);
 	Sound.beepSequenceUp();
 
-	
+	final AtomicBoolean temp = new AtomicBoolean(true);
 	
 	Button.UP.addKeyListener(new KeyListener() {
 
 	    @Override
 	    public void keyReleased(Key k) {
-	    	Movement.setMode(Movement.Mode.BACKWARD);
-	    	forward.set(false);
+	    	//Movement.setMode(Movement.Mode.BACKWARD);
+	    	temp.set(!temp.get());
+	    	int factor = temp.get() ? 1 : -1;
+	    	Complex.rotate(factor * 720, 150);
 	    }
 
 	    @Override

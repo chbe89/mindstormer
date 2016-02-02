@@ -38,6 +38,16 @@ public final class Movement {
 		setSpeedRight(speed);
 	}
 	
+	public static void rotateLeft(int angle, boolean immediateReturn) {
+		leftWheel.rotate(angle, immediateReturn);
+		//TODO: STATE
+	}
+	
+	public static void rotateRight(int angle, boolean immediateReturn) {
+		rightWheel.rotate(angle, immediateReturn);
+		//TODO: STATE
+	}
+	
 	public static void setSpeedLeft(float speed) {
 		leftWheel.setSpeed(speed);
 		State.leftSpeed = speed;
