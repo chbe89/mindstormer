@@ -3,12 +3,8 @@ package edu.kit.mindstormer;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
-import edu.kit.mindstormer.movement.Complex;
-import edu.kit.mindstormer.movement.Movement;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
-import lejos.hardware.Key;
-import lejos.hardware.KeyListener;
 import lejos.hardware.Sound;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;

@@ -5,10 +5,10 @@ import lejos.hardware.motor.Motor;
 import lejos.hardware.motor.NXTRegulatedMotor;
 
 public final class Movement {
-	private final static NXTRegulatedMotor leftWheel = Motor.A;
-	private final static NXTRegulatedMotor rightWheel = Motor.D;
-	private final static MotorListener leftMotorListener = new MotorListener();
-	private final static MotorListener rightMotorListener = new MotorListener();
+	protected final static NXTRegulatedMotor leftWheel = Motor.A;
+	protected final static NXTRegulatedMotor rightWheel = Motor.D;
+	protected final static MotorListener leftMotorListener = new MotorListener();
+	protected final static MotorListener rightMotorListener = new MotorListener();
 	
 	private Movement() {};
 	
