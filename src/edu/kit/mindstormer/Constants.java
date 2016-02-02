@@ -1,4 +1,4 @@
-package mindstormer;
+package edu.kit.mindstormer;
 
 public final class Constants {
 	

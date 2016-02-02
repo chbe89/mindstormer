@@ -1,6 +1,6 @@
-package movement;
+package edu.kit.mindstormer.movement;
 
-import mindstormer.Constants;
+import edu.kit.mindstormer.Constants;
 
 public class Complex {
 	

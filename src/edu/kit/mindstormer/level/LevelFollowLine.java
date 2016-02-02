@@ -1,4 +1,4 @@
-package level;
+package edu.kit.mindstormer.level;
 
 public class LevelFollowLine implements Level {
 

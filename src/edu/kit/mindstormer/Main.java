@@ -1,11 +1,11 @@
-package mindstormer;
+package edu.kit.mindstormer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import movement.Complex;
-import movement.Movement;
-import movement.State;
-import movement.Movement.Mode;
+import edu.kit.mindstormer.movement.Complex;
+import edu.kit.mindstormer.movement.Movement;
+import edu.kit.mindstormer.movement.State;
+import edu.kit.mindstormer.movement.Movement.Mode;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.Key;

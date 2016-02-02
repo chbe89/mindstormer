@@ -1,4 +1,4 @@
-package movement;
+package edu.kit.mindstormer.movement;
 
 import lejos.hardware.motor.Motor;
 import lejos.hardware.motor.NXTRegulatedMotor;
