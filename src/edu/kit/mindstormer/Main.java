@@ -25,12 +25,13 @@ public class Main {
 	final static int SH = g.getHeight();
 	
     public static void main(String[] args) {
-    initEV3();
-	initKeylisteners();
-	listenToSensors();
-	
-	
-	Sensors.closeSensors();
+    
+    	initEV3();
+		initKeylisteners();
+		listenToSensors();
+		
+		
+		Sensors.closeSensors();
     }
 
     private static void initEV3() {
