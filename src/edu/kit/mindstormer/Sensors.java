@@ -1,4 +1,4 @@
-package movement;
+package edu.kit.mindstormer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,13 +8,13 @@ import lejos.hardware.port.Port;
 import lejos.hardware.sensor.BaseSensor;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
-import lejos.hardware.sensor.SensorMode;
 import lejos.robotics.SampleProvider;
 
 public class Sensors {
 
 	private static final List<BaseSensor> sensors = new ArrayList<>();
 
+	@SuppressWarnings("resource")
 	public static SampleProvider getSensor(String type, String portName, String mode) {
 		Port port = LocalEV3.get().getPort(portName);
 		BaseSensor sensor = null;
@@ -45,28 +45,7 @@ public class Sensors {
 		}
 
 		sensors.add(sensor);
-
-
 		return sampleProvider;
-	}
-
-	private static SensorMode invokeMethod(BaseSensor sensor, String methodName) {
-		Method modeGetter = null;
-		for (Method method : sensor.getClass().getDeclaredMethods()) {
-			if (method.getName().equalsIgnoreCase(methodName) && method.getParameterCount() == 0)
-				modeGetter = method;
-		}
-
-		if (modeGetter == null)
-			throw new IllegalArgumentException("there is no method: " + methodName);
-
-		Object sensorMode;
-		try {
-			sensorMode = modeGetter.invoke(sensor);
-			return SensorMode.class.cast(sensorMode);
-		} catch (Exception e) {
-			throw new IllegalStateException("error retrieving the mode");
-		}
 	}
 
 	public static void closeSensors() {
