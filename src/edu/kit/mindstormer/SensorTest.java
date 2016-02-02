@@ -60,12 +60,15 @@ public class SensorTest {
 		    GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
 
 	    if (sample[0] > Constants.LINE_COLOR_THRESHOLD) {
-		Movement.set(Mode.FORWARD, 50, Mode.FORWARD, 50);
+		Movement.move(50, 50);
 	    } else {
+		Movement.moveRight(20, 50, true);
 		while (sample[0] <= Constants.LINE_COLOR_THRESHOLD) {
 		    sensor.fetchSample(sample, 0);
-		    Movement.rotateRight(20, true);
-		    Movement.rotateLeft(40, true);
+		}
+		Movement.moveLeft(40, 50, true);
+		while (sample[0] <= Constants.LINE_COLOR_THRESHOLD) {
+		    sensor.fetchSample(sample, 0);
 		}
 	    }
 	    lastValue = sample[0];
