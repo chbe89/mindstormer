@@ -7,20 +7,19 @@ import lejos.hardware.Button;
 import lejos.hardware.Key;
 import lejos.hardware.KeyListener;
 import lejos.hardware.Sound;
-import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
-import lejos.hardware.port.Port;
-import lejos.hardware.sensor.CruizcoreGyro;
-import lejos.hardware.sensor.SensorMode;
+import lejos.hardware.port.SensorPort;
+import lejos.hardware.sensor.EV3GyroSensor;
+import lejos.robotics.SampleProvider;
 import lejos.utility.Delay;
 
 public class SensorTest {
 
     public static void main(String[] args) {
-	Port port = LocalEV3.get().getPort("S1");
-	CruizcoreGyro gyro = new CruizcoreGyro(port);
-	SensorMode sensor = gyro.getRateMode();
+	EV3GyroSensor gyro = new EV3GyroSensor(SensorPort.S2);
+	gyro.reset();
+	SampleProvider sensor = gyro.getRateMode();
 	float[] sample = new float[sensor.sampleSize()];
 	GraphicsLCD g = BrickFinder.getDefault().getGraphicsLCD();
 
@@ -43,6 +42,7 @@ public class SensorTest {
 
 	    }
 	});
+	
 
 	while (!stop.get()) {
 	    sensor.fetchSample(sample, 0);
