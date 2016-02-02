@@ -14,12 +14,7 @@ public class LaunchRobot {
 		programs.add(new NavigatorProgram());
 		
 		OperatingSystem os = OperatingSystem.withPrograms(programs);
-		Thread t = new Thread(os);
-		t.start();
-		try {
-			t.join();
-		} catch (InterruptedException e) {
-		}
+		os.run();
 	}
 
 }
