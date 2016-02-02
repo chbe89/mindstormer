@@ -3,18 +3,16 @@ package edu.kit.mindstormer.program.implementation;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import edu.kit.mindstormer.movement.Movement;
-import edu.kit.mindstormer.movement.Movement.Mode;
-import edu.kit.mindstormer.movement.State;
-import edu.kit.mindstormer.program.AbstractProgram;
-import edu.kit.mindstormer.util.AbstractStateDependentKeyListener;
 import lejos.hardware.Button;
 import lejos.hardware.Key;
+import edu.kit.mindstormer.movement.Movement;
+import edu.kit.mindstormer.program.AbstractProgram;
+import edu.kit.mindstormer.util.AbstractStateDependentKeyListener;
 
 public class NavigatorProgram extends AbstractProgram {
 
 	ArrayList<AbstractStateDependentKeyListener> listeners;
-	protected NavigatorProgram() {
+	public NavigatorProgram() {
 		super("Navigator");
 	}
 
