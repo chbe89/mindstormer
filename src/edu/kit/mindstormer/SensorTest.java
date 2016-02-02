@@ -2,8 +2,6 @@ package edu.kit.mindstormer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import edu.kit.mindstormer.movement.Movement;
-import edu.kit.mindstormer.movement.Movement.Mode;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.Key;
@@ -14,8 +12,10 @@ import lejos.hardware.lcd.GraphicsLCD;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.SensorMode;
-import lejos.robotics.Color;
 import lejos.utility.Delay;
+import edu.kit.mindstormer.movement.Complex;
+import edu.kit.mindstormer.movement.Movement;
+import edu.kit.mindstormer.movement.State;
 
 public class SensorTest {
 
@@ -35,6 +35,9 @@ public class SensorTest {
 
 	Sound.beepSequenceUp();
 	final AtomicBoolean stop = new AtomicBoolean(false);
+	Movement.init();
+
+	g.setFont(Font.getDefaultFont());
 
 	Button.ESCAPE.addKeyListener(new KeyListener() {
 
@@ -50,29 +53,19 @@ public class SensorTest {
 	    }
 	});
 
-	float lastValue = 0;
 	while (!stop.get()) {
-	    sensor.fetchSample(sample, 0);
-	    Delay.msDelay(50);
-	    g.clear();
-	    g.setFont(Font.getDefaultFont());
-	    g.drawString(String.valueOf(sample[0]) + " + " + String.valueOf(lastValue), SW / 2, SH / 2,
-		    GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
-/*
-	    if (sample[0] > Constants.LINE_COLOR_THRESHOLD) {
-		Movement.move(50, 50);
-	    } else {
-		Movement.moveRight(20, 50, true);
-		while (sample[0] <= Constants.LINE_COLOR_THRESHOLD) {
-		    sensor.fetchSample(sample, 0);
-		}
-		Movement.moveLeft(40, 50, true);
-		while (sample[0] <= Constants.LINE_COLOR_THRESHOLD) {
-		    sensor.fetchSample(sample, 0);
-		}
-	    }*/
-	    lastValue = sample[0];
-	    g.refresh();
+	    Complex.rotate(90, 100);
+	    while (sample[0] < Constants.LINE_COLOR_THRESHOLD && !State.stopped(true, true)) {
+		sensor.fetchSample(sample, 0);
+	    }
+	    Complex.rotate(-180, 100);
+	    while (sample[0] < Constants.LINE_COLOR_THRESHOLD && !State.stopped(true, true)) {
+		sensor.fetchSample(sample, 0);
+	    }
+	    Movement.move(100, 100);
+	    while (sample[0] >= Constants.LINE_COLOR_THRESHOLD) {
+		sensor.fetchSample(sample, 0);
+	    }
 	}
 	// gyro.close();
 	color.close();

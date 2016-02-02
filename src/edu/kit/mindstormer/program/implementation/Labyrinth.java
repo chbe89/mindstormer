@@ -3,7 +3,7 @@ import edu.kit.mindstormer.program.AbstractProgram;
 
 public class Labyrinth extends AbstractProgram {
 
-	protected Labyrinth() {
+	public Labyrinth() {
 		super("Labyrinth");
 	}
 	

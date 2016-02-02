@@ -3,7 +3,7 @@ import edu.kit.mindstormer.program.AbstractProgram;
 
 public class Race extends AbstractProgram {
 
-	protected Race() {
+	public Race() {
 		super("Race");
 	}
 	

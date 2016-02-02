@@ -3,7 +3,7 @@ import edu.kit.mindstormer.program.AbstractProgram;
 
 public class Endboss extends AbstractProgram {
 
-	protected Endboss() {
+	public Endboss() {
 		super("Endboss");
 	}
 	

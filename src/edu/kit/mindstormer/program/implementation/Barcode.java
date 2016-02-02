@@ -3,7 +3,7 @@ import edu.kit.mindstormer.program.AbstractProgram;
 
 public class Barcode extends AbstractProgram {
 
-	protected Barcode() {
+	public Barcode() {
 		super("Barcode");
 	}
 	

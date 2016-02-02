@@ -20,3 +20,5 @@ hs_err_pid*
 lib/
 bin/
 .DS_Store
+
+*.orig

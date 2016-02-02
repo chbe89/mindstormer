@@ -9,6 +9,7 @@ import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.program.Program;
 import edu.kit.mindstormer.program.implementation.FollowLine;
 import edu.kit.mindstormer.program.implementation.NavigatorProgram;
+import edu.kit.mindstormer.program.implementation.Race;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.Key;
@@ -38,6 +39,9 @@ public class Main {
     /*
 		Collection<Program> programs = new ArrayList<Program>();
 		programs.add(new NavigatorProgram());
+		programs.add(new Race());
+		programs.add(new FollowLine());
+
 		
 		OperatingSystem os = OperatingSystem.withPrograms(programs);
 		os.run();*/

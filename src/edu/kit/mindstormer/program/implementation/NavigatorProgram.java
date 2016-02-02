@@ -36,6 +36,7 @@ public class NavigatorProgram extends AbstractProgram {
 					| GraphicsLCD.HCENTER);
 			display.refresh();
 		}
+		
 		display.clear();
 		display.drawString("NavigatorProgram shutting down", width / 2, height / 2, GraphicsLCD.BASELINE
 				| GraphicsLCD.HCENTER);
