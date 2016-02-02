@@ -1,8 +1,12 @@
 package edu.kit.mindstormer;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-
+import edu.kit.mindstormer.program.OperatingSystem;
+import edu.kit.mindstormer.program.Program;
+import edu.kit.mindstormer.program.implementation.NavigatorProgram;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
@@ -21,12 +25,18 @@ public class Main {
 	
     public static void main(String[] args) {
     
-    	initEV3();
+    	/*initEV3();
 		initKeylisteners();
 		listenToSensors();
 		
 		
-		Sensors.closeSensors();
+		Sensors.closeSensors();*/
+    	
+		Collection<Program> programs = new ArrayList<Program>();
+		programs.add(new NavigatorProgram());
+		
+		OperatingSystem os = OperatingSystem.withPrograms(programs);
+		os.run();
     }
 
     private static void initEV3() {

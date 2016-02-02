@@ -2,6 +2,7 @@ package edu.kit.mindstormer.program;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import lejos.hardware.Button;
 import lejos.hardware.Key;
 import lejos.hardware.KeyListener;
 
@@ -33,25 +34,20 @@ class OsKeyListener implements KeyListener {
 
 	@Override
 	public void keyReleased(Key k) {
-		switch (k.getId()) {
-		case Key.UP:
+		if (Button.UP.equals(k)) {
 			if (isActive())
 				context.showPreviousProgram();
-			break;
-		case Key.DOWN:
+		} else if (Button.DOWN.equals(k)) {
 			if (isActive())
 				context.showNextProgram();
-			break;
-		case Key.ENTER:
+		} else if (Button.ENTER.equals(k)) {
 			if (isActive())
 				context.startProgram();
-			break;
-		case Key.ESCAPE:
+		} else if (Button.ESCAPE.equals(k)) {
 			if (!isActive())
 				context.terminateProgram();
 			else
 				context.terminateOs();
-			break;
 		}
 	}
 }

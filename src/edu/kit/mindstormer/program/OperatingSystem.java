@@ -7,10 +7,11 @@ import java.util.concurrent.CountDownLatch;
 
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
+import lejos.hardware.Sound;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
 
-public class OperatingSystem implements ProgramContext, Runnable {
+public class OperatingSystem implements ProgramContext {
 
 	private final List<Program> programs;
 
@@ -42,9 +43,9 @@ public class OperatingSystem implements ProgramContext, Runnable {
 		return display;
 	}
 
-	@Override
 	public void run() {
 		displayText("Started OS!");
+		Sound.beepSequenceUp();
 		Button.DOWN.addKeyListener(navigationKeyListener);
 		Button.UP.addKeyListener(navigationKeyListener);
 		Button.ENTER.addKeyListener(navigationKeyListener);
@@ -59,7 +60,8 @@ public class OperatingSystem implements ProgramContext, Runnable {
 
 	@Override
 	public void terminateProgram() {
-		programs.get(pc).terminate();
+		//programs.get(pc).terminate();
+		AbstractProgram.quit.set(true);
 		navigationKeyListener.activate();
 	}
 
@@ -71,6 +73,7 @@ public class OperatingSystem implements ProgramContext, Runnable {
 
 	@Override
 	public void startProgram() {
+		AbstractProgram.quit.set(false);
 		Program program = programs.get(pc);
 		program.run();
 
@@ -93,9 +96,10 @@ public class OperatingSystem implements ProgramContext, Runnable {
 	}
 
 	private void displayText(String text) {
+		display.clear();
 		display.drawString(text, width / 2, height / 2, GraphicsLCD.BASELINE
 				| GraphicsLCD.HCENTER);
-		display.refresh();
+		//display.refresh();
 	}
 
 	@Override

@@ -1,17 +1,21 @@
 package edu.kit.mindstormer.program.implementation;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import lejos.hardware.Button;
-import lejos.hardware.Key;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.program.AbstractProgram;
 import edu.kit.mindstormer.util.AbstractStateDependentKeyListener;
+import lejos.hardware.BrickFinder;
+import lejos.hardware.Button;
+import lejos.hardware.Key;
+import lejos.hardware.lcd.Font;
+import lejos.hardware.lcd.GraphicsLCD;
 
 public class NavigatorProgram extends AbstractProgram {
 
-	ArrayList<AbstractStateDependentKeyListener> listeners;
+	List<AbstractStateDependentKeyListener> listeners = new ArrayList<>();
 	public NavigatorProgram() {
 		super("Navigator");
 	}
@@ -19,9 +23,23 @@ public class NavigatorProgram extends AbstractProgram {
 	@Override
 	public void run() {
 		initListeners();
+		
+		GraphicsLCD display = BrickFinder.getDefault().getGraphicsLCD();
+		display.setFont(Font.getDefaultFont());
+		
+		int width = display.getWidth();
+		int height = display.getHeight();
+		
 		while (!quit.get()) {
-			
+			display.clear();
+			display.drawString("NavigatorProgram running", width / 2, height / 2, GraphicsLCD.BASELINE
+					| GraphicsLCD.HCENTER);
+			display.refresh();
 		}
+		display.clear();
+		display.drawString("NavigatorProgram shutting down", width / 2, height / 2, GraphicsLCD.BASELINE
+				| GraphicsLCD.HCENTER);
+		
 		deactivateListeners();
 	}
 
