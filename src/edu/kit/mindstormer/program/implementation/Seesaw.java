@@ -1,10 +1,10 @@
 package edu.kit.mindstormer.program.implementation;
 import edu.kit.mindstormer.program.AbstractProgram;
 
-public class Wippe extends AbstractProgram {
+public class Seesaw extends AbstractProgram {
 
-	protected Wippe() {
-		super("Wippe");
+	protected Seesaw() {
+		super("Seesaw");
 	}
 	
 	public void run() {

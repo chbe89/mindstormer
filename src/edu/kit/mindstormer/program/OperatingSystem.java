@@ -11,7 +11,7 @@ import lejos.hardware.Sound;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
 
-public class OperatingSystem implements ProgramContext, Runnable {
+public class OperatingSystem implements ProgramContext {
 
 	private final List<Program> programs;
 
@@ -43,7 +43,6 @@ public class OperatingSystem implements ProgramContext, Runnable {
 		return display;
 	}
 
-	@Override
 	public void run() {
 		displayText("Started OS!");
 		Sound.beepSequenceUp();
