@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class AbstractProgram implements Program {
 
 	private final String name;
-	protected final AtomicBoolean quit = new AtomicBoolean();
+	protected static final AtomicBoolean quit = new AtomicBoolean();
 
 	protected AbstractProgram(String name) {
 		this.name = name;
@@ -27,8 +27,5 @@ public abstract class AbstractProgram implements Program {
 	@Override
 	public void terminate() {
 		quit.set(true);
-		Program p1 = null;
-		Program p2 = null;
-		
 	}
 }

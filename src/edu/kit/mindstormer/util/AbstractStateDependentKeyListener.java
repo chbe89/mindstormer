@@ -17,6 +17,10 @@ public abstract class AbstractStateDependentKeyListener implements KeyListener {
 		isActive.set(true);
 	}
 
+	public boolean isActive() {
+		return isActive.get();
+	}
+
 	@Override
 	public final void keyPressed(Key k) {
 		if (isActive.get())
