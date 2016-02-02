@@ -58,7 +58,7 @@ public class SensorTest {
 	    g.setFont(Font.getDefaultFont());
 	    g.drawString(String.valueOf(sample[0]) + " + " + String.valueOf(lastValue), SW / 2, SH / 2,
 		    GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
-
+/*
 	    if (sample[0] > Constants.LINE_COLOR_THRESHOLD) {
 		Movement.set(Mode.FORWARD, 50, Mode.FORWARD, 50);
 	    } else {
@@ -67,7 +67,7 @@ public class SensorTest {
 		    Movement.rotateRight(20, true);
 		    Movement.rotateLeft(40, true);
 		}
-	    }
+	    }*/
 	    lastValue = sample[0];
 	    g.refresh();
 	}
