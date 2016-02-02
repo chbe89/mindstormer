@@ -1,4 +1,4 @@
-package state;
+package level;
 
 public class LevelFollowLine implements Level {
 

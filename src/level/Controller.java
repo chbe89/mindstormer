@@ -1,4 +1,4 @@
-package state;
+package level;
 
 import barcode.Barcode;
 import movement.Movement;
