@@ -11,8 +11,7 @@ public final class Movement {
 		
 	public static void setLeft(Mode mode, float speed) {
 		setMode(Wheel.LEFT, mode);
-		setSpeedLeft(speed);
-		
+		setSpeedLeft(speed);	
 	}
 	
 	public static void setRight(Mode mode, float speed) {
