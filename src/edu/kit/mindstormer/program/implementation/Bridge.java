@@ -1,10 +1,10 @@
 package edu.kit.mindstormer.program.implementation;
 import edu.kit.mindstormer.program.AbstractProgram;
 
-public class Ramp extends AbstractProgram {
+public class Bridge extends AbstractProgram {
 
-	protected Ramp() {
-		super("Ramp");
+	protected Bridge() {
+		super("Bridge");
 	}
 	
 	public void run() {

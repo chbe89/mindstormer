@@ -118,13 +118,13 @@ public class NavigatorProgram extends AbstractProgram {
 		Button.ENTER.addKeyListener(enter);
 		listeners.add(enter);
 	}
-	
+	/*
 	private void activateListeners() {
 		for (AbstractStateDependentKeyListener listener : listeners) {
 			listener.activate();
 		}
 	}
-	
+	*/
 	private void deactivateListeners() {
 		for (AbstractStateDependentKeyListener listener : listeners) {
 			listener.deactivate();
