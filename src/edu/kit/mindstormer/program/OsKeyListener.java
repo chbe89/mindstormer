@@ -39,17 +39,21 @@ class OsKeyListener implements KeyListener {
 				context.showPreviousProgram();
 		} else if (Button.DOWN.equals(k)) {
 			if (isActive())
-				context.showNextProgram();
+				context.showNextProgram();				
 		} else if (Button.ENTER.equals(k)) {
 			if (isActive())
 				context.addProgramToQueue();
 		} else if (Button.ESCAPE.equals(k)) {
 			if (!isActive())
 				context.terminateProgram();
-			//else
-			//	context.terminateOs();
+			else
+				context.terminateOs();
 		} else if (Button.LEFT.equals(k)) {
 			context.terminateOs();
+			OperatingSystem.displayText("Trying to shutdown OS");
+		} else if (Button.RIGHT.equals(k)) {
+			context.terminateOs();
+			OperatingSystem.displayText("Trying to shutdown OS");
 		}
 	}
 }
