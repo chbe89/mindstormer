@@ -8,7 +8,8 @@ import lejos.hardware.KeyListener;
 public abstract class AbstractStateDependentKeyListener implements KeyListener {
 
 	private final AtomicBoolean isActive = new AtomicBoolean(true);
-
+	private final TimePad pad = new TimePad();
+	
 	public final void activate() {
 		isActive.set(true);
 	}
@@ -31,7 +32,7 @@ public abstract class AbstractStateDependentKeyListener implements KeyListener {
 
 	@Override
 	public final void keyReleased(Key k) {
-		if (isActive.get())
+		if (isActive.get() && pad.requestTime())
 			released(k);
 	}
 

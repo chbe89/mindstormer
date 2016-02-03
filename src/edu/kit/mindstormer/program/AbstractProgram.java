@@ -1,11 +1,14 @@
 package edu.kit.mindstormer.program;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class AbstractProgram implements Program {
 
 	private final String name;
 
+	protected AbstractProgram() {
+		this.name = this.getClass().getSimpleName();
+	}
+	
 	protected AbstractProgram(String name) {
 		this.name = name;
 	}

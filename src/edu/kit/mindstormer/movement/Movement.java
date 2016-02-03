@@ -3,11 +3,16 @@ package edu.kit.mindstormer.movement;
 import edu.kit.mindstormer.Constants;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.robotics.RegulatedMotor;
 
 public final class Movement {
-	protected final static RegulatedMotor leftWheel = new EV3LargeRegulatedMotor(BrickFinder.getDefault().getPort("A"));
-	protected final static RegulatedMotor rightWheel = new EV3LargeRegulatedMotor(BrickFinder.getDefault().getPort("D"));
+	protected final static RegulatedMotor leftWheel = new EV3LargeRegulatedMotor(
+			BrickFinder.getDefault().getPort("A"));
+	protected final static RegulatedMotor rightWheel = new EV3LargeRegulatedMotor(
+			BrickFinder.getDefault().getPort("D"));
+	protected final static RegulatedMotor sensorMotor = new EV3MediumRegulatedMotor(
+			BrickFinder.getDefault().getPort("B"));
 	protected final static MotorListener leftMotorListener = new MotorListener();
 	protected final static MotorListener rightMotorListener = new MotorListener();
 
@@ -19,7 +24,7 @@ public final class Movement {
 		rightWheel.setAcceleration(Constants.ACCELERATION);
 		leftWheel.addListener(leftMotorListener);
 		rightWheel.addListener(rightMotorListener);
-		leftWheel.synchronizeWith(new RegulatedMotor[] {rightWheel});
+		leftWheel.synchronizeWith(new RegulatedMotor[] { rightWheel });
 	}
 
 	public static void moveLeft(int speed) {
@@ -39,14 +44,14 @@ public final class Movement {
 		leftWheel.endSynchronization();
 	}
 
-	public static void moveLeft(int angle, int speed, boolean immediateReturn) {
+	public static void moveLeft(int angle, int speed) {
 		leftWheel.setSpeed(speed);
-		leftWheel.rotate(angle, immediateReturn);
+		leftWheel.rotate(angle, true);
 	}
 
-	public static void moveRight(int angle, int speed, boolean immediateReturn) {
+	public static void moveRight(int angle, int speed) {
 		rightWheel.setSpeed(speed);
-		rightWheel.rotate(angle, immediateReturn);
+		rightWheel.rotate(angle, true);
 	}
 
 	public static void move(int leftSpeed, int rightSpeed) {
@@ -54,6 +59,15 @@ public final class Movement {
 		moveLeft(leftSpeed);
 		moveRight(rightSpeed);
 		leftWheel.endSynchronization();
+	}
+
+	public static void moveRobot(int speed) {
+		move(speed, speed);
+	}
+
+	public static void moveDistance(float distance, int speed) {
+		float wheelTurn = distance * 720f/118.5f;
+		driveForwardByDegrees(wheelTurn, speed);
 	}
 
 	public static void stop() {
@@ -83,7 +97,8 @@ public final class Movement {
 	}
 
 	private static void setMode(Wheel wheel, Mode mode) {
-		RegulatedMotor selectedWheel = (wheel == Wheel.LEFT) ? leftWheel : rightWheel;
+		RegulatedMotor selectedWheel = (wheel == Wheel.LEFT) ? leftWheel
+				: rightWheel;
 
 		if (Mode.FORWARD == mode) {
 			selectedWheel.forward();
@@ -93,46 +108,60 @@ public final class Movement {
 			selectedWheel.stop();
 		}
 	}
-	
+
 	public static void rotate(float angle, int speed) {
 		int motorAngle = getMotorAngle(angle, true);
 		leftWheel.startSynchronization();
-		moveLeft(-motorAngle, speed / 2, true);
-		moveRight(motorAngle, speed / 2, true);
-		leftWheel.endSynchronization();;
+		moveLeft(-motorAngle, speed / 2);
+		moveRight(motorAngle, speed / 2);
+		leftWheel.endSynchronization();
 	}
-	
-	
+
 	public static void rotateLeft(float angle, int speed) {
 		int motorAngle = getMotorAngle(angle, false);
-    	stop();
-    	moveLeft(motorAngle, speed, true);
+		stop();
+		moveLeft(motorAngle, speed);
 	}
-	
+
 	public static void rotateRight(float angle, int speed) {
 		int motorAngle = getMotorAngle(angle, false);
-    	stop();
-    	moveRight(motorAngle, speed, true);
+		stop();
+		moveRight(motorAngle, speed);
 	}
-	
+
 	private static int getMotorAngle(float angle, boolean bothWheels) {
-		return Math.round(Constants.ROTATION_FACTOR * angle * (bothWheels ? 0.5f : 1));
+		return Math.round(Constants.ROTATION_FACTOR * angle
+				* (bothWheels ? 0.5f : 1));
 	}
 
 	public static void driveForwardByDegrees(float wheelTurn, int speed) {
 		int motorAngle = getMotorAngle(wheelTurn, true);
 		leftWheel.startSynchronization();
-		moveLeft(motorAngle, speed / 2, true);
-		moveRight(motorAngle, speed / 2, true);
+		moveLeft(motorAngle, speed / 2);
+		moveRight(motorAngle, speed / 2);
 		leftWheel.endSynchronization();
 	}
+<<<<<<< HEAD
 	
 	public static void driveCurve(boolean turnLeft, float wheelTurn, int speed, float curveStrength) {
 		int motorAngle = getMotorAngle(wheelTurn, true);
 		leftWheel.startSynchronization();
 		moveLeft(motorAngle, (int)(speed / (!turnLeft? 1:curveStrength)), true);
 		moveRight(motorAngle, (int)(speed / (turnLeft? 1:curveStrength)), true);
+=======
+
+	public static void driveCurve(boolean turnLeft, float wheelTurn, int speed) {
+		int motorAngle = getMotorAngle(wheelTurn, true);
+		leftWheel.startSynchronization();
+		moveLeft(motorAngle, speed / (!turnLeft ? 1 : 2));
+		moveRight(motorAngle, speed / (turnLeft ? 1 : 2));
+>>>>>>> 10c4f62c2870160e0268a5bfe24d5fb5a6b6cbb6
 		leftWheel.endSynchronization();
+	}
+
+	public static void rotateSensorMotor(int angle) {
+		sensorMotor.rotate(
+				Math.round(Constants.SENSOR_ROTATION_FACTOR * angle), true);
 	}
 
 	public static enum Mode {

@@ -1,14 +1,13 @@
 package edu.kit.mindstormer.program.implementation;
+import lejos.hardware.sensor.EV3ColorSensor;
 import edu.kit.mindstormer.Constants;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.program.AbstractProgram;
 import edu.kit.mindstormer.sensor.Sensor;
-import lejos.hardware.sensor.EV3ColorSensor;
-import lejos.utility.Delay;
 
 public class FollowLineSinus extends AbstractProgram {
 	EV3ColorSensor sensor;
-	float[] sample;
+	float sample;
 	int searchAngle = 20;
 	int forwardSpeed = 350;
 	int turnSpeed = 200;
@@ -16,8 +15,6 @@ public class FollowLineSinus extends AbstractProgram {
 	
 	public FollowLineSinus() {
 		super("FollowLineSinus");
-		sensor = Sensor.COLOR;
-		sample = new float[sensor.sampleSize()];
 	}
 	
 	public void run() {
