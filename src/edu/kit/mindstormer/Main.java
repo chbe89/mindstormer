@@ -38,6 +38,7 @@ public class Main {
 		programs.add(new FollowLine());
 		programs.add(new Seesaw());
 		programs.add(new FollowLineSinus());
+		programs.add(new SensorMotorTest());
 		
 		OperatingSystem os = OperatingSystem.withPrograms(programs);
 		os.run();

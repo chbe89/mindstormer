@@ -10,7 +10,7 @@ public class TimePad {
 	private long time = 0;
 
 	public TimePad() {
-		this(50);
+		this(200);
 	}
 	
 	public TimePad(int milliseconds) {

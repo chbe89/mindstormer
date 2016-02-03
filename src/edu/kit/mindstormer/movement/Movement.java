@@ -3,11 +3,13 @@ package edu.kit.mindstormer.movement;
 import edu.kit.mindstormer.Constants;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.robotics.RegulatedMotor;
 
 public final class Movement {
 	protected final static RegulatedMotor leftWheel = new EV3LargeRegulatedMotor(BrickFinder.getDefault().getPort("A"));
 	protected final static RegulatedMotor rightWheel = new EV3LargeRegulatedMotor(BrickFinder.getDefault().getPort("D"));
+	protected final static RegulatedMotor sensorMotor = new EV3MediumRegulatedMotor(BrickFinder.getDefault().getPort("B"));
 	protected final static MotorListener leftMotorListener = new MotorListener();
 	protected final static MotorListener rightMotorListener = new MotorListener();
 
@@ -133,6 +135,10 @@ public final class Movement {
 		moveLeft(motorAngle, speed / (!turnLeft? 1:2), true);
 		moveRight(motorAngle, speed / (turnLeft? 1:2), true);
 		leftWheel.endSynchronization();
+	}
+	
+	public static void rotateSensorMotor(int angle) {
+		sensorMotor.rotate(Math.round(Constants.SENSOR_ROTATION_FACTOR * angle), true);
 	}
 
 	public static enum Mode {

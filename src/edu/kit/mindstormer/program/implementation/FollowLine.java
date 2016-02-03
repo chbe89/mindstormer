@@ -6,15 +6,14 @@ import edu.kit.mindstormer.program.AbstractProgram;
 import edu.kit.mindstormer.sensor.Sensor;
 
 public class FollowLine extends AbstractProgram {
-	float[] sample;
+	float sample;
 	int searchAngle = 20;
-	int forwardSpeed = 350;
-	int turnSpeed = 200;
+	int forwardSpeed = 300;
+	int turnSpeed = 225;
 	
 	
 	public FollowLine() {
 		super("FollowLine");
-		sample = new float[Sensor.COLOR.sampleSize()];
 	}
 	
 	public void run() {
@@ -24,10 +23,8 @@ public class FollowLine extends AbstractProgram {
 			boolean found1 = find((turnDirection ? 1 : -1) * turnMultiplicator * searchAngle);
 			boolean found2 = false;
 			if (!found1) {
-				turnMultiplicator *= 2;
 				found2 = find((turnDirection ? -1 : 1) * turnMultiplicator * searchAngle);
 			}
-			turnMultiplicator *= 2;
 
 			
 			if (found1 || found2) {
@@ -38,12 +35,15 @@ public class FollowLine extends AbstractProgram {
 				
 				Movement.stop();
 				Movement.move(forwardSpeed, forwardSpeed);
-			    while (sample[0] >= Constants.LINE_COLOR_THRESHOLD) {
-			    	Sensor.COLOR.fetchSample(sample, 0);
+			    while (sample >= Constants.LINE_COLOR_THRESHOLD) {
+			    	sample = Sensor.sampleColor();
 			    }
 			    Movement.stop();
 			    
 			    
+			} else {
+
+				turnMultiplicator ++;
 			}
 		}
 		Movement.stop();
@@ -51,10 +51,10 @@ public class FollowLine extends AbstractProgram {
 	
 	private boolean find(float angle) {
 		Movement.rotate(angle, turnSpeed);
-		while (sample[0] < Constants.LINE_COLOR_THRESHOLD && !State.stopped(true, true)) {
-			Sensor.COLOR.fetchSample(sample, 0);
+		while (sample < Constants.LINE_COLOR_THRESHOLD && !State.stopped(true, true)) {
+			sample = Sensor.sampleColor();
 	    }
-		if (sample[0] >= Constants.LINE_COLOR_THRESHOLD) {
+		if (sample >= Constants.LINE_COLOR_THRESHOLD) {
 			Movement.stop();
 			return true;
 		}

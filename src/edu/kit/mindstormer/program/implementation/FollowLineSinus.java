@@ -7,7 +7,7 @@ import edu.kit.mindstormer.sensor.Sensor;
 
 public class FollowLineSinus extends AbstractProgram {
 	EV3ColorSensor sensor;
-	float[] sample;
+	float sample;
 	int searchAngle = 20;
 	int forwardSpeed = 350;
 	int turnSpeed = 200;
@@ -15,8 +15,6 @@ public class FollowLineSinus extends AbstractProgram {
 	
 	public FollowLineSinus() {
 		super("FollowLineSinus");
-		sensor = Sensor.COLOR;
-		sample = new float[sensor.sampleSize()];
 	}
 	
 	public void run() {
@@ -33,8 +31,8 @@ public class FollowLineSinus extends AbstractProgram {
 	}
 	
 	private void waitForFoundLine() {
-		while (sample[0] >= Constants.LINE_COLOR_THRESHOLD) {
-	    	sensor.fetchSample(sample, 0);
+		while (sample >= Constants.LINE_COLOR_THRESHOLD) {
+			sample = Sensor.sampleColor();
 	    }
 	}
 }
