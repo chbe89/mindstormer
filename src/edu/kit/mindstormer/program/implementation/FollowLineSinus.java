@@ -3,6 +3,7 @@ import edu.kit.mindstormer.Constants;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
 import edu.kit.mindstormer.program.AbstractProgram;
+import edu.kit.mindstormer.sensor.Sensor;
 import lejos.hardware.sensor.EV3ColorSensor;
 
 public class FollowLineSinus extends AbstractProgram {
@@ -14,9 +15,8 @@ public class FollowLineSinus extends AbstractProgram {
 	
 	
 	public FollowLineSinus() {
-		super("FollowLine");
-		sensor = new EV3ColorSensor(Constants.COLOR_SENSOR_PORT);
-		sensor.setCurrentMode("Red");
+		super("FollowLineSinus");
+		sensor = Sensor.COLOR;
 		sample = new float[sensor.sampleSize()];
 	}
 	
