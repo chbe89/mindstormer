@@ -19,9 +19,16 @@ public final class Constants {
 	 */
 	public final static float SENSOR_ROTATION_FACTOR = 25.7f;
 	
+	/**
+	 * Translates distance into motor rotation.
+	 */
+	public final static float DISTANCE_FACTOR = 27.64f;
+	
 	public final static float LINE_COLOR_THRESHOLD = 0.08f;
 	
 	public final static int ACCELERATION = 1000;
+	
+	
 	
 	
 	private Constants() {};

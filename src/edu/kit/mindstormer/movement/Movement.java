@@ -65,11 +65,6 @@ public final class Movement {
 		move(speed, speed);
 	}
 
-	public static void moveDistance(float distance, int speed) {
-		float wheelTurn = distance * 720f/118.5f;
-		driveForwardByDegrees(wheelTurn, speed);
-	}
-
 	public static void stop() {
 		leftWheel.startSynchronization();
 		stopRight();
@@ -110,7 +105,7 @@ public final class Movement {
 	}
 
 	public static void rotate(float angle, int speed) {
-		int motorAngle = getMotorAngle(angle, true);
+		int motorAngle = getMotorAngleForRotation(angle, true);
 		leftWheel.startSynchronization();
 		moveLeft(-motorAngle, speed / 2);
 		moveRight(motorAngle, speed / 2);
@@ -118,32 +113,35 @@ public final class Movement {
 	}
 
 	public static void rotateLeft(float angle, int speed) {
-		int motorAngle = getMotorAngle(angle, false);
+		int motorAngle = getMotorAngleForRotation(angle, false);
 		stop();
 		moveLeft(motorAngle, speed);
 	}
 
 	public static void rotateRight(float angle, int speed) {
-		int motorAngle = getMotorAngle(angle, false);
+		int motorAngle = getMotorAngleForRotation(angle, false);
 		stop();
 		moveRight(motorAngle, speed);
 	}
 
-	private static int getMotorAngle(float angle, boolean bothWheels) {
-		return Math.round(Constants.ROTATION_FACTOR * angle
-				* (bothWheels ? 0.5f : 1));
+	private static int getMotorAngleForRotation(float angle, boolean bothWheels) {
+		return Math.round(Constants.ROTATION_FACTOR * angle * (bothWheels ? 0.5f : 1));
+	}
+	
+	private static int getMotorAngleForDistance(float distance, boolean bothWheels) {
+		return Math.round(Constants.DISTANCE_FACTOR * distance * (bothWheels ? 0.5f : 1));
 	}
 
-	public static void driveForwardByDegrees(float wheelTurn, int speed) {
-		int motorAngle = getMotorAngle(wheelTurn, true);
+	public static void moveDistance(float distance, int speed) {
+		int motorAngle = getMotorAngleForDistance(distance, true);
 		leftWheel.startSynchronization();
 		moveLeft(motorAngle, speed / 2);
 		moveRight(motorAngle, speed / 2);
 		leftWheel.endSynchronization();
 	}
 
-	public static void driveCurve(boolean turnLeft, float wheelTurn, int speed) {
-		int motorAngle = getMotorAngle(wheelTurn, true);
+	public static void driveCurve(boolean turnLeft, float distance, int speed) {
+		int motorAngle = getMotorAngleForDistance(distance, true);
 		leftWheel.startSynchronization();
 		moveLeft(motorAngle, speed / (!turnLeft ? 1 : 2));
 		moveRight(motorAngle, speed / (turnLeft ? 1 : 2));
@@ -151,8 +149,7 @@ public final class Movement {
 	}
 
 	public static void rotateSensorMotor(int angle) {
-		sensorMotor.rotate(
-				Math.round(Constants.SENSOR_ROTATION_FACTOR * angle), true);
+		sensorMotor.rotate(Math.round(Constants.SENSOR_ROTATION_FACTOR * angle), true);
 	}
 
 	public static enum Mode {

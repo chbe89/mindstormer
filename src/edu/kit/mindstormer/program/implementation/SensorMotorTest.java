@@ -1,7 +1,8 @@
 package edu.kit.mindstormer.program.implementation;
 
-import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.program.AbstractProgram;
+import edu.kit.mindstormer.program.OperatingSystem;
+import edu.kit.mindstormer.sensor.Sensor;
 
 public class SensorMotorTest extends AbstractProgram  {
 	public SensorMotorTest() {
@@ -12,9 +13,11 @@ public class SensorMotorTest extends AbstractProgram  {
 		boolean once = true;
 		while (!quit.get()) {
 			if (once) {
-				Movement.rotateSensorMotor(-90);
+				//Movement.rotateSensorMotor(-90);
 				once = false;
+				
 			}
+			OperatingSystem.displayText(Sensor.sampleDistance() + "");
 			
 		}
 	}
