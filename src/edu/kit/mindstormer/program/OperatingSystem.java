@@ -113,7 +113,7 @@ public class OperatingSystem implements ProgramContext {
 
 	@Override
 	public void showPreviousProgram() {
-		pc = (pc - 1) % programs.size();
+		pc = ((pc - 1) + programs.size()) % programs.size();
 		displayCurrentProgram();
 	}
 }
