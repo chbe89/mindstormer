@@ -7,6 +7,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import edu.kit.mindstormer.movement.Movement;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
@@ -29,6 +30,7 @@ public class OperatingSystem implements ProgramContext {
 	private final ArrayList<Program> runningPrograms = new ArrayList<>();
 	
 	public static OperatingSystem withPrograms(Collection<Program> programs) {
+		Movement.init();
 		return new OperatingSystem(new ArrayList<Program>(programs));
 	}
 

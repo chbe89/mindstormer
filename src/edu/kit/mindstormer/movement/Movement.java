@@ -12,6 +12,7 @@ public final class Movement {
 	
 	private Movement() {};
 	
+	
 	public static void init() {
 		leftWheel.setAcceleration(Constants.ACCELERATION);
 		rightWheel.setAcceleration(Constants.ACCELERATION);

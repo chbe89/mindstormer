@@ -4,20 +4,19 @@ import edu.kit.mindstormer.movement.Complex;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
 import edu.kit.mindstormer.program.AbstractProgram;
-import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
 
 public class FollowLine extends AbstractProgram {
 	EV3ColorSensor sensor;
 	float[] sample;
 	int searchAngle = 20;
-	int forwardSpeed = 200;
+	int forwardSpeed = 350;
 	int turnSpeed = 200;
 	
 	
 	public FollowLine() {
 		super("FollowLine");
-		sensor = new EV3ColorSensor(SensorPort.S1);
+		sensor = new EV3ColorSensor(Constants.COLOR_SENSOR_PORT);
 		sensor.setCurrentMode("Red");
 		sample = new float[sensor.sampleSize()];
 	}
@@ -55,6 +54,10 @@ public class FollowLine extends AbstractProgram {
 		while (sample[0] < Constants.LINE_COLOR_THRESHOLD && !State.stopped(true, true)) {
 	    	sensor.fetchSample(sample, 0);
 	    }
-		return sample[0] >= Constants.LINE_COLOR_THRESHOLD;
+		if (sample[0] >= Constants.LINE_COLOR_THRESHOLD) {
+			Movement.stop();
+			return true;
+		}
+		return false;
 	}
 }
