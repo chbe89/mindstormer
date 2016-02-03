@@ -36,7 +36,7 @@ public class Main {
 		
 		
 		Sensors.closeSensors();*/
-    /*
+    
 		Collection<Program> programs = new ArrayList<Program>();
 		programs.add(new NavigatorProgram());
 		programs.add(new Race());
@@ -44,29 +44,8 @@ public class Main {
 
 		
 		OperatingSystem os = OperatingSystem.withPrograms(programs);
-		os.run();*/
-    	Sound.beepSequenceUp();
-    	Movement.init();
+		os.run();
 
-    	g.setFont(Font.getDefaultFont());
-    	final FollowLine followLine = new FollowLine();
-
-    	Button.ESCAPE.addKeyListener(new KeyListener() {
-
-    	    @Override
-    	    public void keyReleased(Key k) {
-    	    	followLine.terminate();
-    	    }
-
-    	    @Override
-    	    public void keyPressed(Key k) {
-    		// TODO Auto-generated method stub
-
-    	    }
-    	});
-    	
-    	
-    	followLine.run();
     }
 
     private static void initEV3() {
