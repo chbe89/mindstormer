@@ -13,4 +13,8 @@ public class State {
 		}
 		return stopped;
 	}
+	
+	public static boolean stoppedSensor() {
+		return Movement.sensorMotorListener.isStopped();
+	}
 }

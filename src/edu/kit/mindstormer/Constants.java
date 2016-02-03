@@ -19,6 +19,8 @@ public final class Constants {
 	 */
 	public final static float SENSOR_ROTATION_FACTOR = 25.7f;
 	
+	public final static int SENSOR_MOTOR_SPEED = 800;
+	
 	/**
 	 * Translates distance into motor rotation.
 	 */
