@@ -67,7 +67,7 @@ public final class Movement {
 
 	public static void moveDistance(float distance, int speed) {
 		float wheelTurn = distance * 720f/118.5f;
-		driveForwardByDegrees(wheelTurn, speed, false);
+		driveForwardByDegrees(wheelTurn, speed);
 	}
 
 	public static void stop() {
@@ -134,11 +134,11 @@ public final class Movement {
 				* (bothWheels ? 0.5f : 1));
 	}
 
-	public static void driveForwardByDegrees(float wheelTurn, int speed, boolean immediateReturn) {
+	public static void driveForwardByDegrees(float wheelTurn, int speed) {
 		int motorAngle = getMotorAngle(wheelTurn, true);
 		leftWheel.startSynchronization();
-		moveLeft(motorAngle, speed / 2, immediateReturn);
-		moveRight(motorAngle, speed / 2, immediateReturn);
+		moveLeft(motorAngle, speed / 2, true);
+		moveRight(motorAngle, speed / 2, true);
 		leftWheel.endSynchronization();
 	}
 
