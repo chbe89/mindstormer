@@ -17,18 +17,18 @@ public class RollerBox extends AbstractProgram {
 
 		while (!quit.get()) {
 			Movement.rotate(180, rotationSpeed);
-			while(!State.stopped(true, true)) {
+			while (!State.stopped(true, true)) {
+			}
+
+			Movement.moveDistance(-70, speed);
+
+			while (!State.stopped(true, true)) {
 			}
 			
-			Movement.moveDistance(31, speed);
-			
-			while(!State.stopped(true, true)) {
-			}
-			
-			Movement.rotate(180, rotationSpeed);
-			while(!State.stopped(true, true)) {
-			}
+			// Movement.rotate(180, rotationSpeed);
+			// while(!State.stopped(true, true)) {
+			// }
 		}
-		//Button.ESCAPE.simulateEvent(Key.KEY_RELEASED);
+		// Button.ESCAPE.simulateEvent(Key.KEY_RELEASED);
 	}
 }
