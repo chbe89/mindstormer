@@ -13,11 +13,13 @@ public class Seesaw extends AbstractProgram {
 	}
 	
 	public void run() {		
-		Complex.driveForwardByDegrees(720, 500);
+		Complex.driveForwardByDegrees(-600, 5000);
 		while (!State.stopped(true, true)) {
 			
 		}
-		Complex.driveForwardByDegrees(360, 100);
-		
+		Complex.driveForwardByDegrees(-200, 450);
+		while (!State.stopped(true, true)) {
+			
+		}
 	}
 }

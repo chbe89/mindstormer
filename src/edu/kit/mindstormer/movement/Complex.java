@@ -14,6 +14,13 @@ public class Complex {
 		Movement.moveRight(motorAngle, speed / 2, true);
 	}
 	
+	public static void driveCurve(boolean turnLeft, float wheelTurn, float speed) {
+		int motorAngle = getMotorAngle(wheelTurn, true);
+    	Movement.stop();
+		Movement.moveLeft(motorAngle / (!turnLeft? 1:2), speed / 2, true);
+		Movement.moveRight(motorAngle / (turnLeft? 1:2), speed / 2, true);
+	}
+	
 	public static void rotate(float angle, float speed) {
 		int motorAngle = getMotorAngle(angle, true);
     	Movement.stop();

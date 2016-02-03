@@ -13,6 +13,7 @@ import lejos.hardware.Button;
 import lejos.hardware.Sound;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
+import lejos.utility.Delay;
 
 public class OperatingSystem implements ProgramContext {
 
@@ -20,9 +21,9 @@ public class OperatingSystem implements ProgramContext {
 
 	private final OsKeyListener navigationKeyListener;
 
-	private final GraphicsLCD display;
-	private final int width;
-	private final int height;
+	private static GraphicsLCD display;
+	private static int width;
+	private static int height;
 
 	private int pc = 0;
 	
@@ -37,9 +38,9 @@ public class OperatingSystem implements ProgramContext {
 	private OperatingSystem(List<Program> programs) {
 		this.programs = programs;
 		this.navigationKeyListener = new OsKeyListener(this);
-		this.display = initializeDisplay();
-		this.width = display.getWidth();
-		this.height = display.getHeight();
+		display = initializeDisplay();
+		width = display.getWidth();
+		height = display.getHeight();
 	}
 
 	private GraphicsLCD initializeDisplay() {
@@ -49,7 +50,7 @@ public class OperatingSystem implements ProgramContext {
 	}
 
 	public void run() {
-		displayText("Started OS!");
+		displayText("Started OS! " + Button.UP.getClass().getSimpleName());
 		Sound.beepSequenceUp();
 		Button.DOWN.addKeyListener(navigationKeyListener);
 		Button.UP.addKeyListener(navigationKeyListener);
@@ -67,12 +68,14 @@ public class OperatingSystem implements ProgramContext {
 	@Override
 	public void terminateProgram() {
 		//programs.get(pc).terminate();
+		displayText("Trying to stop program");
 		AbstractProgram.quit.set(true);
 		navigationKeyListener.activate();
 	}
 
 	@Override
 	public void terminateOs() {
+		displayText("Terminating OS, Goodbye");
 		quitOS.set(true);
 	}
 
@@ -80,7 +83,10 @@ public class OperatingSystem implements ProgramContext {
 	public void startProgram(Program program) {
 		navigationKeyListener.deactivate();
 		Program.quit.set(false);
+		displayText(program.getName() + " running");
 		program.run();
+		displayText(program.getName() + " stopped");
+		Delay.msDelay(500);
 		navigationKeyListener.activate();
 		displayCurrentProgram();
 	}
@@ -105,7 +111,7 @@ public class OperatingSystem implements ProgramContext {
 		displayText(program.getName());
 	}
 
-	private void displayText(String text) {
+	public static void displayText(String text) {
 		display.clear();
 		display.drawString(text, width / 2, height / 2, GraphicsLCD.BASELINE
 				| GraphicsLCD.HCENTER);

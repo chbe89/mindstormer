@@ -37,7 +37,7 @@ public class Main {
 		programs.add(new Race());
 		programs.add(new FollowLine());
 		programs.add(new Seesaw());
-		
+		programs.add(new FollowLineSinus());
 		
 		OperatingSystem os = OperatingSystem.withPrograms(programs);
 		os.run();
