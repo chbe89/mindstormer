@@ -15,6 +15,7 @@ public class Sensor {
 
 	private static final float[] colorSample = new float[COLOR.sampleSize()];
 	private static final float[] distanceSample = new float[DISTANCE.sampleSize()];
+	private static final float[] distanceMedianSample = new float[DISTANCE_MEDIAN.sampleSize()];
 
 	public static void init() {
 		COLOR.setCurrentMode("Red");
@@ -25,14 +26,14 @@ public class Sensor {
 		COLOR.fetchSample(colorSample, 0);
 		return colorSample[0];
 	}
-
+	
 	public static float sampleDistance() {
-		DISTANCE_MEDIAN.fetchSample(distanceSample, 0);
+		DISTANCE.fetchSample(distanceSample, 0);
 		return distanceSample[0];
 	}
 
-	public static boolean hasInfiniteDistance() {
-		float distance = sampleDistance();
-		return distance == Float.POSITIVE_INFINITY || distance == Float.NEGATIVE_INFINITY;
+	public static float sampleDistanceMedian() {
+		DISTANCE_MEDIAN.fetchSample(distanceMedianSample, 0);
+		return distanceMedianSample[0];
 	}
 }

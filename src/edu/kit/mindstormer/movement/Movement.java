@@ -8,9 +8,9 @@ import lejos.robotics.RegulatedMotor;
 
 public final class Movement {
 	protected final static RegulatedMotor leftWheel = new EV3LargeRegulatedMotor(
-			BrickFinder.getDefault().getPort("A"));
-	protected final static RegulatedMotor rightWheel = new EV3LargeRegulatedMotor(
 			BrickFinder.getDefault().getPort("D"));
+	protected final static RegulatedMotor rightWheel = new EV3LargeRegulatedMotor(
+			BrickFinder.getDefault().getPort("A"));
 	protected final static RegulatedMotor sensorMotor = new EV3MediumRegulatedMotor(
 			BrickFinder.getDefault().getPort("B"));
 	protected final static MotorListener leftMotorListener = new MotorListener();
@@ -110,8 +110,8 @@ public final class Movement {
 	public static void rotate(float angle, int speed) {
 		int motorAngle = getMotorAngleForRotation(angle, true);
 		leftWheel.startSynchronization();
-		moveLeft(-motorAngle, speed / 2);
-		moveRight(motorAngle, speed / 2);
+		moveLeft(motorAngle, speed / 2);
+		moveRight(-motorAngle, speed / 2);
 		leftWheel.endSynchronization();
 	}
 
@@ -146,8 +146,8 @@ public final class Movement {
 	public static void driveCurve(boolean turnLeft, float distance, int speed, float curveStrength) {
 		int motorAngle = getMotorAngleForDistance(distance, true);
 		leftWheel.startSynchronization();
-		moveLeft(motorAngle, (int)(speed / (!turnLeft? 1:curveStrength)));
-		moveRight(motorAngle, (int)(speed / (turnLeft? 1:curveStrength)));
+		moveLeft(motorAngle, (int)(speed / (turnLeft? 1:curveStrength)));
+		moveRight(motorAngle, (int)(speed / (!turnLeft? 1:curveStrength)));
 		leftWheel.endSynchronization();
 	}
 
