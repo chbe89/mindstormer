@@ -53,11 +53,11 @@ public class SensorTest {
 	});
 
 	while (!stop.get()) {
-		Movement.rotate(90, 100);
+		Movement.rotate(90, 100, true);
 	    while (sample[0] < Constants.LINE_COLOR_THRESHOLD && !State.stopped(true, true)) {
 		sensor.fetchSample(sample, 0);
 	    }
-	    Movement.rotate(-180, 100);
+	    Movement.rotate(-180, 100, true);
 	    while (sample[0] < Constants.LINE_COLOR_THRESHOLD && !State.stopped(true, true)) {
 		sensor.fetchSample(sample, 0);
 	    }

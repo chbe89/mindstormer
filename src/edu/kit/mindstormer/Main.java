@@ -40,6 +40,7 @@ public class Main {
 		programs.add(new FollowLineSinus());
 		programs.add(new SensorMotorTest());
 		programs.add(new RollerBox());
+		programs.add(new MoveFixedDistance());
 		
 		OperatingSystem os = OperatingSystem.withPrograms(programs);
 		os.run();
