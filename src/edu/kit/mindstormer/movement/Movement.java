@@ -23,13 +23,13 @@ public final class Movement {
 	}
 
 	public static void moveLeft(int speed) {
-		setMode(Wheel.LEFT, speed);
 		leftWheel.setSpeed(speed);
+		setMode(Wheel.LEFT, speed);
 	}
 
 	public static void moveRight(int speed) {
-		setMode(Wheel.RIGHT, speed);
 		rightWheel.setSpeed(speed);
+		setMode(Wheel.RIGHT, speed);
 	}
 
 	public static void move(int speed) {

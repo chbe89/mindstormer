@@ -1,7 +1,6 @@
 package edu.kit.mindstormer.program.implementation;
 import edu.kit.mindstormer.Constants;
 import edu.kit.mindstormer.movement.Movement;
-import edu.kit.mindstormer.movement.State;
 import edu.kit.mindstormer.program.AbstractProgram;
 import edu.kit.mindstormer.sensor.Sensor;
 import lejos.hardware.sensor.EV3ColorSensor;
