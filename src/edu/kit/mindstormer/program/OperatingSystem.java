@@ -50,7 +50,7 @@ public class OperatingSystem implements ProgramContext {
 	}
 
 	public void run() {
-		displayText("Started OS! " + Button.UP.getClass().getSimpleName());
+		displayText("Started OS!");
 		Sound.beepSequenceUp();
 		Button.DOWN.addKeyListener(navigationKeyListener);
 		Button.UP.addKeyListener(navigationKeyListener);

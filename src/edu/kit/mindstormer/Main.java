@@ -39,6 +39,7 @@ public class Main {
 		programs.add(new Seesaw());
 		programs.add(new FollowLineSinus());
 		programs.add(new SensorMotorTest());
+		programs.add(new RollerBox());
 		
 		OperatingSystem os = OperatingSystem.withPrograms(programs);
 		os.run();

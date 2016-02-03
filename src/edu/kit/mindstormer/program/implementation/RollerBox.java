@@ -15,9 +15,9 @@ public class RollerBox extends AbstractProgram {
 	public void run() {
 
 		while (!quit.get()) {
-			Movement.rotate(180, rotationSpeed);
-			Movement.moveDistance(720, rotationSpeed);
-			Movement.rotate(180, rotationSpeed);
+			Movement.rotate(180, rotationSpeed, false);
+			Movement.moveDistance(720, speed);
+			Movement.rotate(180, rotationSpeed, false);
 		}
 
 	}

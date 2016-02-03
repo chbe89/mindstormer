@@ -66,7 +66,7 @@ public final class Movement {
 	}
 
 	public static void moveDistance(int distance, int speed) {
-		driveForwardByDegrees(distance, speed);
+		driveForwardByDegrees(distance, speed, false);
 	}
 
 	public static void stop() {
@@ -108,11 +108,11 @@ public final class Movement {
 		}
 	}
 
-	public static void rotate(float angle, int speed) {
+	public static void rotate(float angle, int speed, boolean immediateReturn) {
 		int motorAngle = getMotorAngle(angle, true);
 		leftWheel.startSynchronization();
-		moveLeft(-motorAngle, speed / 2, true);
-		moveRight(motorAngle, speed / 2, true);
+		moveLeft(-motorAngle, speed / 2, immediateReturn);
+		moveRight(motorAngle, speed / 2, immediateReturn);
 		leftWheel.endSynchronization();
 		;
 	}
@@ -134,11 +134,11 @@ public final class Movement {
 				* (bothWheels ? 0.5f : 1));
 	}
 
-	public static void driveForwardByDegrees(float wheelTurn, int speed) {
+	public static void driveForwardByDegrees(float wheelTurn, int speed, boolean immediateReturn) {
 		int motorAngle = getMotorAngle(wheelTurn, true);
 		leftWheel.startSynchronization();
-		moveLeft(motorAngle, speed / 2, true);
-		moveRight(motorAngle, speed / 2, true);
+		moveLeft(motorAngle, speed / 2, immediateReturn);
+		moveRight(motorAngle, speed / 2, immediateReturn);
 		leftWheel.endSynchronization();
 	}
 
