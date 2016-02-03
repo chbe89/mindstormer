@@ -140,11 +140,11 @@ public final class Movement {
 		leftWheel.endSynchronization();
 	}
 
-	public static void driveCurve(boolean turnLeft, float distance, int speed) {
+	public static void driveCurve(boolean turnLeft, float distance, int speed, float curveStrength) {
 		int motorAngle = getMotorAngleForDistance(distance, true);
 		leftWheel.startSynchronization();
-		moveLeft(motorAngle, speed / (!turnLeft ? 1 : 2));
-		moveRight(motorAngle, speed / (turnLeft ? 1 : 2));
+		moveLeft(motorAngle, (int)(speed / (!turnLeft? 1:curveStrength)));
+		moveRight(motorAngle, (int)(speed / (turnLeft? 1:curveStrength)));
 		leftWheel.endSynchronization();
 	}
 
