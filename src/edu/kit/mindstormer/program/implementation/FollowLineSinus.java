@@ -1,6 +1,5 @@
 package edu.kit.mindstormer.program.implementation;
 import edu.kit.mindstormer.Constants;
-import edu.kit.mindstormer.movement.Complex;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
 import edu.kit.mindstormer.program.AbstractProgram;
@@ -24,11 +23,11 @@ public class FollowLineSinus extends AbstractProgram {
 	public void run() {
 		boolean turnDirection = true;
 		while (!quit.get()) {
-			Complex.driveCurve(turnDirection, 2000, 500);
+			Movement.driveCurve(turnDirection, 2000, 500);
 			
 			waitForFoundLine();
 			turnDirection = !turnDirection;
-			Complex.driveCurve(turnDirection, 2000, 500);
+			Movement.driveCurve(turnDirection, 2000, 500);
 			
 		    Movement.stop();
 		}

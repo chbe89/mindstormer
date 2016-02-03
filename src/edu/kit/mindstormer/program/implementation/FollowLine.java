@@ -1,6 +1,5 @@
 package edu.kit.mindstormer.program.implementation;
 import edu.kit.mindstormer.Constants;
-import edu.kit.mindstormer.movement.Complex;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
 import edu.kit.mindstormer.program.AbstractProgram;
@@ -53,7 +52,7 @@ public class FollowLine extends AbstractProgram {
 	}
 	
 	private boolean find(float angle) {
-		Complex.rotate(angle, turnSpeed);
+		Movement.rotate(angle, turnSpeed);
 		while (sample[0] < Constants.LINE_COLOR_THRESHOLD && !State.stopped(true, true)) {
 	    	sensor.fetchSample(sample, 0);
 	    }
