@@ -107,13 +107,11 @@ public final class Movement {
 	
 	public static void rotateLeft(float angle, int speed) {
 		int motorAngle = getMotorAngle(angle, false);
-    	stop();
     	moveLeft(motorAngle, speed, true);
 	}
 	
 	public static void rotateRight(float angle, int speed) {
 		int motorAngle = getMotorAngle(angle, false);
-    	stop();
     	moveRight(motorAngle, speed, true);
 	}
 	

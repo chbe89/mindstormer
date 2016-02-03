@@ -6,10 +6,11 @@ import edu.kit.mindstormer.program.AbstractProgram;
 import edu.kit.mindstormer.sensor.Sensor;
 
 public class FollowLine extends AbstractProgram {
-	float sample;
-	int searchAngle = 20;
-	int forwardSpeed = 300;
-	int turnSpeed = 225;
+	private float sample;
+	private int searchAngle = 20;
+	private int forwardSpeed = 300;
+	private int turnSpeed = 225;
+	private int turnMultiplicator;
 	
 	
 	public FollowLine() {
@@ -17,36 +18,34 @@ public class FollowLine extends AbstractProgram {
 	}
 	
 	public void run() {
-		int turnMultiplicator = 1;
-		boolean turnDirection = true;
+		sample = 0f;
+		turnMultiplicator = 1;
+		
+		
 		while (!quit.get()) {
-			boolean found1 = find((turnDirection ? 1 : -1) * turnMultiplicator * searchAngle);
-			boolean found2 = false;
-			if (!found1) {
-				found2 = find((turnDirection ? -1 : 1) * turnMultiplicator * searchAngle);
-			}
-
-			
-			if (found1 || found2) {
-				turnMultiplicator = 1;
-				if (found2) {
-					turnDirection = !turnDirection;
-				}
+			find();
 				
-				Movement.stop();
-				Movement.move(forwardSpeed, forwardSpeed);
-			    while (sample >= Constants.LINE_COLOR_THRESHOLD) {
-			    	sample = Sensor.sampleColor();
-			    }
-			    Movement.stop();
-			    
-			    
-			} else {
-
-				turnMultiplicator ++;
-			}
+			Movement.move(forwardSpeed, forwardSpeed);
+		    while (sample >= Constants.LINE_COLOR_THRESHOLD) {
+		    	sample = Sensor.sampleColor();
+		    }
 		}
 		Movement.stop();
+	}
+	
+	private void find() {
+		boolean found1 = false;
+		boolean found2 = false;
+		while(!found1 && !found2) {
+			found1 = find(turnMultiplicator * searchAngle);
+			
+			if (!found1) {
+				turnMultiplicator += turnMultiplicator > 0 ? 1 : -1;
+				found2 = find(-turnMultiplicator * searchAngle);
+			}
+			
+		}
+		turnMultiplicator = (turnMultiplicator > 0 ? 1 : -1) * (found2 ? -1 : 1);
 	}
 	
 	private boolean find(float angle) {
