@@ -35,7 +35,7 @@ public class FollowLineSinus extends AbstractProgram {
 	}
 	
 	private void waitForFoundLine() {
-		while (sample[0] < Constants.LINE_COLOR_THRESHOLD && !State.stopped(true, true)) {
+		while (sample[0] < Constants.LINE_COLOR_THRESHOLD) {
 	    	sensor.fetchSample(sample, 0);
 	    }
 	}
