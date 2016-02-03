@@ -8,12 +8,7 @@ import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.program.Program;
 import edu.kit.mindstormer.program.implementation.*;
 import lejos.hardware.BrickFinder;
-import lejos.hardware.Button;
-import lejos.hardware.Sound;
-import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
-import lejos.robotics.SampleProvider;
-import lejos.utility.Delay;
 
 public class Main {
 
@@ -25,13 +20,6 @@ public class Main {
 	
     public static void main(String[] args) {
     
-    	/*initEV3();
-		initKeylisteners();
-		listenToSensors();
-		
-		
-		Sensors.closeSensors();*/
-    
 		Collection<Program> programs = new ArrayList<Program>();
 		programs.add(new NavigatorProgram());
 		programs.add(new Race());
@@ -39,37 +27,10 @@ public class Main {
 		programs.add(new Seesaw());
 		programs.add(new FollowLineSinus());
 		programs.add(new SensorMotorTest());
+		programs.add(new RollerBox());
+		programs.add(new MoveFixedDistance());
 		
 		OperatingSystem os = OperatingSystem.withPrograms(programs);
 		os.run();
     }
-
-    private static void initEV3() {
-    	Button.LEDPattern(4);
-    	Sound.beepSequenceUp();
-    	g.setFont(Font.getDefaultFont());
-    	g.drawString("Doge ready!", SW / 2, SH / 2, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
-    	g.refresh();
-    	Sound.beepSequenceUp();
-    }
-    
-    private static void listenToSensors() {
-      	SampleProvider gyro = Sensors.getSensor("gyro", "S2", "angle");
-    	float[] sample = new float[gyro.sampleSize()];
-
-    	while (!escape.get()) {
-    		sample = new float[gyro.sampleSize()];
-    		gyro.fetchSample(sample, 0);
-    	    Delay.msDelay(500);
-    	    g.clear();
-    	    g.setFont(Font.getDefaultFont());
-    	    g.drawString(String.valueOf(sample[0]), SW / 2, SH / 2, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
-    	    g.refresh();
-    	}
-    }
-    
-	private static void initKeylisteners() {
-
-		Button.ESCAPE.waitForPressAndRelease();
-	}
 }
