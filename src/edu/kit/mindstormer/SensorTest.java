@@ -13,7 +13,6 @@ import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.SensorMode;
 import lejos.utility.Delay;
-import edu.kit.mindstormer.movement.Complex;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
 
@@ -54,11 +53,11 @@ public class SensorTest {
 	});
 
 	while (!stop.get()) {
-	    Complex.rotate(90, 100);
+		Movement.rotate(90, 100);
 	    while (sample[0] < Constants.LINE_COLOR_THRESHOLD && !State.stopped(true, true)) {
 		sensor.fetchSample(sample, 0);
 	    }
-	    Complex.rotate(-180, 100);
+	    Movement.rotate(-180, 100);
 	    while (sample[0] < Constants.LINE_COLOR_THRESHOLD && !State.stopped(true, true)) {
 		sensor.fetchSample(sample, 0);
 	    }

@@ -93,6 +93,47 @@ public final class Movement {
 			selectedWheel.stop();
 		}
 	}
+	
+	public static void rotate(float angle, int speed) {
+		int motorAngle = getMotorAngle(angle, true);
+		leftWheel.startSynchronization();
+		moveLeft(-motorAngle, speed / 2, true);
+		moveRight(motorAngle, speed / 2, true);
+		leftWheel.endSynchronization();;
+	}
+	
+	
+	public static void rotateLeft(float angle, int speed) {
+		int motorAngle = getMotorAngle(angle, false);
+    	stop();
+    	moveLeft(motorAngle, speed, true);
+	}
+	
+	public static void rotateRight(float angle, int speed) {
+		int motorAngle = getMotorAngle(angle, false);
+    	stop();
+    	moveRight(motorAngle, speed, true);
+	}
+	
+	private static int getMotorAngle(float angle, boolean bothWheels) {
+		return Math.round(Constants.ROTATION_FACTOR * angle * (bothWheels ? 0.5f : 1));
+	}
+
+	public static void driveForwardByDegrees(float wheelTurn, int speed) {
+		int motorAngle = getMotorAngle(wheelTurn, true);
+		leftWheel.startSynchronization();
+		moveLeft(motorAngle, speed / 2, true);
+		moveRight(motorAngle, speed / 2, true);
+		leftWheel.endSynchronization();
+	}
+	
+	public static void driveCurve(boolean turnLeft, float wheelTurn, int speed) {
+		int motorAngle = getMotorAngle(wheelTurn, true);
+		leftWheel.startSynchronization();
+		moveLeft(motorAngle / (!turnLeft? 1:2), speed / 2, true);
+		moveRight(motorAngle / (turnLeft? 1:2), speed / 2, true);
+		leftWheel.endSynchronization();
+	}
 
 	public static enum Mode {
 		FORWARD, BACKWARD, STOP;
