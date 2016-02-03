@@ -1,4 +1,4 @@
-package edu.kit.mindstormer.program.implementation;
+package edu.kit.mindstormer.program.implementation.test;
 
 import lejos.utility.Delay;
 import edu.kit.mindstormer.program.AbstractProgram;
@@ -12,8 +12,7 @@ public class DistanceSensorTest extends AbstractProgram {
 		while (!quit.get()) {
 			float distance = Sensor.sampleDistance();
 			OperatingSystem.displayText(String.valueOf(distance));
-			Delay.msDelay(200);
+			Delay.msDelay(100);
 		}
-
 	}
 }

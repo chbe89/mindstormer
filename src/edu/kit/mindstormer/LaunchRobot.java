@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.program.Program;
-import edu.kit.mindstormer.program.implementation.NavigatorProgram;
+import edu.kit.mindstormer.program.implementation.test.NavigatorProgram;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.Key;

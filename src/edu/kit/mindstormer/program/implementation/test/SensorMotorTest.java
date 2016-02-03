@@ -1,4 +1,4 @@
-package edu.kit.mindstormer.program.implementation;
+package edu.kit.mindstormer.program.implementation.test;
 
 import edu.kit.mindstormer.program.AbstractProgram;
 import edu.kit.mindstormer.program.OperatingSystem;

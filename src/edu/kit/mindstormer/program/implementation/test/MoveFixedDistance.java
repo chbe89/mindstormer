@@ -1,4 +1,4 @@
-package edu.kit.mindstormer.program.implementation;
+package edu.kit.mindstormer.program.implementation.test;
 
 import lejos.hardware.Button;
 import lejos.hardware.Key;
