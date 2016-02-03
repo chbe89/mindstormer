@@ -7,7 +7,7 @@ import edu.kit.mindstormer.sensor.Sensor;
 
 public class FollowLineSinus extends AbstractProgram {
 	EV3ColorSensor sensor;
-	float sample;
+	float[] sample;
 	int searchAngle = 20;
 	int forwardSpeed = 350;
 	int turnSpeed = 200;
