@@ -35,7 +35,7 @@ public class Main {
 		Collection<Program> programs = new ArrayList<Program>();
 		programs.add(new NavigatorProgram());
 		programs.add(new Race());
-		//programs.add(new FollowLine());
+		programs.add(new FollowLine());
 		programs.add(new Seesaw());
 		programs.add(new FollowLineSinus());
 		

@@ -5,13 +5,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import edu.kit.mindstormer.movement.Movement;
+import edu.kit.mindstormer.sensor.Sensor;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.utility.Delay;
-import edu.kit.mindstormer.movement.Movement;
 
 public class OperatingSystem implements ProgramContext {
 
@@ -30,6 +31,7 @@ public class OperatingSystem implements ProgramContext {
 	
 	public static OperatingSystem withPrograms(Collection<Program> programs) {
 		Movement.init();
+		Sensor.init();
 		return new OperatingSystem(new ArrayList<Program>(programs));
 	}
 

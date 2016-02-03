@@ -8,7 +8,7 @@ import edu.kit.mindstormer.sensor.Sensor;
 public class FollowLine extends AbstractProgram {
 	float[] sample;
 	int searchAngle = 20;
-	int forwardSpeed = 600;
+	int forwardSpeed = 350;
 	int turnSpeed = 200;
 	
 	
@@ -24,8 +24,11 @@ public class FollowLine extends AbstractProgram {
 			boolean found1 = find((turnDirection ? 1 : -1) * turnMultiplicator * searchAngle);
 			boolean found2 = false;
 			if (!found1) {
-				found2 = find((turnDirection ? -1 : 1) * turnMultiplicator * 2 * searchAngle);
+				turnMultiplicator *= 2;
+				found2 = find((turnDirection ? -1 : 1) * turnMultiplicator * searchAngle);
 			}
+			turnMultiplicator *= 2;
+
 			
 			if (found1 || found2) {
 				turnMultiplicator = 1;
@@ -34,15 +37,13 @@ public class FollowLine extends AbstractProgram {
 				}
 				
 				Movement.stop();
-				//Movement.move(forwardSpeed, forwardSpeed);
+				Movement.move(forwardSpeed, forwardSpeed);
 			    while (sample[0] >= Constants.LINE_COLOR_THRESHOLD) {
 			    	Sensor.COLOR.fetchSample(sample, 0);
 			    }
 			    Movement.stop();
 			    
 			    
-			} else {
-				turnMultiplicator++;
 			}
 		}
 		Movement.stop();
