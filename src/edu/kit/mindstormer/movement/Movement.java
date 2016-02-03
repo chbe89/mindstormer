@@ -15,6 +15,7 @@ public final class Movement {
 			BrickFinder.getDefault().getPort("B"));
 	protected final static MotorListener leftMotorListener = new MotorListener();
 	protected final static MotorListener rightMotorListener = new MotorListener();
+	protected final static MotorListener sensorMotorListener = new MotorListener();
 
 	private Movement() {
 	};
@@ -24,7 +25,9 @@ public final class Movement {
 		rightWheel.setAcceleration(Constants.ACCELERATION);
 		leftWheel.addListener(leftMotorListener);
 		rightWheel.addListener(rightMotorListener);
+		sensorMotor.addListener(sensorMotorListener);
 		leftWheel.synchronizeWith(new RegulatedMotor[] { rightWheel });
+		sensorMotor.setSpeed(Constants.SENSOR_MOTOR_SPEED);
 	}
 
 	public static void moveLeft(int speed) {
