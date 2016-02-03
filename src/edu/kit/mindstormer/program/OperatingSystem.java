@@ -8,6 +8,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import edu.kit.mindstormer.movement.Movement;
+import edu.kit.mindstormer.sensor.Sensor;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
@@ -32,6 +33,7 @@ public class OperatingSystem implements ProgramContext {
 	
 	public static OperatingSystem withPrograms(Collection<Program> programs) {
 		Movement.init();
+		Sensor.init();
 		return new OperatingSystem(new ArrayList<Program>(programs));
 	}
 
