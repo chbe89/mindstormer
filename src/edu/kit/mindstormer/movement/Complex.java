@@ -6,21 +6,22 @@ public class Complex {
 	
 	
 	private Complex() {};
-	public static void rotate(float angle, float speed) {
+	public static void rotate(float angle, int speed) {
 		int motorAngle = getMotorAngle(angle, true);
-    	Movement.stop();
+		Movement.leftWheel.startSynchronization();
 		Movement.moveLeft(-motorAngle, speed / 2, true);
 		Movement.moveRight(motorAngle, speed / 2, true);
+		Movement.leftWheel.endSynchronization();;
 	}
 	
 	
-	public static void rotateLeft(float angle, float speed) {
+	public static void rotateLeft(float angle, int speed) {
 		int motorAngle = getMotorAngle(angle, false);
     	Movement.stop();
     	Movement.moveLeft(motorAngle, speed, true);
 	}
 	
-	public static void rotateRight(float angle, float speed) {
+	public static void rotateRight(float angle, int speed) {
 		int motorAngle = getMotorAngle(angle, false);
     	Movement.stop();
     	Movement.moveRight(motorAngle, speed, true);

@@ -10,7 +10,7 @@ public class FollowLine extends AbstractProgram {
 	EV3ColorSensor sensor;
 	float[] sample;
 	int searchAngle = 20;
-	int forwardSpeed = 350;
+	int forwardSpeed = 600;
 	int turnSpeed = 200;
 	
 	
@@ -36,17 +36,20 @@ public class FollowLine extends AbstractProgram {
 				if (found2) {
 					turnDirection = !turnDirection;
 				}
+				
+				Movement.stop();
+				//Movement.move(forwardSpeed, forwardSpeed);
+			    while (sample[0] >= Constants.LINE_COLOR_THRESHOLD) {
+			    	sensor.fetchSample(sample, 0);
+			    }
+			    Movement.stop();
+			    
+			    
 			} else {
 				turnMultiplicator++;
 			}
-			
-		    
-		    Movement.move(forwardSpeed, forwardSpeed);
-		    while (sample[0] >= Constants.LINE_COLOR_THRESHOLD) {
-		    	sensor.fetchSample(sample, 0);
-		    }
-		    Movement.stop();
 		}
+		Movement.stop();
 	}
 	
 	private boolean find(float angle) {

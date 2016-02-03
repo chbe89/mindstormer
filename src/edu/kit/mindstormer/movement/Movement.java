@@ -1,69 +1,76 @@
 package edu.kit.mindstormer.movement;
 
 import edu.kit.mindstormer.Constants;
-import lejos.hardware.motor.Motor;
-import lejos.hardware.motor.NXTRegulatedMotor;
+import lejos.hardware.BrickFinder;
+import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.robotics.RegulatedMotor;
 
 public final class Movement {
-	protected final static NXTRegulatedMotor leftWheel = Motor.A;
-	protected final static NXTRegulatedMotor rightWheel = Motor.D;
+	protected final static RegulatedMotor leftWheel = new EV3LargeRegulatedMotor(BrickFinder.getDefault().getPort("A"));
+	protected final static RegulatedMotor rightWheel = new EV3LargeRegulatedMotor(BrickFinder.getDefault().getPort("D"));
 	protected final static MotorListener leftMotorListener = new MotorListener();
 	protected final static MotorListener rightMotorListener = new MotorListener();
-	
-	private Movement() {};
-	
-	
+
+	private Movement() {
+	};
+
 	public static void init() {
 		leftWheel.setAcceleration(Constants.ACCELERATION);
 		rightWheel.setAcceleration(Constants.ACCELERATION);
 		leftWheel.addListener(leftMotorListener);
 		rightWheel.addListener(rightMotorListener);
+		leftWheel.synchronizeWith(new RegulatedMotor[] {rightWheel});
 	}
-	
-	public static void moveLeft(float speed) {
+
+	public static void moveLeft(int speed) {
 		setMode(Wheel.LEFT, speed);
 		leftWheel.setSpeed(speed);
 	}
-	
-	public static void moveRight(float speed) {
+
+	public static void moveRight(int speed) {
 		setMode(Wheel.RIGHT, speed);
 		rightWheel.setSpeed(speed);
 	}
-	
-	public static void move(float speed) {
+
+	public static void move(int speed) {
+		leftWheel.startSynchronization();
 		moveLeft(speed);
 		moveRight(speed);
+		leftWheel.endSynchronization();
 	}
-	
-	public static void moveLeft(int angle, float speed, boolean immediateReturn) {
+
+	public static void moveLeft(int angle, int speed, boolean immediateReturn) {
 		leftWheel.setSpeed(speed);
 		leftWheel.rotate(angle, immediateReturn);
 	}
-	
-	public static void moveRight(int angle, float speed, boolean immediateReturn) {
+
+	public static void moveRight(int angle, int speed, boolean immediateReturn) {
 		rightWheel.setSpeed(speed);
 		rightWheel.rotate(angle, immediateReturn);
 	}
-	
-	
-	public static void move(float leftSpeed, float rightSpeed) {
+
+	public static void move(int leftSpeed, int rightSpeed) {
+		leftWheel.startSynchronization();
 		moveLeft(leftSpeed);
 		moveRight(rightSpeed);
+		leftWheel.endSynchronization();
 	}
-	
+
 	public static void stop() {
-		stopLeft();
+		leftWheel.startSynchronization();
 		stopRight();
+		stopLeft();
+		leftWheel.endSynchronization();
 	}
-	
+
 	public static void stopLeft() {
 		leftWheel.stop();
 	}
-	
+
 	public static void stopRight() {
 		rightWheel.stop();
 	}
-	
+
 	private static float setMode(Wheel wheel, float speed) {
 		if (speed > 0) {
 			setMode(wheel, Mode.FORWARD);
@@ -74,17 +81,11 @@ public final class Movement {
 		}
 		return Math.abs(speed);
 	}
-	
+
 	private static void setMode(Wheel wheel, Mode mode) {
-		NXTRegulatedMotor selectedWheel;
-		
-		if (wheel == Wheel.LEFT) {
-			selectedWheel = leftWheel;
-		} else {
-			selectedWheel = rightWheel;
-		}
-		
-		if(Mode.FORWARD == mode) {
+		RegulatedMotor selectedWheel = (wheel == Wheel.LEFT) ? leftWheel : rightWheel;
+
+		if (Mode.FORWARD == mode) {
 			selectedWheel.forward();
 		} else if (Mode.BACKWARD == mode) {
 			selectedWheel.backward();
@@ -92,11 +93,11 @@ public final class Movement {
 			selectedWheel.stop();
 		}
 	}
-	
+
 	public static enum Mode {
 		FORWARD, BACKWARD, STOP;
 	}
-	
+
 	private static enum Wheel {
 		LEFT, RIGHT;
 	}
