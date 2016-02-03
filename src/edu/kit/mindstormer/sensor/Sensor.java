@@ -1,14 +1,17 @@
 package edu.kit.mindstormer.sensor;
 
-import edu.kit.mindstormer.Constants;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3IRSensor;
+import lejos.robotics.SampleProvider;
+import lejos.robotics.filter.MedianFilter;
+import edu.kit.mindstormer.Constants;
 
 ;
 
 public class Sensor {
 	private static final EV3ColorSensor COLOR = new EV3ColorSensor(Constants.COLOR_SENSOR_PORT);
 	private static final EV3IRSensor DISTANCE = new EV3IRSensor(Constants.DISTANCE_SENSOR_PORT);
+	private static final SampleProvider DISTANCE_MEDIAN = new MedianFilter(DISTANCE, 5);
 
 	private static final float[] colorSample = new float[COLOR.sampleSize()];
 	private static final float[] distanceSample = new float[DISTANCE.sampleSize()];
@@ -24,7 +27,7 @@ public class Sensor {
 	}
 
 	public static float sampleDistance() {
-		DISTANCE.fetchSample(distanceSample, 0);
+		DISTANCE_MEDIAN.fetchSample(distanceSample, 0);
 		return distanceSample[0];
 	}
 
