@@ -4,16 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.program.Program;
-import edu.kit.mindstormer.program.implementation.FollowLine;
-import edu.kit.mindstormer.program.implementation.NavigatorProgram;
-import edu.kit.mindstormer.program.implementation.Race;
+import edu.kit.mindstormer.program.implementation.*;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
-import lejos.hardware.Key;
-import lejos.hardware.KeyListener;
 import lejos.hardware.Sound;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
@@ -41,11 +36,11 @@ public class Main {
 		programs.add(new NavigatorProgram());
 		programs.add(new Race());
 		programs.add(new FollowLine());
-
+		programs.add(new Seesaw());
+		programs.add(new FollowLineSinus());
 		
 		OperatingSystem os = OperatingSystem.withPrograms(programs);
 		os.run();
-
     }
 
     private static void initEV3() {

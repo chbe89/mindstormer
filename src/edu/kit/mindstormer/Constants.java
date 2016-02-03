@@ -1,6 +1,12 @@
 package edu.kit.mindstormer;
 
+import lejos.hardware.port.Port;
+import lejos.hardware.port.SensorPort;
+
 public final class Constants {
+	
+	
+	public final static Port COLOR_SENSOR_PORT = SensorPort.S2;
 	
 	/**
 	 * Translates wheel rotation into motor rotation.
