@@ -1,5 +1,7 @@
 package edu.kit.mindstormer.program.implementation;
 
+import lejos.hardware.Button;
+import lejos.hardware.Key;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
 import edu.kit.mindstormer.program.AbstractProgram;
@@ -15,20 +17,22 @@ public class RollerBox extends AbstractProgram {
 
 	public void run() {
 
-		while (!quit.get()) {
-			Movement.rotate(180, rotationSpeed);
-			while (!State.stopped(true, true)) {
-			}
+		// while (!quit.get()) {
 
-			Movement.moveDistance(-70, speed);
-
-			while (!State.stopped(true, true)) {
-			}
-			
-			// Movement.rotate(180, rotationSpeed);
-			// while(!State.stopped(true, true)) {
-			// }
+		Movement.rotate(180, rotationSpeed);
+		while (!State.stopped(true, true)) {
 		}
-		// Button.ESCAPE.simulateEvent(Key.KEY_RELEASED);
+
+		Movement.moveDistance(-70, speed);
+		while (!State.stopped(true, true)) {
+			// keep distance to wall
+		}
+		
+
+		Movement.rotate(180, rotationSpeed);
+		while (!State.stopped(true, true)) {
+		}
+		// }
+		Button.ESCAPE.simulateEvent(Key.KEY_RELEASED);
 	}
 }
