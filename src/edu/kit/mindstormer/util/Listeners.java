@@ -15,6 +15,16 @@ public final class Listeners {
 		// ctor
 	}
 
+	public static void removeListeners(Key key) {
+		try {
+			List<KeyListener> listeners = getListeners(key);
+			if (!listeners.isEmpty())
+				listeners.clear();
+		} catch (Exception e) {
+			// do nothing
+		}
+	}
+	
 	public static List<KeyListener> getListeners(Key key) throws Exception {
 		EV3Key k = cast(key);
 		if (k == null)
@@ -41,17 +51,6 @@ public final class Listeners {
 		field.setAccessible(true);
 		Object obj = field.get(k);
 		return obj;
-	}
-
-	public static void removeListeners(Key key) {
-		try {
-
-			List<KeyListener> listeners = getListeners(key);
-			if (!listeners.isEmpty())
-				listeners.clear();
-		} catch (Exception e) {
-			// do nothing
-		}
 	}
 
 	private static EV3Key cast(Key key) {

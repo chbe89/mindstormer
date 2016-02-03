@@ -1,6 +1,5 @@
 package edu.kit.mindstormer.program;
 
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class AbstractProgram implements Program {
 

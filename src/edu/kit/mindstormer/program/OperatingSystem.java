@@ -3,17 +3,15 @@ package edu.kit.mindstormer.program;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import edu.kit.mindstormer.movement.Movement;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
 import lejos.hardware.lcd.Font;
 import lejos.hardware.lcd.GraphicsLCD;
 import lejos.utility.Delay;
+import edu.kit.mindstormer.movement.Movement;
 
 public class OperatingSystem implements ProgramContext {
 

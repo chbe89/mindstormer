@@ -5,11 +5,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import lejos.hardware.Button;
 import lejos.hardware.Key;
 import lejos.hardware.KeyListener;
+import edu.kit.mindstormer.util.TimePad;
 
 class OsKeyListener implements KeyListener {
 
 	private final AtomicBoolean isActive = new AtomicBoolean(true);
 	private final ProgramContext context;
+
+	private final TimePad pad = new TimePad();
 
 	OsKeyListener(ProgramContext context) {
 		this.context = context;
@@ -34,12 +37,15 @@ class OsKeyListener implements KeyListener {
 
 	@Override
 	public void keyReleased(Key k) {
+		if (!pad.requestTime())
+			return;
+
 		if (Button.UP.equals(k)) {
 			if (isActive())
 				context.showPreviousProgram();
 		} else if (Button.DOWN.equals(k)) {
 			if (isActive())
-				context.showNextProgram();				
+				context.showNextProgram();
 		} else if (Button.ENTER.equals(k)) {
 			if (isActive())
 				context.addProgramToQueue();
