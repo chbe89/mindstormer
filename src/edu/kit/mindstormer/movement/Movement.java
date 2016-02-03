@@ -7,9 +7,12 @@ import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.robotics.RegulatedMotor;
 
 public final class Movement {
-	protected final static RegulatedMotor leftWheel = new EV3LargeRegulatedMotor(BrickFinder.getDefault().getPort("A"));
-	protected final static RegulatedMotor rightWheel = new EV3LargeRegulatedMotor(BrickFinder.getDefault().getPort("D"));
-	protected final static RegulatedMotor sensorMotor = new EV3MediumRegulatedMotor(BrickFinder.getDefault().getPort("B"));
+	protected final static RegulatedMotor leftWheel = new EV3LargeRegulatedMotor(
+			BrickFinder.getDefault().getPort("A"));
+	protected final static RegulatedMotor rightWheel = new EV3LargeRegulatedMotor(
+			BrickFinder.getDefault().getPort("D"));
+	protected final static RegulatedMotor sensorMotor = new EV3MediumRegulatedMotor(
+			BrickFinder.getDefault().getPort("B"));
 	protected final static MotorListener leftMotorListener = new MotorListener();
 	protected final static MotorListener rightMotorListener = new MotorListener();
 
@@ -21,7 +24,7 @@ public final class Movement {
 		rightWheel.setAcceleration(Constants.ACCELERATION);
 		leftWheel.addListener(leftMotorListener);
 		rightWheel.addListener(rightMotorListener);
-		leftWheel.synchronizeWith(new RegulatedMotor[] {rightWheel});
+		leftWheel.synchronizeWith(new RegulatedMotor[] { rightWheel });
 	}
 
 	public static void moveLeft(int speed) {
@@ -58,6 +61,14 @@ public final class Movement {
 		leftWheel.endSynchronization();
 	}
 
+	public static void moveRobot(int speed) {
+		move(speed, speed);
+	}
+
+	public static void moveDistance(int distance, int speed) {
+		driveForwardByDegrees(distance, speed);
+	}
+
 	public static void stop() {
 		leftWheel.startSynchronization();
 		stopRight();
@@ -85,7 +96,8 @@ public final class Movement {
 	}
 
 	private static void setMode(Wheel wheel, Mode mode) {
-		RegulatedMotor selectedWheel = (wheel == Wheel.LEFT) ? leftWheel : rightWheel;
+		RegulatedMotor selectedWheel = (wheel == Wheel.LEFT) ? leftWheel
+				: rightWheel;
 
 		if (Mode.FORWARD == mode) {
 			selectedWheel.forward();
@@ -95,30 +107,31 @@ public final class Movement {
 			selectedWheel.stop();
 		}
 	}
-	
+
 	public static void rotate(float angle, int speed) {
 		int motorAngle = getMotorAngle(angle, true);
 		leftWheel.startSynchronization();
 		moveLeft(-motorAngle, speed / 2, true);
 		moveRight(motorAngle, speed / 2, true);
-		leftWheel.endSynchronization();;
+		leftWheel.endSynchronization();
+		;
 	}
-	
-	
+
 	public static void rotateLeft(float angle, int speed) {
 		int motorAngle = getMotorAngle(angle, false);
-    	stop();
-    	moveLeft(motorAngle, speed, true);
+		stop();
+		moveLeft(motorAngle, speed, true);
 	}
-	
+
 	public static void rotateRight(float angle, int speed) {
 		int motorAngle = getMotorAngle(angle, false);
-    	stop();
-    	moveRight(motorAngle, speed, true);
+		stop();
+		moveRight(motorAngle, speed, true);
 	}
-	
+
 	private static int getMotorAngle(float angle, boolean bothWheels) {
-		return Math.round(Constants.ROTATION_FACTOR * angle * (bothWheels ? 0.5f : 1));
+		return Math.round(Constants.ROTATION_FACTOR * angle
+				* (bothWheels ? 0.5f : 1));
 	}
 
 	public static void driveForwardByDegrees(float wheelTurn, int speed) {
@@ -128,17 +141,18 @@ public final class Movement {
 		moveRight(motorAngle, speed / 2, true);
 		leftWheel.endSynchronization();
 	}
-	
+
 	public static void driveCurve(boolean turnLeft, float wheelTurn, int speed) {
 		int motorAngle = getMotorAngle(wheelTurn, true);
 		leftWheel.startSynchronization();
-		moveLeft(motorAngle, speed / (!turnLeft? 1:2), true);
-		moveRight(motorAngle, speed / (turnLeft? 1:2), true);
+		moveLeft(motorAngle, speed / (!turnLeft ? 1 : 2), true);
+		moveRight(motorAngle, speed / (turnLeft ? 1 : 2), true);
 		leftWheel.endSynchronization();
 	}
-	
+
 	public static void rotateSensorMotor(int angle) {
-		sensorMotor.rotate(Math.round(Constants.SENSOR_ROTATION_FACTOR * angle), true);
+		sensorMotor.rotate(
+				Math.round(Constants.SENSOR_ROTATION_FACTOR * angle), true);
 	}
 
 	public static enum Mode {
