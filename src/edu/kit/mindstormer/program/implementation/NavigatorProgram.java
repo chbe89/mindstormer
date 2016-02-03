@@ -42,6 +42,7 @@ public class NavigatorProgram extends AbstractProgram {
 				| GraphicsLCD.HCENTER);
 		
 		deactivateListeners();
+		Movement.stop();
 	}
 
 	private void initListeners() {

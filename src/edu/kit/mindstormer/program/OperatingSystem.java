@@ -73,7 +73,6 @@ public class OperatingSystem implements ProgramContext {
 
 	@Override
 	public void terminateOs() {
-		navigationKeyListener.deactivate();
 		quitOS.set(true);
 	}
 
