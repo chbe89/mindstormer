@@ -151,13 +151,13 @@ public final class Movement {
 	
 	public static void holdDistance(float centimeterPerSecond, float distance) {
 		float sample = Sensor.sampleDistance();
-		Delay.msDelay(100);
+		Delay.msDelay(200);
 		float difference = Sensor.sampleDistance() - sample;
 
 		if (difference > 0 && sample > distance) {
-			move(centimeterPerSecond, (3f / 4f) * centimeterPerSecond);
+			move(centimeterPerSecond, (7f / 8f) * centimeterPerSecond);
 		} else if (difference < 0 && sample < distance){
-			move((3f / 4f) * centimeterPerSecond, centimeterPerSecond);
+			move((7f / 8f) * centimeterPerSecond, centimeterPerSecond);
 		} else {
 			move(centimeterPerSecond);
 		}
