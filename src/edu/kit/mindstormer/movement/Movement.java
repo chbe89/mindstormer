@@ -6,98 +6,93 @@ import lejos.hardware.BrickFinder;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.robotics.RegulatedMotor;
+import lejos.utility.Delay;
 
 public final class Movement {
-	protected final static RegulatedMotor leftWheel = new EV3LargeRegulatedMotor(
+	protected final static RegulatedMotor leftMotor = new EV3LargeRegulatedMotor(
 			BrickFinder.getDefault().getPort("D"));
-	protected final static RegulatedMotor rightWheel = new EV3LargeRegulatedMotor(
+	protected final static RegulatedMotor rightMotor = new EV3LargeRegulatedMotor(
 			BrickFinder.getDefault().getPort("A"));
 	protected final static RegulatedMotor sensorMotor = new EV3MediumRegulatedMotor(
 			BrickFinder.getDefault().getPort("B"));
-	protected final static MotorListener leftMotorListener = new MotorListener();
-	protected final static MotorListener rightMotorListener = new MotorListener();
-	protected final static MotorListener sensorMotorListener = new MotorListener();
+	protected final static MotorListener motorListener = new MotorListener();
 
 	private Movement() {
 	};
 
 	public static void init() {
-		leftWheel.setAcceleration(Constants.ACCELERATION);
-		rightWheel.setAcceleration(Constants.ACCELERATION);
-		leftWheel.addListener(leftMotorListener);
-		rightWheel.addListener(rightMotorListener);
-		sensorMotor.addListener(sensorMotorListener);
-		leftWheel.synchronizeWith(new RegulatedMotor[] { rightWheel });
+		leftMotor.setAcceleration(Constants.ACCELERATION);
+		rightMotor.setAcceleration(Constants.ACCELERATION);
+		leftMotor.addListener(motorListener);
+		rightMotor.addListener(motorListener);
+		sensorMotor.addListener(motorListener);
+		leftMotor.synchronizeWith(new RegulatedMotor[] { rightMotor });
 		sensorMotor.setSpeed(Constants.SENSOR_MOTOR_SPEED);
 	}
 
-	public static void moveLeft(int speed) {
-		leftWheel.setSpeed(speed);
-		setMode(Wheel.LEFT, speed);
+	public static void moveLeft(float centimeterPerSecond) {
+		leftMotor.setSpeed(cmPerSecondToSpeed(centimeterPerSecond));
+		setMode(Wheel.LEFT, centimeterPerSecond);
 	}
 
-	public static void moveRight(int speed) {
-		rightWheel.setSpeed(speed);
-		setMode(Wheel.RIGHT, speed);
+	public static void moveRight(float centimeterPerSecond) {
+		rightMotor.setSpeed(cmPerSecondToSpeed(centimeterPerSecond));
+		setMode(Wheel.RIGHT, centimeterPerSecond);
 	}
 
-	public static void move(int speed) {
-		leftWheel.startSynchronization();
-		moveLeft(speed);
-		moveRight(speed);
-		leftWheel.endSynchronization();
+	public static void move(float centimeterPerSecond) {
+		leftMotor.startSynchronization();
+		moveLeft(centimeterPerSecond);
+		moveRight(centimeterPerSecond);
+		leftMotor.endSynchronization();
 	}
 
-	public static void moveLeft(int angle, int speed) {
-		leftWheel.setSpeed(speed);
-		leftWheel.rotate(angle, true);
+	public static void moveLeft(int angle, float centimeterPerSecond) {
+		leftMotor.setSpeed(cmPerSecondToSpeed(centimeterPerSecond));
+		leftMotor.rotate(angle, true);
 	}
 
-	public static void moveRight(int angle, int speed) {
-		rightWheel.setSpeed(speed);
-		rightWheel.rotate(angle, true);
+	public static void moveRight(int angle, float centimeterPerSecond) {
+		rightMotor.setSpeed(cmPerSecondToSpeed(centimeterPerSecond));
+		rightMotor.rotate(angle, true);
 	}
 
-	public static void move(int leftSpeed, int rightSpeed) {
-		leftWheel.startSynchronization();
-		moveLeft(leftSpeed);
-		moveRight(rightSpeed);
-		leftWheel.endSynchronization();
-	}
-
-	public static void moveRobot(int speed) {
-		move(speed, speed);
+	public static void move(int leftCentimeterPerSecond, float rightCentimeterPerSecond) {
+		leftMotor.startSynchronization();
+		moveLeft(leftCentimeterPerSecond);
+		moveRight(rightCentimeterPerSecond);
+		leftMotor.endSynchronization();
 	}
 
 	public static void stop() {
-		leftWheel.startSynchronization();
+		leftMotor.startSynchronization();
 		stopRight();
 		stopLeft();
-		leftWheel.endSynchronization();
+		leftMotor.endSynchronization();
 	}
 
 	public static void stopLeft() {
-		leftWheel.stop();
+		leftMotor.stop();
 	}
 
 	public static void stopRight() {
-		rightWheel.stop();
+		rightMotor.stop();
 	}
 
-	private static float setMode(Wheel wheel, float speed) {
-		if (speed > 0) {
+	private static float setMode(Wheel wheel, float leftCentimeterPerSecond) {
+		if (leftCentimeterPerSecond > 0) {
 			setMode(wheel, Mode.FORWARD);
-		} else if (speed < 0) {
+		} else if (leftCentimeterPerSecond < 0) {
 			setMode(wheel, Mode.BACKWARD);
 		} else {
 			setMode(wheel, Mode.STOP);
 		}
-		return Math.abs(speed);
+		return Math.abs(leftCentimeterPerSecond);
 	}
 
 	private static void setMode(Wheel wheel, Mode mode) {
-		RegulatedMotor selectedWheel = (wheel == Wheel.LEFT) ? leftWheel
-				: rightWheel;
+		RegulatedMotor selectedWheel = (wheel == Wheel.LEFT) ? leftMotor
+				: rightMotor;
 
 		if (Mode.FORWARD == mode) {
 			selectedWheel.forward();
@@ -108,64 +103,80 @@ public final class Movement {
 		}
 	}
 
-	public static void rotate(float angle, int speed) {
+	public static void rotate(float angle, float centimeterPerSecond) {
 		int motorAngle = getMotorAngleForRotation(angle, true);
-		leftWheel.startSynchronization();
-		moveLeft(motorAngle, speed / 2);
-		moveRight(-motorAngle, speed / 2);
-		leftWheel.endSynchronization();
+		leftMotor.startSynchronization();
+		moveLeft(motorAngle, cmPerSecondToSpeed(centimeterPerSecond) / 2);
+		moveRight(-motorAngle, cmPerSecondToSpeed(centimeterPerSecond) / 2);
+		leftMotor.endSynchronization();
 	}
 
-	public static void rotateLeft(float angle, int speed) {
+	public static void rotateLeft(float angle, float centimeterPerSecond) {
 		int motorAngle = getMotorAngleForRotation(angle, false);
-		stop();
-		moveLeft(motorAngle, speed);
+		moveLeft(motorAngle, centimeterPerSecond);
 	}
 
-	public static void rotateRight(float angle, int speed) {
+	public static void rotateRight(float angle, float centimeterPerSecond) {
 		int motorAngle = getMotorAngleForRotation(angle, false);
-		stop();
-		moveRight(motorAngle, speed);
+		moveRight(motorAngle, centimeterPerSecond);
 	}
 
 	private static int getMotorAngleForRotation(float angle, boolean bothWheels) {
-		return Math.round(Constants.ROTATION_FACTOR * angle * (bothWheels ? 0.5f : 1));
+		return Math.round(Constants.VEHICLE_ANGLE_TO_MOTOR_ANGLE * angle * (bothWheels ? 0.5f : 1));
 	}
 	
-	private static int getMotorAngleForDistance(float distance, boolean bothWheels) {
-		return Math.round(Constants.DISTANCE_FACTOR * distance * (bothWheels ? 0.5f : 1));
+	private static int getMotorAngleForDistance(float distance) {
+		return Math.round(Constants.CM_TO_MOTOR_ANGLE * distance);
+	}
+	
+	private static int cmPerSecondToSpeed(float centimeterPerSecond) {
+		return Math.round(Constants.CM_TO_MOTOR_ANGLE * centimeterPerSecond);
 	}
 
-	public static void moveDistance(float distance, int speed) {
-		int motorAngle = getMotorAngleForDistance(distance, true);
-		leftWheel.startSynchronization();
-		moveLeft(motorAngle, speed / 2);
-		moveRight(motorAngle, speed / 2);
-		leftWheel.endSynchronization();
+	public static void moveDistance(float distance, float centimeterPerSecond) {
+		int motorAngle = getMotorAngleForDistance(distance);
+		leftMotor.startSynchronization();
+		moveLeft(motorAngle, centimeterPerSecond / 2);
+		moveRight(motorAngle, centimeterPerSecond / 2);
+		leftMotor.endSynchronization();
 	}
-
-	public static void driveCurve(boolean turnLeft, float distance, int speed, float curveStrength) {
-		int motorAngle = getMotorAngleForDistance(distance, true);
-		leftWheel.startSynchronization();
-		moveLeft(motorAngle, (int)(speed / (turnLeft? 1:curveStrength)));
-		moveRight(motorAngle, (int)(speed / (!turnLeft? 1:curveStrength)));
-		leftWheel.endSynchronization();
-	}
-
+	
 	public static void rotateSensorMotor(int angle) {
-		sensorMotor.rotate(Math.round(Constants.SENSOR_ROTATION_FACTOR * angle), true);
+		sensorMotor.rotate(Math.round(Constants.SENSOR_ANGLE_TO_MOTOR_ANGLE * angle), true);
 	}
 	
-	public static void alignParallelToWall(int speed) {
-		float sampleDistance = 10;
+	public static void moveParallel(float centimeterPerSecond, float distance) {
+		float sampleDistance = Constants.DEFAULT_SAMPLE_DISTANCE;
+		alignParallel(centimeterPerSecond, sampleDistance);
 		float sample = Sensor.sampleDistance();
-		if (sample > 0.2f) {
+		float alignmentError = distance - sample;
+		if (Math.abs(alignmentError) > Constants.MAX_ALIGNMENT_ERROR) {
+			rotate(90, 14);
+			State.waitForMotors(true, true);
+			moveDistance(alignmentError, centimeterPerSecond);
+			State.waitForMotors(true, true);
+			rotate(-90, 14);
+			State.waitForMotors(true, true);
+		}
+	
+	}
+	
+	public static void alignParallel(float centimeterPerSecond) {
+		alignParallel(centimeterPerSecond, Constants.DEFAULT_SAMPLE_DISTANCE);
+	}
+	
+	
+	public static void alignParallel(float centimeterPerSecond, float sampleDistance) {
+		float sample = Sensor.sampleDistance();
+		if (sample > 30f) {
 			return;
 		}
-		Movement.moveDistance(sampleDistance, speed);
+		moveDistance(sampleDistance, centimeterPerSecond);
 		while (!State.stopped(true, true)) {}
+		stop();
 		float sampleDifference = (sample - Sensor.sampleDistance());
-		rotate((speed > 0 ? 1.f : -1.f) * (float) Math.sin(sampleDifference / sampleDistance), 200);
+		Delay.msDelay(10);
+		rotate((centimeterPerSecond > 0 ? 1.f : -1.f) * (float) Math.toDegrees(Math.atan(sampleDifference / sampleDistance)), 14);
 		while (!State.stopped(true, true)) {}
 	}
 

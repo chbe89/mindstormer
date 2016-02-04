@@ -20,12 +20,12 @@ public class FollowLineSinus extends AbstractProgram {
 	public void run() {
 		boolean turnDirection = true;
 		while (!quit.get()) {
-			Movement.driveCurve(turnDirection, 2000, 300, 1.5f);
+			//Movement.driveCurve(turnDirection, 2000, 300, 1.5f);
 			//Delay.msDelay(5000);
 			waitForFoundLine();
 			
 			turnDirection = !turnDirection;
-			Movement.driveCurve(turnDirection, 2000, 300, 1.5f);
+			//Movement.driveCurve(turnDirection, 2000, 300, 1.5f);
 			
 		    Movement.stop();
 		}
