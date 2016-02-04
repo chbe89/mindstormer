@@ -18,12 +18,12 @@ public class Bridge extends AbstractProgram {
 		
 		while (!quit.get()) {
 			sample = Sensor.sampleDistance();
-			Movement.move(-200, -240);
+			Movement.move(-24, -20);
 			while (sample < 8f) {
 				sample = Sensor.sampleDistance();
 			}
 			Movement.stop();
-			Movement.rotate(-20, 250);
+			Movement.rotate(20, 20);
 			while (!State.stopped(true, true)) {}
 		}
 		

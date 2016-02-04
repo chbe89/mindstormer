@@ -4,18 +4,15 @@ public class State {
 	private State() {};
 	
 	public static boolean stopped(boolean left, boolean right) {
-		boolean stopped = true;
-		if (left) {
-			stopped &= Movement.leftMotorListener.isStopped();
-		}
-		if (right) {
-			stopped &= Movement.rightMotorListener.isStopped();
-		}
-		return stopped;
+		return Movement.motorListener.isStopped(left, right, false);
 	}
 	
 	public static boolean stoppedSensor() {
-		return Movement.sensorMotorListener.isStopped();
+		return Movement.motorListener.isStopped(false, false, true);
+	}
+	
+	public static void waitForMotors(boolean left, boolean right) {
+		while(!stopped(left, right)) {}
 	}
 	
 	public static void waitForStoppedMove() {

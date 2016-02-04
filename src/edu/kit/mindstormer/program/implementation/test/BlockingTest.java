@@ -7,11 +7,13 @@ public class BlockingTest extends AbstractProgram {
 
 	@Override
 	public void run() {
+
+		Movement.moveDistance(10, 15);
 		while (!quit.get()) {
 			//boolean infiniteDistance = true;
 			//OperatingSystem.displayText("InfiniteDistance: " + infiniteDistance);
 			//Delay.msDelay(100);
-			Movement.alignParallelToWall(250);
+			//Movement.moveParallel(250, 20);
 		}
 	}
 }

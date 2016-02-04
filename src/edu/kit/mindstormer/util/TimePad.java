@@ -12,7 +12,7 @@ public class TimePad {
 	public TimePad() {
 		this(200);
 	}
-	
+
 	public TimePad(int milliseconds) {
 		this.ms = milliseconds;
 		this.isLocked = new AtomicBoolean(false);
@@ -33,11 +33,14 @@ public class TimePad {
 		long current = System.currentTimeMillis();
 		boolean hasEnoughTimeElapsed = current - time > ms;
 		if (hasEnoughTimeElapsed) {
-			boolean isUnlocked = !isLocked.get()
-					|| isLocked.compareAndSet(true, false);
+			boolean isUnlocked = !isLocked.get() || tryUnlock();
 			return !isUnlocked;
 		}
 
 		return isLocked.get();
+	}
+
+	private boolean tryUnlock() {
+		return isLocked.compareAndSet(true, false);
 	}
 }
