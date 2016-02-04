@@ -1,5 +1,6 @@
 package edu.kit.mindstormer.program.implementation.test;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import lejos.hardware.Button;
@@ -17,6 +18,7 @@ import edu.kit.mindstormer.util.TimePad;
 public class ReadjustSensor extends AbstractProgram {
 
 	private final SensorKeyListener listener = new SensorKeyListener();
+	private CountDownLatch latch = new CountDownLatch(1);
 
 	@Override
 	public void initialize() {
@@ -29,8 +31,16 @@ public class ReadjustSensor extends AbstractProgram {
 
 	@Override
 	public void run() {
-		while (!quit.get()) {
+		nonBlockingWait();
+	}
 
+	private void nonBlockingWait() {
+		while (true) {
+			try {
+				latch.await();
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
 		}
 	}
 
@@ -41,6 +51,8 @@ public class ReadjustSensor extends AbstractProgram {
 		Listeners.removeListener(Button.UP, listener);
 		Listeners.removeListener(Button.DOWN, listener);
 		Listeners.removeListener(Button.ENTER, listener);
+
+		latch.countDown();
 	}
 
 	private static class SensorKeyListener implements KeyListener {
@@ -50,6 +62,11 @@ public class ReadjustSensor extends AbstractProgram {
 
 		@Override
 		public void keyPressed(Key k) {
+			// do nothing
+		}
+
+		@Override
+		public void keyReleased(Key k) {
 			if (!pad.requestTime())
 				return;
 
@@ -64,6 +81,8 @@ public class ReadjustSensor extends AbstractProgram {
 				checkAndMove(1);
 				break;
 			case ENTER:
+				move.set(false);
+				OperatingSystem.displayText("Sensor stopped moving.");
 				break;
 			default:
 				break;
@@ -80,24 +99,8 @@ public class ReadjustSensor extends AbstractProgram {
 
 		private void moveSensor(int angle) {
 			while (move.get()) {
-				State.waitForSensorMotor();
 				Movement.rotateSensorMotor(angle);
-			}
-		}
-
-		@Override
-		public void keyReleased(Key k) {
-			if (!pad.requestTime())
-				return;
-
-			SmartKey key = SmartKey.from(k);
-			switch (key) {
-			case ENTER:
-				move.set(false);
-				OperatingSystem.displayText("Sensor stopped moving.");
-				break;
-			default:
-				break;
+				State.waitForSensorMotor();
 			}
 		}
 	}
