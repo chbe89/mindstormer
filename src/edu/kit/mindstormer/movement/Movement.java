@@ -1,6 +1,7 @@
 package edu.kit.mindstormer.movement;
 
 import edu.kit.mindstormer.Constants;
+import edu.kit.mindstormer.sensor.Sensor;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
@@ -153,6 +154,20 @@ public final class Movement {
 
 	public static void rotateSensorMotor(int angle) {
 		sensorMotor.rotate(Math.round(Constants.SENSOR_ROTATION_FACTOR * angle), true);
+	}
+	
+	public static void alignParallelToWall(int speed) {
+		float sampleDistance = 10;
+		float sample = Sensor.sampleDistance();
+		if (sample > 0.2f) {
+			return;
+		}
+		Movement.moveDistance(sampleDistance, speed);
+		while (!State.stopped(true, true)) {}
+		float newSample = Sensor.sampleDistance();
+		float sampleDifference = sample - newSample;
+		rotate(Math.sin(sampleDifference / sampleDistance), 100);
+		
 	}
 
 	public static enum Mode {
