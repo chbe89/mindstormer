@@ -1,61 +1,75 @@
 package edu.kit.mindstormer.program.implementation;
 
-import lejos.hardware.BrickFinder;
-import lejos.hardware.lcd.Font;
-import lejos.hardware.lcd.GraphicsLCD;
 import lejos.utility.Delay;
 import edu.kit.mindstormer.Constants;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
 import edu.kit.mindstormer.program.AbstractProgram;
+import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.sensor.Sensor;
 
 public class Labyrinth extends AbstractProgram {
-	float sample;
+	float sampleUltra;
 	float sampleTouch;
-	GraphicsLCD display;
+	final int speed = 400;
 
 	public Labyrinth() {
 		super("Labyrinth");
-		display = BrickFinder.getDefault().getGraphicsLCD();
-		display.setFont(Font.getDefaultFont());
 	}
 
 	public void run() {
 
 		while (!quit.get()) {
-			sample = Sensor.sampleDistance();
-			sampleTouch = Sensor.sampleTouchBoth();
-			display.clear();
-			display.drawString(String.valueOf(sample), display.getWidth() / 2, display.getHeight() / 2,
-					GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
-			Delay.msDelay(1000);
+			updateSensors();
+			OperatingSystem.displayText("T:" + String.valueOf(sampleTouch) + "U:" + String.valueOf(sampleUltra));
 
-			display.clear();
-			display.drawString("Touch" + String.valueOf(sampleTouch), display.getWidth() / 2, display.getHeight() / 2,
-					GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
-			Delay.msDelay(1000);
-			Movement.move(200);
-			while (Constants.MIN_WALL_DISTANCE < sample && sample < Constants.MAX_WALL_DISTANCE
-					&& sampleTouch == Constants.TOUCH_SENSOR_UNPRESSED) {
-				display.clear();
-				display.drawString("MOVING", display.getWidth() / 2, display.getHeight() / 2,
-						GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
-				sample = Sensor.sampleDistance();
-				sampleTouch = Sensor.sampleTouchBoth();
+			Movement.move(speed);
+			while (Constants.MIN_WALL_DISTANCE < sampleUltra 
+					&& sampleUltra < Constants.MAX_WALL_DISTANCE
+					&& sampleTouch != Constants.TOUCH_SENSOR_PRESSED) {
+				//OperatingSystem.displayText("MOVING " + String.valueOf(sampleTouch));
+				updateSensors();
 			}
 			Movement.stop();
-			if (sample < Constants.MIN_WALL_DISTANCE) {
+			if (sampleTouch >= Constants.TOUCH_SENSOR_PRESSED) {
+				OperatingSystem.displayText("DETECTED TOUCH");
+				backupAndTurn(true);
+			} else if (sampleUltra >= Constants.MAX_WALL_DISTANCE ) {
+				OperatingSystem.displayText("DETECTED NO WALL");
+				driveCurve90d(false);
+			} else if (sampleUltra < Constants.MIN_WALL_DISTANCE) {
+				OperatingSystem.displayText("DETECTED TOO CLOSE");
+				Movement.rotate(5, speed);
+				State.waitForStoppedMove();
+				Movement.moveDistance(5, speed);
+				State.waitForStoppedMove();
 				// correctAngleToWall
-			} else if (sample >= Constants.MAX_WALL_DISTANCE && sampleTouch != Constants.BOTH_TOUCH_SENSOR_PRESSED) {
-				Movement.rotate(-90, 250);
 			} else {
-				Movement.rotate(90, 250);
+				OperatingSystem.displayText("ERROR UNDEFINED STATE");
 			}
-			while (!State.stoppedSensor()) {
-			}
-
 		}
-
+	}
+	
+	private void updateSensors() {
+		sampleUltra = Sensor.sampleDistance();
+		sampleTouch = Sensor.sampleTouchBoth();
+	}
+	
+	private void backupAndTurn(boolean left) {
+		Movement.moveDistance(-15, speed);
+		State.waitForStoppedMove();
+		Movement.rotate(90 * (left?-1:1), speed);
+		State.waitForStoppedMove();
+		Movement.moveDistance(30, speed);
+		State.waitForStoppedMove();
+	}
+	
+	private void driveCurve90d(boolean left) {
+		Movement.moveDistance(10, speed);
+		State.waitForStoppedMove();
+		Movement.rotate(90 * (left?-1:1), speed);
+		State.waitForStoppedMove();
+		Movement.moveDistance(30, speed);
+		State.waitForStoppedMove();
 	}
 }

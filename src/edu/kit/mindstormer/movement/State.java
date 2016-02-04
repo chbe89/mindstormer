@@ -17,4 +17,9 @@ public class State {
 	public static boolean stoppedSensor() {
 		return Movement.sensorMotorListener.isStopped();
 	}
+	
+	public static void waitForStoppedMove() {
+		while (!stopped(true, true)) {
+		}
+	}
 }

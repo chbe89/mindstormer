@@ -139,8 +139,8 @@ public final class Movement {
 	public static void moveDistance(float distance, int speed) {
 		int motorAngle = getMotorAngleForDistance(distance, true);
 		leftWheel.startSynchronization();
-		moveLeft(motorAngle, speed / 2);
-		moveRight(motorAngle, speed / 2);
+		moveLeft(motorAngle, speed);
+		moveRight(motorAngle, speed);
 		leftWheel.endSynchronization();
 	}
 
