@@ -14,4 +14,8 @@ public class State {
 	public static void waitForMotors(boolean left, boolean right) {
 		while(!stopped(left, right)) {}
 	}
+	
+	public static void waitForSensorMotor() {
+		while(!Movement.motorListener.isStopped(false, false, true)) {}
+	}
 }

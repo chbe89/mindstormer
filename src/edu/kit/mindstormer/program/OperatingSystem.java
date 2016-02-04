@@ -67,7 +67,7 @@ public class OperatingSystem implements ProgramContext {
 
 	@Override
 	public void terminateProgram() {
-		//programs.get(pc).terminate();
+		programs.get(pc).terminate();
 		displayText("Trying to stop program");
 		AbstractProgram.quit.set(true);
 		navigationKeyListener.activate();
@@ -83,6 +83,7 @@ public class OperatingSystem implements ProgramContext {
 	public void startProgram(Program program) {
 		navigationKeyListener.deactivate();
 		Program.quit.set(false);
+		program.initialize();
 		displayText(program.getName() + " running");
 		program.run();
 		displayText(program.getName() + " stopped");
