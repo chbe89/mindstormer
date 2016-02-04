@@ -25,10 +25,10 @@ public class OperatingSystem implements ProgramContext {
 	private static int height;
 
 	private int pc = 0;
-	
+
 	private final AtomicBoolean quitOS = new AtomicBoolean(false);
 	private final ArrayList<Program> runningPrograms = new ArrayList<>();
-	
+
 	public static OperatingSystem withPrograms(Collection<Program> programs) {
 		Movement.init();
 		Sensor.init();
@@ -38,14 +38,15 @@ public class OperatingSystem implements ProgramContext {
 	private OperatingSystem(List<Program> programs) {
 		this.programs = programs;
 		this.navigationKeyListener = new OsKeyListener(this);
-		display = initializeDisplay();
-		width = display.getWidth();
-		height = display.getHeight();
+		if (display == null)
+			display = initializeDisplay();
 	}
 
-	private GraphicsLCD initializeDisplay() {
+	private static GraphicsLCD initializeDisplay() {
 		GraphicsLCD display = BrickFinder.getDefault().getGraphicsLCD();
 		display.setFont(Font.getDefaultFont());
+		width = display.getWidth();
+		height = display.getHeight();
 		return display;
 	}
 
@@ -97,7 +98,7 @@ public class OperatingSystem implements ProgramContext {
 		Program program = programs.get(pc);
 		runningPrograms.add(program);
 	}
-	
+
 	@Override
 	public void showNextProgram() {
 		pc = (pc + 1) % programs.size();
@@ -113,10 +114,12 @@ public class OperatingSystem implements ProgramContext {
 	}
 
 	public static void displayText(String text) {
+		if (display == null)
+			display = initializeDisplay();
+		
 		display.clear();
-		display.drawString(text, width / 2, height / 2, GraphicsLCD.BASELINE
-				| GraphicsLCD.HCENTER);
-		//display.refresh();
+		display.drawString(text, width / 2, height / 2, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
+		// display.refresh();
 	}
 
 	@Override

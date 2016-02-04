@@ -67,6 +67,7 @@ public final class Movement {
 	
 	public static void moveDistance(float distance, float centimeterPerSecond) {
 		int backwardsFactor = (distance < 0 || centimeterPerSecond < 0) ? -1 : 1;
+		distance = Math.abs(distance);
 		int motorAngle = getMotorAngleForDistance(distance);
 		leftMotor.startSynchronization();
 		moveLeft(backwardsFactor * motorAngle, centimeterPerSecond);

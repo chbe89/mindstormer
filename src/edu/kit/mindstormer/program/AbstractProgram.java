@@ -30,4 +30,9 @@ public abstract class AbstractProgram implements Program {
 	public void terminate() {
 		quit.set(true);
 	}
+	
+	@Override
+	public String toString() {
+		return "Program [" + name + "]";
+	}
 }

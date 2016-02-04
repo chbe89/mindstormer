@@ -15,6 +15,7 @@ import edu.kit.mindstormer.program.implementation.test.DistanceSensorTest;
 import edu.kit.mindstormer.program.implementation.test.MoveFixedDistance;
 import edu.kit.mindstormer.program.implementation.test.NavigatorProgram;
 import edu.kit.mindstormer.program.implementation.test.ReadjustSensor;
+import edu.kit.mindstormer.util.HttpLogger;
 
 public class Main {
 
@@ -31,6 +32,9 @@ public class Main {
 		programs.add(new NavigatorProgram());
 		programs.add(new ReadjustSensor());
 
+		HttpLogger logger = HttpLogger.getInstance();
+		logger.log("Starting OS with " + programs.size() + " programs.");
+		logger.log("Programs = " + programs.toString());
 		
 		OperatingSystem os = OperatingSystem.withPrograms(programs);
 		os.run();
