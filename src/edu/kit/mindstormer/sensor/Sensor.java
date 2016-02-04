@@ -7,8 +7,6 @@ import lejos.robotics.SampleProvider;
 import lejos.robotics.filter.MedianFilter;
 import edu.kit.mindstormer.Constants;
 
-;
-
 public class Sensor {
 	private static final EV3ColorSensor COLOR = new EV3ColorSensor(Constants.COLOR_SENSOR_PORT);
 	private static final EV3UltrasonicSensor DISTANCE = new EV3UltrasonicSensor(Constants.DISTANCE_SENSOR_PORT);
