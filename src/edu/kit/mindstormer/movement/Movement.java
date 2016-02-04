@@ -63,6 +63,15 @@ public final class Movement {
 		moveRight(rightCentimeterPerSecond);
 		leftMotor.endSynchronization();
 	}
+	
+	public static void moveDistance(float distance, float centimeterPerSecond) {
+		int backwardsFactor = (distance < 0 || centimeterPerSecond < 0) ? -1 : 1;
+		int motorAngle = getMotorAngleForDistance(distance);
+		leftMotor.startSynchronization();
+		moveLeft(backwardsFactor * motorAngle, centimeterPerSecond);
+		moveRight(backwardsFactor * motorAngle, centimeterPerSecond);
+		leftMotor.endSynchronization();
+	}
 
 	public static void stop() {
 		leftMotor.startSynchronization();
@@ -132,17 +141,26 @@ public final class Movement {
 	private static int cmPerSecondToSpeed(float centimeterPerSecond) {
 		return Math.round(Constants.CM_TO_MOTOR_ANGLE * centimeterPerSecond);
 	}
-
-	public static void moveDistance(float distance, float centimeterPerSecond) {
-		int motorAngle = getMotorAngleForDistance(distance);
-		leftMotor.startSynchronization();
-		moveLeft(motorAngle, centimeterPerSecond);
-		moveRight(motorAngle, centimeterPerSecond);
-		leftMotor.endSynchronization();
-	}
 	
 	public static void rotateSensorMotor(int angle) {
 		sensorMotor.rotate(-Math.round(Constants.SENSOR_ANGLE_TO_MOTOR_ANGLE * angle), true);
+	}
+	
+
+	
+	public static void holdDistance(float centimeterPerSecond, float distance) {
+		float sample = Sensor.sampleDistance();
+		Delay.msDelay(100);
+		float difference = Sensor.sampleDistance() - sample;
+
+		if (difference > 0 && sample > distance) {
+			move(centimeterPerSecond, (3f / 4f) * centimeterPerSecond);
+		} else if (difference < 0 && sample < distance){
+			move((3f / 4f) * centimeterPerSecond, centimeterPerSecond);
+		} else {
+			move(centimeterPerSecond);
+		}
+		
 	}
 	
 	public static void moveParallel(float centimeterPerSecond, float distance) {
@@ -153,26 +171,11 @@ public final class Movement {
 		if (Math.abs(alignmentError) > Constants.MAX_ALIGNMENT_ERROR) {
 			rotate(90, 14);
 			State.waitForMotors(true, true);
-			moveDistance(alignmentError, centimeterPerSecond);
+			moveDistance(alignmentError, -centimeterPerSecond);
 			State.waitForMotors(true, true);
 			rotate(-90, 14);
 			State.waitForMotors(true, true);
 		}
-	}
-	
-	public static void holdDistance(float centimeterPerSecond, float distance) {
-		float sample = Sensor.sampleDistance();
-		Delay.msDelay(100);
-		float difference = Sensor.sampleDistance() - sample;
-
-		if (difference > 0 && sample > distance) {
-			move(centimeterPerSecond, centimeterPerSecond - 3);
-		} else if (difference < 0 && sample < distance){
-			move(centimeterPerSecond - 3, centimeterPerSecond);
-		} else {
-			move(centimeterPerSecond);
-		}
-		
 	}
 	
 	public static void alignParallel(float centimeterPerSecond) {
@@ -190,7 +193,7 @@ public final class Movement {
 		stop();
 		float sampleDifference = (sample - Sensor.sampleDistance());
 		Delay.msDelay(10);
-		rotate((centimeterPerSecond > 0 ? 1.f : -1.f) * (float) Math.toDegrees(Math.atan(sampleDifference / sampleDistance)), 14);
+		rotate((centimeterPerSecond > 0 ? -1.f : 1.f) * (float) Math.toDegrees(Math.atan(sampleDifference / sampleDistance)), 14);
 		while (!State.stopped(true, true)) {}
 	}
 
