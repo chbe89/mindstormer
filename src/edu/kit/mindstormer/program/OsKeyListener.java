@@ -2,9 +2,9 @@ package edu.kit.mindstormer.program;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import lejos.hardware.Button;
 import lejos.hardware.Key;
 import lejos.hardware.KeyListener;
+import edu.kit.mindstormer.util.SmartKey;
 import edu.kit.mindstormer.util.TimePad;
 
 class OsKeyListener implements KeyListener {
@@ -40,26 +40,37 @@ class OsKeyListener implements KeyListener {
 		if (!pad.requestTime())
 			return;
 
-		if (Button.UP.equals(k)) {
+		SmartKey key = SmartKey.from(k);
+		switch (key) {
+		case UP:
 			if (isActive())
 				context.showPreviousProgram();
-		} else if (Button.DOWN.equals(k)) {
+			break;
+		case DOWN:
 			if (isActive())
 				context.showNextProgram();
-		} else if (Button.ENTER.equals(k)) {
+			break;
+		case LEFT:
+			shutdown();
+			break;
+		case RIGHT:
+			shutdown();
+			break;
+		case ENTER:
 			if (isActive())
 				context.addProgramToQueue();
-		} else if (Button.ESCAPE.equals(k)) {
+			break;
+		case ESCAPE:
 			if (!isActive())
 				context.terminateProgram();
 			else
-				context.terminateOs();
-		} else if (Button.LEFT.equals(k)) {
-			context.terminateOs();
-			OperatingSystem.displayText("Trying to shutdown OS");
-		} else if (Button.RIGHT.equals(k)) {
-			context.terminateOs();
-			OperatingSystem.displayText("Trying to shutdown OS");
+				shutdown();
+			break;
 		}
+	}
+
+	private void shutdown() {
+		context.terminateOs();
+		OperatingSystem.displayText("Trying to shutdown OS");
 	}
 }

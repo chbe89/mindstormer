@@ -12,12 +12,12 @@ import edu.kit.mindstormer.Constants;
 public class Sensor {
 	private static final EV3ColorSensor COLOR = new EV3ColorSensor(Constants.COLOR_SENSOR_PORT);
 	private static final EV3UltrasonicSensor DISTANCE = new EV3UltrasonicSensor(Constants.DISTANCE_SENSOR_PORT);
-	private static final EV3TouchSensor TOUCH = new EV3TouchSensor(Constants.TOUCH_SENSOR_PORT);
-	private static final EV3TouchSensor TOUCH_2 = new EV3TouchSensor(Constants.TOUCH_SENSOR_PORT_2);
+	private static final EV3TouchSensor TOUCH_RIGHT = new EV3TouchSensor(Constants.TOUCH_SENSOR_PORT);
+	private static final EV3TouchSensor TOUCH_LEFT = new EV3TouchSensor(Constants.TOUCH_SENSOR_PORT_2);
 	private static final SampleProvider DISTANCE_MEDIAN = new MedianFilter(DISTANCE, 5);
 
 	private static final float[] colorSample = new float[COLOR.sampleSize()];
-	private static final float[] touchSample = new float[TOUCH.sampleSize()];
+	private static final float[] touchSample = new float[TOUCH_RIGHT.sampleSize()];
 	private static final float[] distanceSample = new float[DISTANCE.sampleSize()];
 	private static final float[] distanceMedianSample = new float[DISTANCE_MEDIAN.sampleSize()];
 
@@ -32,12 +32,12 @@ public class Sensor {
 	}
 	
 	public static float sampleTouchRight(){
-		TOUCH.fetchSample(touchSample, 0);
+		TOUCH_RIGHT.fetchSample(touchSample, 0);
 		return touchSample[0];
 	}
 	
 	public static float sampleTouchLeft(){
-		TOUCH_2.fetchSample(touchSample, 0);
+		TOUCH_LEFT.fetchSample(touchSample, 0);
 		return touchSample[0];
 	}
 	

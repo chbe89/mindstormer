@@ -14,6 +14,7 @@ import edu.kit.mindstormer.program.implementation.test.BlockingTest;
 import edu.kit.mindstormer.program.implementation.test.DistanceSensorTest;
 import edu.kit.mindstormer.program.implementation.test.MoveFixedDistance;
 import edu.kit.mindstormer.program.implementation.test.NavigatorProgram;
+import edu.kit.mindstormer.program.implementation.test.ReadjustSensor;
 
 public class Main {
 
@@ -28,6 +29,7 @@ public class Main {
 		programs.add(new MoveFixedDistance());
 		programs.add(new DistanceSensorTest());
 		programs.add(new NavigatorProgram());
+		programs.add(new ReadjustSensor());
 
 		
 		OperatingSystem os = OperatingSystem.withPrograms(programs);

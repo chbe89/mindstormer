@@ -15,6 +15,16 @@ public final class Listeners {
 		// ctor
 	}
 
+	public static boolean removeListener(Key key, KeyListener listener) {
+		List<KeyListener> listeners = Collections.emptyList();
+		try {
+			listeners = getListeners(key);
+		} catch (Exception e) {
+		}
+
+		return listeners.isEmpty() ? false : listeners.remove(listener);
+	}
+
 	public static void removeListeners(Key key) {
 		try {
 			List<KeyListener> listeners = getListeners(key);
@@ -24,7 +34,7 @@ public final class Listeners {
 			// do nothing
 		}
 	}
-	
+
 	public static List<KeyListener> getListeners(Key key) throws Exception {
 		EV3Key k = cast(key);
 		if (k == null)
@@ -37,16 +47,14 @@ public final class Listeners {
 
 		if (List.class.isInstance(obj)) {
 			@SuppressWarnings("unchecked")
-			List<KeyListener> listeners = (List<KeyListener>) List.class
-					.cast(obj);
+			List<KeyListener> listeners = (List<KeyListener>) List.class.cast(obj);
 			return listeners;
 		}
 
 		return Collections.emptyList();
 	}
 
-	private static Object getMember(EV3Key k, String member)
-			throws NoSuchFieldException, IllegalAccessException {
+	private static Object getMember(EV3Key k, String member) throws NoSuchFieldException, IllegalAccessException {
 		Field field = EV3Key.class.getDeclaredField(member);
 		field.setAccessible(true);
 		Object obj = field.get(k);
