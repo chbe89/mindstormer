@@ -6,11 +6,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import edu.kit.mindstormer.program.OperatingSystem;
+
 public final class HttpLogger {
 
 	private static String CHARSET = "UTF-8";
 	private static String BASE_URL = "http://192.168.0.213:5000/log";
-	
+
 	private static final HttpLogger instance = new HttpLogger();
 	private static boolean enabled = true;
 
@@ -35,6 +37,7 @@ public final class HttpLogger {
 			postMessage(logEntry);
 		} catch (Exception e) {
 			enabled = false;
+			OperatingSystem.displayText("Log error: " + e.getMessage());
 		}
 	}
 
@@ -58,6 +61,7 @@ public final class HttpLogger {
 			String url = BASE_URL + "?" + query;
 			new URL(url).openConnection();
 		} catch (UnsupportedEncodingException | MalformedURLException e) {
+			OperatingSystem.displayText("URL error: " + e.getMessage());
 		}
 	}
 }
