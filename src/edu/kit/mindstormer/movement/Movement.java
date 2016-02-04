@@ -1,6 +1,7 @@
 package edu.kit.mindstormer.movement;
 
 import edu.kit.mindstormer.Constants;
+import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.sensor.Sensor;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
@@ -149,17 +150,47 @@ public final class Movement {
 
 	
 	public static void holdDistance(float centimeterPerSecond, float distance) {
-		float sample = Sensor.sampleDistance();
-		Delay.msDelay(200);
-		float difference = Sensor.sampleDistance() - sample;
+		float turningFactor = 7f / 8f;
+		int delayTime = 1000;
+		float centimeterTraveled = centimeterPerSecond * delayTime / 1000.f;
+		
+		// auf wand zufahren = minus angle
 
+		move(centimeterPerSecond);
+		float sample1 = Sensor.sampleDistance();
+		Delay.msDelay(delayTime);
+		float sample2 = Sensor.sampleDistance();
+		stop();
+		float difference = sample2 - sample1;
+		Delay.msDelay(30);
+		
+		float angleToWall = (float) Math.toDegrees(Math.atan(difference / centimeterTraveled));
+		OperatingSystem.displayText(angleToWall + "");
+		
+		float proportionalDistance = Math.abs(difference) / distance;
+		float proportionalAngle = 45 * proportionalDistance;
+		float angleCorrection = proportionalAngle - angleToWall;
+		
+		if (sample2 > distance) {
+			rotate(-angleCorrection, 10);
+			State.waitForMotors(true, true);
+			//angle should be negative
+		} else if (sample2 < distance) {
+			rotate(angleCorrection, 10);
+			State.waitForMotors(true, true);
+			//angle should be positive
+		} else {
+		}
+		Delay.msDelay(30);
+		
+		/*
 		if (difference > 0 && sample > distance) {
-			move(centimeterPerSecond, (7f / 8f) * centimeterPerSecond);
+			move(centimeterPerSecond, turningFactor * centimeterPerSecond);
 		} else if (difference < 0 && sample < distance){
-			move((7f / 8f) * centimeterPerSecond, centimeterPerSecond);
+			move(turningFactor * centimeterPerSecond, centimeterPerSecond);
 		} else {
 			move(centimeterPerSecond);
-		}
+		}*/
 		
 	}
 	
