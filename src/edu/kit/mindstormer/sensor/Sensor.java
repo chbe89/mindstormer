@@ -13,6 +13,7 @@ public class Sensor {
 	private static final EV3ColorSensor COLOR = new EV3ColorSensor(Constants.COLOR_SENSOR_PORT);
 	private static final EV3UltrasonicSensor DISTANCE = new EV3UltrasonicSensor(Constants.DISTANCE_SENSOR_PORT);
 	private static final EV3TouchSensor TOUCH = new EV3TouchSensor(Constants.TOUCH_SENSOR_PORT);
+	private static final EV3TouchSensor TOUCH_2 = new EV3TouchSensor(Constants.TOUCH_SENSOR_PORT_2);
 	private static final SampleProvider DISTANCE_MEDIAN = new MedianFilter(DISTANCE, 5);
 
 	private static final float[] colorSample = new float[COLOR.sampleSize()];
@@ -30,9 +31,18 @@ public class Sensor {
 		return colorSample[0];
 	}
 	
-	public static float sampleTouch(){
+	public static float sampleTouchRight(){
 		TOUCH.fetchSample(touchSample, 0);
 		return touchSample[0];
+	}
+	
+	public static float sampleTouchLeft(){
+		TOUCH_2.fetchSample(touchSample, 0);
+		return touchSample[0];
+	}
+	
+	public static float sampleTouchBoth(){
+		return sampleTouchLeft() + sampleTouchRight();
 	}
 	
 	public static float sampleDistance() {
