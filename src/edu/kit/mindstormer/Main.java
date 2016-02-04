@@ -7,6 +7,7 @@ import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.program.Program;
 import edu.kit.mindstormer.program.implementation.Bridge;
 import edu.kit.mindstormer.program.implementation.FollowLine;
+import edu.kit.mindstormer.program.implementation.Labyrinth;
 import edu.kit.mindstormer.program.implementation.RollerBox;
 import edu.kit.mindstormer.program.implementation.Seesaw;
 import edu.kit.mindstormer.program.implementation.test.BlockingTest;
@@ -18,7 +19,7 @@ public class Main {
 
     public static void main(String[] args) {
 		Collection<Program> programs = new ArrayList<Program>();
-		
+		programs.add(new Labyrinth());
 		programs.add(new FollowLine());
 		programs.add(new Bridge());
 		programs.add(new Seesaw());
@@ -27,6 +28,7 @@ public class Main {
 		programs.add(new DistanceSensorTest());
 		programs.add(new BlockingTest());
 		programs.add(new NavigatorProgram());
+
 		
 		OperatingSystem os = OperatingSystem.withPrograms(programs);
 		os.run();
