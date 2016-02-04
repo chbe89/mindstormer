@@ -10,8 +10,8 @@ import edu.kit.mindstormer.sensor.Sensor;
 public class Labyrinth extends AbstractProgram {
 	float sampleUltra;
 	float sampleTouch;
-	final int speed = 18;
-	private float toDrive = 20;
+	final int speed = 22;
+//	private float toDrive = 20;
 	
 
 	public void run() {
@@ -30,6 +30,7 @@ public class Labyrinth extends AbstractProgram {
 			Movement.stop();
 			if (sampleTouch >= Constants.TOUCH_SENSOR_PRESSED) {
 				OperatingSystem.displayText("DETECTED TOUCH");
+				Movement.moveDistance(1, speed);
 				backupAndTurn(true);
 			} else if (sampleUltra >= Constants.MAX_WALL_DISTANCE ) {
 				OperatingSystem.displayText("DETECTED NO WALL");
@@ -62,13 +63,13 @@ public class Labyrinth extends AbstractProgram {
 	}
 	
 	private void driveCurve90d(boolean left) {
-	    	toDrive += sampleUltra;
-		OperatingSystem.displayText("to Drive" + String.valueOf(toDrive));
-		Movement.moveDistance(10, speed);
-		State.waitForStoppedMove();
+//	    	toDrive += sampleUltra;
+//		OperatingSystem.displayText("to Drive" + String.valueOf(toDrive));
+//		Movement.moveDistance(10, speed);
+//		State.waitForStoppedMove();
 		Movement.rotate(90 * (left?-1:1), speed);
 		State.waitForStoppedMove();
-		Movement.moveDistance(toDrive, speed);
+		Movement.moveDistance(55, speed);
 		State.waitForStoppedMove();
 		OperatingSystem.displayText("Drive Curve Completed");
 
