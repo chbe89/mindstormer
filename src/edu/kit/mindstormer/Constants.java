@@ -39,9 +39,9 @@ public final class Constants {
 	public final static float TOUCH_SENSOR_UNPRESSED = 0.0f;
 
 	public final static float BOTH_TOUCH_SENSOR_PRESSED = 2.0f;
-
-	public final static float MIN_WALL_DISTANCE = 10.0f;
-
+	
+	public final static float MIN_WALL_DISTANCE = 4.0f;
+	
 	public final static float MAX_WALL_DISTANCE = 30.0f;
 
 	private Constants() {
