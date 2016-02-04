@@ -164,10 +164,9 @@ public final class Movement {
 		}
 		Movement.moveDistance(sampleDistance, speed);
 		while (!State.stopped(true, true)) {}
-		float newSample = Sensor.sampleDistance();
-		float sampleDifference = sample - newSample;
-		rotate(Math.sin(sampleDifference / sampleDistance), 100);
-		
+		float sampleDifference = (sample - Sensor.sampleDistance());
+		rotate((speed > 0 ? 1.f : -1.f) * (float) Math.sin(sampleDifference / sampleDistance), 200);
+		while (!State.stopped(true, true)) {}
 	}
 
 	public static enum Mode {

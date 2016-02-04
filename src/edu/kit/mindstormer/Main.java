@@ -20,13 +20,13 @@ public class Main {
     public static void main(String[] args) {
 		Collection<Program> programs = new ArrayList<Program>();
 		programs.add(new Labyrinth());
+		programs.add(new BlockingTest());
 		programs.add(new FollowLine());
 		programs.add(new Bridge());
 		programs.add(new Seesaw());
 		programs.add(new RollerBox());
 		programs.add(new MoveFixedDistance());
 		programs.add(new DistanceSensorTest());
-		programs.add(new BlockingTest());
 		programs.add(new NavigatorProgram());
 
 		

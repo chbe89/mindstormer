@@ -47,11 +47,11 @@ public class Sensor {
 	
 	public static float sampleDistance() {
 		DISTANCE.fetchSample(distanceSample, 0);
-		return distanceSample[0];
+		return 100 * distanceSample[0];
 	}
 
 	public static float sampleDistanceMedian() {
 		DISTANCE_MEDIAN.fetchSample(distanceMedianSample, 0);
-		return distanceMedianSample[0];
+		return 100 * distanceMedianSample[0];
 	}
 }
