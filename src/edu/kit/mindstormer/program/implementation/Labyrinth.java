@@ -1,6 +1,5 @@
 package edu.kit.mindstormer.program.implementation;
 
-import lejos.utility.Delay;
 import edu.kit.mindstormer.Constants;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
@@ -11,7 +10,7 @@ import edu.kit.mindstormer.sensor.Sensor;
 public class Labyrinth extends AbstractProgram {
 	float sampleUltra;
 	float sampleTouch;
-	final int speed = 400;
+	final int speed = 28;
 
 	public Labyrinth() {
 		super("Labyrinth");
@@ -65,7 +64,7 @@ public class Labyrinth extends AbstractProgram {
 	}
 	
 	private void driveCurve90d(boolean left) {
-		Movement.moveDistance(10, speed);
+		Movement.moveDistance(20 , speed);
 		State.waitForStoppedMove();
 		Movement.rotate(90 * (left?-1:1), speed);
 		State.waitForStoppedMove();

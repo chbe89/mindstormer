@@ -9,7 +9,7 @@ import edu.kit.mindstormer.sensor.Sensor;
 
 public class RollerBox extends AbstractProgram {
 
-	private final int speed = 500 / 15;
+	private final int speed = 34;
 	private final int rotationSpeed = speed / 2;
 
 	public RollerBox() {
