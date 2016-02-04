@@ -35,9 +35,8 @@ public class RollerBox extends AbstractProgram {
 	}
 
 	private void driveOut() {
-		Movement.moveDistance(-20, speed);
-		while (!State.stopped(true, true)) {
-		}
+		Movement.moveDistance(25, -speed);
+		while (!State.stopped(true, true)) { }
 	}
 
 	private void driveThroughBox() {
@@ -47,18 +46,15 @@ public class RollerBox extends AbstractProgram {
 				Movement.stop();
 				break;
 			}
-		Movement.moveDistance(-10, speed);
 	}
 
 	private void turnAround() {
 		Movement.rotate(180, rotationSpeed);
-		while (!State.stopped(true, true)) {
-		}
+		while (!State.stopped(true, true)) { }
 	}
 
 	private void setBack(int distance) {
-		Movement.moveDistance(-distance, speed);
-		while (!State.stopped(true, true)) {
-		}
+		Movement.moveDistance(distance, -speed);
+		while (!State.stopped(true, true)) { }
 	}
 }

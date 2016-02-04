@@ -4,7 +4,7 @@ import edu.kit.mindstormer.program.AbstractProgram;
 
 public class Seesaw extends AbstractProgram {
 
-	int forwardSpeed = 500;
+	private int forwardSpeed = 500;
 	
 	public Seesaw() {
 		super("Seesaw");
