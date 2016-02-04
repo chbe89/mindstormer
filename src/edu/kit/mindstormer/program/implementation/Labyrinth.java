@@ -21,12 +21,24 @@ public class Labyrinth extends AbstractProgram {
     }
 
     public void run() {
-	boolean turnLeft = false;
+
 	while (!quit.get()) {
 	    sample = Sensor.sampleDistance();
 	    sampleTouch = Sensor.sampleTouch();
+	    display.clear();
+	    display.drawString(String.valueOf(sample), display.getWidth() / 2, display.getHeight() / 2,
+		    GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
+	    Delay.msDelay(1000);
+
+	    display.clear();
+	    display.drawString("Touch" + String.valueOf(sampleTouch), display.getWidth() / 2, display.getHeight() / 2,
+		    GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
+	    Delay.msDelay(1000);
 	    Movement.move(200);
 	    while (0.1 < sample && sample < 0.3 && sampleTouch == 0) {
+		display.clear();
+		display.drawString("MOVING", display.getWidth() / 2, display.getHeight() / 2, GraphicsLCD.BASELINE
+			| GraphicsLCD.HCENTER);
 		sample = Sensor.sampleDistance();
 		sampleTouch = Sensor.sampleTouch();
 	    }
