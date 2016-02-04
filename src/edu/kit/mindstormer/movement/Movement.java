@@ -57,7 +57,7 @@ public final class Movement {
 		rightMotor.rotate(angle, true);
 	}
 
-	public static void move(int leftCentimeterPerSecond, float rightCentimeterPerSecond) {
+	public static void move(float leftCentimeterPerSecond, float rightCentimeterPerSecond) {
 		leftMotor.startSynchronization();
 		moveLeft(leftCentimeterPerSecond);
 		moveRight(rightCentimeterPerSecond);
@@ -142,7 +142,7 @@ public final class Movement {
 	}
 	
 	public static void rotateSensorMotor(int angle) {
-		sensorMotor.rotate(Math.round(Constants.SENSOR_ANGLE_TO_MOTOR_ANGLE * angle), true);
+		sensorMotor.rotate(-Math.round(Constants.SENSOR_ANGLE_TO_MOTOR_ANGLE * angle), true);
 	}
 	
 	public static void moveParallel(float centimeterPerSecond, float distance) {
@@ -158,7 +158,21 @@ public final class Movement {
 			rotate(-90, 14);
 			State.waitForMotors(true, true);
 		}
+	}
 	
+	public static void holdDistance(float centimeterPerSecond, float distance) {
+		float sample = Sensor.sampleDistance();
+		Delay.msDelay(100);
+		float difference = Sensor.sampleDistance() - sample;
+
+		if (difference > 0 && sample > distance) {
+			move(centimeterPerSecond, centimeterPerSecond - 3);
+		} else if (difference < 0 && sample < distance){
+			move(centimeterPerSecond - 3, centimeterPerSecond);
+		} else {
+			move(centimeterPerSecond);
+		}
+		
 	}
 	
 	public static void alignParallel(float centimeterPerSecond) {
