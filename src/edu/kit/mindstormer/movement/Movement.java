@@ -136,8 +136,8 @@ public final class Movement {
 	public static void moveDistance(float distance, float centimeterPerSecond) {
 		int motorAngle = getMotorAngleForDistance(distance);
 		leftMotor.startSynchronization();
-		moveLeft(motorAngle, centimeterPerSecond / 2);
-		moveRight(motorAngle, centimeterPerSecond / 2);
+		moveLeft(motorAngle, centimeterPerSecond);
+		moveRight(motorAngle, centimeterPerSecond);
 		leftMotor.endSynchronization();
 	}
 	
