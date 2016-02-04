@@ -9,7 +9,7 @@ import edu.kit.mindstormer.sensor.Sensor;
 
 public class RollerBox extends AbstractProgram {
 
-	private final int speed = 500;
+	private final int speed = 500 / 15;
 	private final int rotationSpeed = speed / 2;
 
 	public RollerBox() {
@@ -17,48 +17,63 @@ public class RollerBox extends AbstractProgram {
 	}
 
 	public void run() {
-
 		// while (!quit.get()) {
 
 		// move till wall is touched
-		Movement.move(speed);
-		while (!State.stopped(true, true))
-			if (Sensor.sampleTouchBoth() >= 1)
-				break;
-		Movement.stop();
+		moveToWall();
 
 		// increase distance from wall
-		Movement.moveDistance(-30, speed);
-		while (!State.stopped(true, true)) {
-		}
-		
+		setBack();
+
 		// rotate in order to drive through roller box backwards
-		Movement.rotate(90, rotationSpeed);
-		while (!State.stopped(true, true)) {
-		}
-		
+		positionBackwards();
+
 		// drive into roller box
-		Movement.moveDistance(-30, speed);
+		setBack();
+
+		// drive through roller box
+		driveThroughBox();
+
+		// drive out of roller box
+		driveOut();
+
+		// reposition
+		positionBackwards();
+
+		Button.ESCAPE.simulateEvent(Key.KEY_RELEASED);
+	}
+
+	private void driveOut() {
+		Movement.moveDistance(-10, speed);
 		while (!State.stopped(true, true)) {
 		}
-		
-		// drive through roller box
+	}
+
+	private void driveThroughBox() {
 		Movement.move(-speed);
 		while (!State.stopped(true, true))
 			if (Sensor.sampleDistance() > 20)
 				break;
 		Movement.stop();
-		
-		// drive out of roller box
-		Movement.moveDistance(-10, speed);
-		while (!State.stopped(true, true)) {
-		}
-		
-		// rotate in order to drive through roller box backwards
+	}
+
+	private void positionBackwards() {
 		Movement.rotate(90, rotationSpeed);
 		while (!State.stopped(true, true)) {
 		}
-		
-		Button.ESCAPE.simulateEvent(Key.KEY_RELEASED);
+	}
+
+	private void setBack() {
+		Movement.moveDistance(-30, speed);
+		while (!State.stopped(true, true)) {
+		}
+	}
+
+	private void moveToWall() {
+		Movement.move(speed);
+		while (!State.stopped(true, true))
+			if (Sensor.sampleTouchBoth() >= 1)
+				break;
+		Movement.stop();
 	}
 }

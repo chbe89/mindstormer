@@ -42,9 +42,19 @@ class OsKeyListener implements KeyListener {
 
 		SmartKey key = SmartKey.from(k);
 		switch (key) {
+		case UP:
+			if (isActive())
+				context.showPreviousProgram();
+			break;
 		case DOWN:
 			if (isActive())
 				context.showNextProgram();
+			break;
+		case LEFT:
+			shutdown();
+			break;
+		case RIGHT:
+			shutdown();
 			break;
 		case ENTER:
 			if (isActive())
@@ -54,17 +64,7 @@ class OsKeyListener implements KeyListener {
 			if (!isActive())
 				context.terminateProgram();
 			else
-				context.terminateOs();
-			break;
-		case LEFT:
-			shutdown();
-			break;
-		case RIGHT:
-			shutdown();
-			break;
-		case UP:
-			if (isActive())
-				context.showPreviousProgram();
+				shutdown();
 			break;
 		}
 	}
