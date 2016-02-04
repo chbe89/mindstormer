@@ -9,8 +9,8 @@ import edu.kit.mindstormer.sensor.Sensor;
 
 public class RollerBox extends AbstractProgram {
 
-	private final int speed = 34;
-	private final int rotationSpeed = speed / 2;
+	private final int speed = 50;
+	private final int rotationSpeed = 30;
 
 	public void run() {
 		// increase distance from wall
@@ -35,28 +35,26 @@ public class RollerBox extends AbstractProgram {
 	}
 
 	private void driveOut() {
-		Movement.moveDistance(-25, speed);
-		while (!State.stopped(true, true)) {
-		}
+		Movement.moveDistance(25, -speed);
+		while (!State.stopped(true, true)) { }
 	}
 
 	private void driveThroughBox() {
 		Movement.move(-speed);
 		while (!State.stopped(true, true))
-			if (Sensor.sampleDistance() > 20)
+			if (Sensor.sampleDistance() > 20) {
+				Movement.stop();
 				break;
-		Movement.stop();
+			}
 	}
 
 	private void turnAround() {
 		Movement.rotate(180, rotationSpeed);
-		while (!State.stopped(true, true)) {
-		}
+		while (!State.stopped(true, true)) { }
 	}
 
 	private void setBack(int distance) {
-		Movement.moveDistance(-distance, speed);
-		while (!State.stopped(true, true)) {
-		}
+		Movement.moveDistance(distance, -speed);
+		while (!State.stopped(true, true)) { }
 	}
 }
