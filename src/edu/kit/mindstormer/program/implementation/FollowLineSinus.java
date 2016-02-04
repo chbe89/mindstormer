@@ -3,7 +3,7 @@ import lejos.hardware.sensor.EV3ColorSensor;
 import edu.kit.mindstormer.Constants;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.program.AbstractProgram;
-import edu.kit.mindstormer.sensor.Sensor;
+
 
 public class FollowLineSinus extends AbstractProgram {
 	EV3ColorSensor sensor;
