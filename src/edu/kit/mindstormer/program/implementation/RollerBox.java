@@ -12,24 +12,15 @@ public class RollerBox extends AbstractProgram {
 	private final int speed = 34;
 	private final int rotationSpeed = speed / 2;
 
-	public RollerBox() {
-		super("RollerBox");
-	}
-
 	public void run() {
-		// while (!quit.get()) {
-
-		// move till wall is touched
-		moveToWall();
-
 		// increase distance from wall
-		setBack();
+		setBack(10);
 
 		// rotate in order to drive through roller box backwards
-		positionBackwards();
+		turnAround();
 
 		// drive into roller box
-		setBack();
+		setBack(20);
 
 		// drive through roller box
 		driveThroughBox();
@@ -38,13 +29,13 @@ public class RollerBox extends AbstractProgram {
 		driveOut();
 
 		// reposition
-		positionBackwards();
+		turnAround();
 
 		Button.ESCAPE.simulateEvent(Key.KEY_RELEASED);
 	}
 
 	private void driveOut() {
-		Movement.moveDistance(-10, speed);
+		Movement.moveDistance(-25, speed);
 		while (!State.stopped(true, true)) {
 		}
 	}
@@ -57,23 +48,15 @@ public class RollerBox extends AbstractProgram {
 		Movement.stop();
 	}
 
-	private void positionBackwards() {
-		Movement.rotate(90, rotationSpeed);
+	private void turnAround() {
+		Movement.rotate(180, rotationSpeed);
 		while (!State.stopped(true, true)) {
 		}
 	}
 
-	private void setBack() {
-		Movement.moveDistance(-30, speed);
+	private void setBack(int distance) {
+		Movement.moveDistance(-distance, speed);
 		while (!State.stopped(true, true)) {
 		}
-	}
-
-	private void moveToWall() {
-		Movement.move(speed);
-		while (!State.stopped(true, true))
-			if (Sensor.sampleTouchBoth() >= 1)
-				break;
-		Movement.stop();
 	}
 }
