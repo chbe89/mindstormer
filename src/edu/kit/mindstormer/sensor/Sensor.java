@@ -30,53 +30,22 @@ public class Sensor {
 	
 	public static void initSensors() {
 		for (int i = 0; i < 4; i++) {
-			boolean success = false;
-			for (int j = 0; j < 5 && !success; j++) {
-				switch(i) {
-					case 0: success = initColor(); break;
-					case 1: success = initDistance();  break;
-					case 2: success = initTouchRight();  break;
-					case 3: success = initTouchLeft();  break;
+			for (int j = 0; j < 5; j++) {
+				try {
+					switch(i) {
+						case 0: COLOR = new EV3ColorSensor(Constants.COLOR_SENSOR_PORT); break;
+						case 1: DISTANCE = new EV3UltrasonicSensor(Constants.DISTANCE_SENSOR_PORT); break;
+						case 2: TOUCH_RIGHT = new EV3TouchSensor(Constants.TOUCH_SENSOR_PORT); break;
+						case 3: TOUCH_RIGHT = new EV3TouchSensor(Constants.TOUCH_SENSOR_PORT); break;
+					}
+				} catch (Exception e) {
+					 continue;
 				}
+				break;
 			}
 		}
 	}
-	
-	public static boolean initColor() {
-		try {
-			COLOR = new EV3ColorSensor(Constants.COLOR_SENSOR_PORT);
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
-	}
-	
-	public static boolean initDistance() {
-		try {
-			DISTANCE = new EV3UltrasonicSensor(Constants.DISTANCE_SENSOR_PORT);
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
-	}
-	
-	public static boolean initTouchRight() {
-		try {
-			TOUCH_RIGHT = new EV3TouchSensor(Constants.TOUCH_SENSOR_PORT);
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
-	}
-	
-	public static boolean initTouchLeft() {
-		try {
-			TOUCH_LEFT = new EV3TouchSensor(Constants.TOUCH_SENSOR_PORT_2);
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
-	}
+
 
 	public static float sampleColor() {
 		COLOR.fetchSample(colorSample, 0);
