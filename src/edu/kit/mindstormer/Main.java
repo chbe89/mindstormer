@@ -26,8 +26,8 @@ public class Main {
 	private static final Collection<Program> programs = new ArrayList<Program>();
 	
     public static void main(String[] args) {
+    	initHardware();
     	installPrograms();
-		initHardware();
 		printLog();
 		
 		OperatingSystem os = OperatingSystem.withPrograms(programs);

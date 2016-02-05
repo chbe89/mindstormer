@@ -194,39 +194,42 @@ public final class Movement {
 		}
 	}
 	
-	public static void moveParallel(float centimeterPerSecond, float distance) {
-		float sampleDistance = Constants.DEFAULT_SAMPLE_DISTANCE;
-		alignParallel(centimeterPerSecond, sampleDistance);
+	
+	public static void moveParallel(float centimeterPerSecond, float distance, float sampleDistance) {
+		float correctionAngle;
+		do {
+			alignParallel(sampleDistance, centimeterPerSecond);
+			correctionAngle = alignParallel(-sampleDistance, centimeterPerSecond);
+		} while (correctionAngle > 3);
+		
 		float sample = Sensor.sampleDistance();
 		float alignmentError = distance - sample;
 		
 		if (Math.abs(alignmentError) > Constants.MAX_ALIGNMENT_ERROR) {
 			rotate(90, 14);
 			State.waitForMotors(true, true);
-			moveDistance(alignmentError, -centimeterPerSecond);
+			moveDistance(-alignmentError, centimeterPerSecond);
 			State.waitForMotors(true, true);
 			rotate(-90, 14);
 			State.waitForMotors(true, true);
 		}
 	}
 	
-	public static void alignParallel(float centimeterPerSecond) {
-		alignParallel(centimeterPerSecond, Constants.DEFAULT_SAMPLE_DISTANCE);
-	}
-	
-	
-	public static void alignParallel(float centimeterPerSecond, float sampleDistance) {
+	public static float alignParallel(float sampleDistance, float centimeterPerSecond) {
 		float sample = Sensor.sampleDistance();
 		if (sample > 30f) {
-			return;
+			return 0;
 		}
 		moveDistance(sampleDistance, centimeterPerSecond);
 		while (!State.stopped(true, true)) {}
 		stop();
 		float sampleDifference = (sample - Sensor.sampleDistance());
 		Delay.msDelay(10);
-		rotate((centimeterPerSecond > 0 ? -1.f : 1.f) * (float) Math.toDegrees(Math.atan(sampleDifference / sampleDistance)), 14);
+		float correctionAngle =  (sampleDistance > 0 ? -1.f : 1.f) * (float) Math.toDegrees(Math.atan(sampleDifference / sampleDistance));
+		
+		rotate(correctionAngle, 14);
 		while (!State.stopped(true, true)) {}
+		return correctionAngle;
 	}
 
 	

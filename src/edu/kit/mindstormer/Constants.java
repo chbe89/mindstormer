@@ -27,7 +27,7 @@ public final class Constants {
 	public final static float SENSOR_ANGLE_TO_MOTOR_ANGLE = 26f;
 
 	public final static float DEFAULT_SAMPLE_DISTANCE = 10f;
-	public final static float MAX_ALIGNMENT_ERROR = 2f;
+	public final static float MAX_ALIGNMENT_ERROR = 1f;
 
 	public final static int SENSOR_MOTOR_SPEED = 800;
 
