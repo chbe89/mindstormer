@@ -2,9 +2,11 @@ package edu.kit.mindstormer.util;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
+
+import edu.kit.mindstormer.program.OperatingSystem;
 
 public final class HttpLogger {
 
@@ -35,7 +37,7 @@ public final class HttpLogger {
 			postMessage(logEntry);
 		} catch (Exception e) {
 			enabled = false;
-			System.out.println("Log error: " + e.getMessage());
+			OperatingSystem.displayText("Log error: " + e.getMessage());
 		}
 	}
 
@@ -57,10 +59,10 @@ public final class HttpLogger {
 		try {
 			String query = String.format("message=%s", URLEncoder.encode(parameter, CHARSET));
 			String url = BASE_URL + "?" + query;
-			URLConnection connection = new URL(url).openConnection();
-			connection.getContent();
+			HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+			connection.getResponseCode();
 		} catch (UnsupportedEncodingException e) {
-			System.out.println("URL error: " + e.getMessage());
+			OperatingSystem.displayText("URL error: " + e.getMessage());
 		}
 	}
 }
