@@ -114,7 +114,7 @@ public class OperatingSystem implements ProgramContext {
 			display = initializeDisplay();
 
 		display.clear();
-		display.drawString(text, width , height , GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
+		display.drawString(text, width / 2 , height , GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
 		// display.refresh();
 		HttpLogger.getInstance().log(text);
 	}
