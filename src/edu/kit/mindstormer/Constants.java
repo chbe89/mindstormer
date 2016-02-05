@@ -8,8 +8,8 @@ public final class Constants {
 
 	public final static Port COLOR_SENSOR_PORT = SensorPort.S2;
 	public final static Port DISTANCE_SENSOR_PORT = SensorPort.S3;
-	public final static Port TOUCH_SENSOR_PORT = SensorPort.S1;
-	public final static Port TOUCH_SENSOR_PORT_2 = SensorPort.S4;
+	public final static Port TOUCH_SENSOR_PORT_RIGHT = SensorPort.S1;
+	public final static Port TOUCH_SENSOR_PORT_LEFT = SensorPort.S4;
 
 	/**
 	 * Translates distance into motor rotation.
