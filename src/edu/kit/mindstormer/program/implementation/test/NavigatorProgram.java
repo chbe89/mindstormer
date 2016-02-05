@@ -50,7 +50,7 @@ public class NavigatorProgram extends AbstractProgram {
 		AbstractStateDependentKeyListener up = new AbstractStateDependentKeyListener() {
 		    @Override
 		    public void released(Key k) {
-		    	Movement.move(-500, -500);
+		    	Movement.move(false, 500);
 		    	forward.set(false);
 		    }
 		    @Override
@@ -63,7 +63,7 @@ public class NavigatorProgram extends AbstractProgram {
 		AbstractStateDependentKeyListener down = new AbstractStateDependentKeyListener() {
 		    @Override
 		    public void released(Key k) {
-		    	Movement.move(500, 500);
+		    	Movement.move(false, 500);
 		    	forward.set(true);
 		    }
 

@@ -21,7 +21,7 @@ public class Labyrinth extends AbstractProgram {
 
 	    while (Constants.MIN_WALL_DISTANCE < sampleUltra && sampleUltra < Constants.MAX_WALL_DISTANCE
 		    && sampleTouch != Constants.TOUCH_SENSOR_PRESSED) {
-		Movement.holdDistance2(speed, 15);
+		Movement.holdDistance2(true,speed, 15);
 		updateSensors();
 		OperatingSystem.displayText("T:" + String.valueOf(sampleTouch) + "U:" + String.valueOf(sampleUltra));
 	    }
@@ -29,13 +29,13 @@ public class Labyrinth extends AbstractProgram {
 	    if (sampleTouch >= Constants.TOUCH_SENSOR_PRESSED) {
 		OperatingSystem.displayText("DETECTED TOUCH");
 		Movement.moveDistance(2, speed);
-		backupAndTurn(true,false);
+		backupAndTurn(true, false);
 	    } else if (sampleUltra >= Constants.MAX_WALL_DISTANCE) {
 		OperatingSystem.displayText("DETECTED NO WALL");
 		driveCurve90d(false);
 	    } else if (sampleUltra < Constants.MIN_WALL_DISTANCE) {
 		OperatingSystem.displayText("DETECTED TOO CLOSE");
-		backupAndTurn(true,true);
+		backupAndTurn(true, true);
 	    } else {
 		OperatingSystem.displayText("ERROR UNDEFINED STATE");
 	    }
@@ -50,21 +50,21 @@ public class Labyrinth extends AbstractProgram {
     private void backupAndTurn(boolean left, boolean toClose) {
 	if (toClose) {
 	    Movement.rotate(90 * (left ? 1 : -1), turnSpeed);
-	    State.waitForStoppedMove();
+	    State.waitForMovementMotors();
 	} else {
 	    Movement.moveDistance(-15, speed);
-	    State.waitForStoppedMove();
+	    State.waitForMovementMotors();
 	    Movement.rotate(90 * (left ? -1 : 1), turnSpeed);
-	    State.waitForStoppedMove();
+	    State.waitForMovementMotors();
 	}
     }
 
     private void driveCurve90d(boolean left) {
 
 	Movement.rotate(90 * (left ? -1 : 1), turnSpeed);
-	State.waitForStoppedMove();
+	State.waitForMovementMotors();
 	Movement.moveDistance(45, speed);
-	State.waitForStoppedMove();
+	State.waitForMovementMotors();
 	OperatingSystem.displayText("Drive Curve Completed");
     }
 }

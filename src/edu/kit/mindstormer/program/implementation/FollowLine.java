@@ -24,7 +24,7 @@ public class FollowLine extends AbstractProgram {
 		while (!quit.get()) {
 			find();
 				
-			Movement.move(forwardSpeed, forwardSpeed);
+			Movement.move(true, forwardSpeed, true, forwardSpeed);
 		    while (sample >= Constants.LINE_COLOR_THRESHOLD) {
 		    	sample = Sensor.sampleColor();
 		    }

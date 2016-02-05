@@ -5,8 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import edu.kit.mindstormer.movement.Movement;
-import edu.kit.mindstormer.sensor.Sensor;
+import edu.kit.mindstormer.util.HttpLogger;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
@@ -15,23 +14,20 @@ import lejos.hardware.lcd.GraphicsLCD;
 import lejos.utility.Delay;
 
 public class OperatingSystem implements ProgramContext {
-
-	private final List<Program> programs;
-
-	private final OsKeyListener navigationKeyListener;
-
+	
 	private static GraphicsLCD display;
 	private static int width;
 	private static int height;
 
+	private final OsKeyListener navigationKeyListener;
+	private final List<Program> programs;
+	private final List<Program> runningPrograms = new ArrayList<>();
+
 	private int pc = 0;
 
 	private final AtomicBoolean quitOS = new AtomicBoolean(false);
-	private final ArrayList<Program> runningPrograms = new ArrayList<>();
 
 	public static OperatingSystem withPrograms(Collection<Program> programs) {
-		Movement.init();
-		Sensor.init();
 		return new OperatingSystem(new ArrayList<Program>(programs));
 	}
 
@@ -110,16 +106,17 @@ public class OperatingSystem implements ProgramContext {
 		if (program == null)
 			return;
 
-		displayText(program.getName());
+		displayText("Currently selected program: " + program.getName());
 	}
 
 	public static void displayText(String text) {
 		if (display == null)
 			display = initializeDisplay();
-		
+
 		display.clear();
 		display.drawString(text, width / 2, height / 2, GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
 		// display.refresh();
+		HttpLogger.getInstance().log(text);
 	}
 
 	@Override

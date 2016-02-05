@@ -15,7 +15,7 @@ public class State {
 		while(!stopped(left, right)) {}
 	}
 	
-	public static void waitForStoppedMove() {
+	public static void waitForMovementMotors() {
 		while (!stopped(true, true)) {
 		}
 	}

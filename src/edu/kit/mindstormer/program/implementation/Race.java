@@ -25,7 +25,7 @@ public class Race extends AbstractProgram {
     public void run() {
 
 	while (!quit.get()) {
-	    Movement.move(speed);
+	    Movement.move(true,speed);
 	    while (Constants.MIN_WALL_DISTANCE < sampleUltra && sampleUltra < (initialDistance + 10.0f)
 		    && sampleTouch != Constants.TOUCH_SENSOR_PRESSED) {
 		sampleUltra = Sensor.sampleDistance();
@@ -37,12 +37,12 @@ public class Race extends AbstractProgram {
 	    } else if (sampleUltra < Constants.MIN_WALL_DISTANCE) {
 		OperatingSystem.displayText("DETECTED TOO CLOSE");
 		Movement.rotate(5, speed);
-		State.waitForStoppedMove();
+		State.waitForMovementMotors();
 		Movement.moveDistance(5, speed);
-		State.waitForStoppedMove();
+		State.waitForMovementMotors();
 	    } else {
 		OperatingSystem.displayText("DETECTED TOO FAR");
-		Movement.holdDistance2(speed, initialDistance);
+		Movement.holdDistance2(true,speed, initialDistance);
 	    }
 	}
 
@@ -50,9 +50,9 @@ public class Race extends AbstractProgram {
 
     private void backupAndTurn(boolean left) {
 	Movement.moveDistance(-15, speed);
-	State.waitForStoppedMove();
+	State.waitForMovementMotors();
 	Movement.rotate(90 * (left ? -1 : 1), turnSpeed);
-	State.waitForStoppedMove();
+	State.waitForMovementMotors();
     }
 
 }
