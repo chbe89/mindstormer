@@ -28,16 +28,15 @@ public final class HttpLogger {
 		enabled = false;
 	}
 
-	public void log(String message) {
+	public void log(final String message) {
 		if (!enabled)
 			return;
 
-		final String logEntry = message;
 		Runnable r = new Runnable() {
 			@Override
 			public void run() {
 				try {
-					postMessage(logEntry);
+					postMessage(message);
 				} catch (IOException e) {
 					enabled = false;
 					OperatingSystem.displayText("Log error: " + e.getMessage());
