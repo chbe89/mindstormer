@@ -181,7 +181,7 @@ public final class Movement {
 		float turningFactorCentimeterPerSecond = 7f / 8f * centimeterPerSecond;
 		
 	    float sample = Sensor.sampleDistance();
-		Delay.msDelay(200);
+		Delay.msDelay(50);
 		float difference = Sensor.sampleDistance() - sample;
 		if (Math.abs(difference) > 20) return;
 
@@ -190,7 +190,7 @@ public final class Movement {
 		} else if (difference < 0 && sample < distance){
 			move(forward, turningFactorCentimeterPerSecond, forward, centimeterPerSecond);
 		} else {
-			move(forward ,centimeterPerSecond);
+			move(forward, centimeterPerSecond);
 		}
 	}
 	
