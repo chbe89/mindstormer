@@ -123,7 +123,7 @@ public final class Movement {
 	}
 	
 	public static void rotateSensorMotor(int angle) {
-		sensorMotor.rotate(-Math.round(Constants.SENSOR_ANGLE_TO_MOTOR_ANGLE * angle), true);
+		sensorMotor.rotate(Math.round(Constants.SENSOR_ANGLE_TO_MOTOR_ANGLE * angle), true);
 	}
 	
 	
@@ -178,7 +178,7 @@ public final class Movement {
 	}
 	
 	public static void holdDistance2(boolean forward, float centimeterPerSecond, float distance) {
-		float turningFactor = 7f / 8f;
+		float turningFactorCentimeterPerSecond = 7f / 8f * centimeterPerSecond;
 		
 	    float sample = Sensor.sampleDistance();
 		Delay.msDelay(200);
@@ -186,9 +186,9 @@ public final class Movement {
 		if (Math.abs(difference) > 20) return;
 
 		if (difference > 0 && sample > distance) {
-			move(forward,centimeterPerSecond, forward, turningFactor * centimeterPerSecond);
+			move(forward, centimeterPerSecond, forward, turningFactorCentimeterPerSecond);
 		} else if (difference < 0 && sample < distance){
-			move(forward, turningFactor * centimeterPerSecond, forward, centimeterPerSecond);
+			move(forward, turningFactorCentimeterPerSecond, forward, centimeterPerSecond);
 		} else {
 			move(forward ,centimeterPerSecond);
 		}

@@ -9,7 +9,6 @@ public class BlockingTest extends AbstractProgram {
 	public void run() {
 		//Movement.moveParallel(15, 20);
 		//Movement.rotate(360, 5);
-		
 		while (!quit.get()) {
 			//Movement.moveParallel(15, 15);
 			//boolean infiniteDistance = true;
