@@ -178,6 +178,20 @@ public final class Movement {
 		
 	}
 	
+	public static void holdDistance2(float centimeterPerSecond, float distance) {
+	    float sample = Sensor.sampleDistance();
+		Delay.msDelay(200);
+		float difference = Sensor.sampleDistance() - sample;
+
+		if (difference > 0 && sample > distance) {
+			move(centimeterPerSecond, (7f / 8f) * centimeterPerSecond);
+		} else if (difference < 0 && sample < distance){
+			move((7f / 8f) * centimeterPerSecond, centimeterPerSecond);
+		} else {
+			move(centimeterPerSecond);
+		}
+	}
+	
 	public static void moveParallel(float centimeterPerSecond, float distance) {
 		float sampleDistance = Constants.DEFAULT_SAMPLE_DISTANCE;
 		alignParallel(centimeterPerSecond, sampleDistance);

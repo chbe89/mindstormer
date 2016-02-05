@@ -9,7 +9,7 @@ public class FollowLine extends AbstractProgram {
 	private float sample;
 	private int searchAngle = 25;
 	private int forwardSpeed = 17;
-	private int turnSpeed = 12;
+	private int turnSpeed = 13;
 	private int turnMultiplicator;
 	
 	

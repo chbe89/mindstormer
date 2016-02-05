@@ -13,8 +13,6 @@ public class Labyrinth extends AbstractProgram {
     final int speed = 22;
     final float turnSpeed = 18;
 
-    // private float toDrive = 20;
-
     public void run() {
 
 	while (!quit.get()) {
@@ -23,7 +21,7 @@ public class Labyrinth extends AbstractProgram {
 
 	    while (Constants.MIN_WALL_DISTANCE < sampleUltra && sampleUltra < Constants.MAX_WALL_DISTANCE
 		    && sampleTouch != Constants.TOUCH_SENSOR_PRESSED) {
-		Movement.holdDistance(speed, 15);
+		Movement.holdDistance2(speed, 15);
 		updateSensors();
 		OperatingSystem.displayText("T:" + String.valueOf(sampleTouch) + "U:" + String.valueOf(sampleUltra));
 	    }
@@ -38,11 +36,6 @@ public class Labyrinth extends AbstractProgram {
 	    } else if (sampleUltra < Constants.MIN_WALL_DISTANCE) {
 		OperatingSystem.displayText("DETECTED TOO CLOSE");
 		backupAndTurn(true,true);
-		// Movement.rotate(5, speed);
-		// State.waitForStoppedMove();
-		// Movement.moveDistance(5, speed);
-		// State.waitForStoppedMove();
-
 	    } else {
 		OperatingSystem.displayText("ERROR UNDEFINED STATE");
 	    }
@@ -64,21 +57,14 @@ public class Labyrinth extends AbstractProgram {
 	    Movement.rotate(90 * (left ? -1 : 1), turnSpeed);
 	    State.waitForStoppedMove();
 	}
-
-	// Movement.moveDistance(30, speed);
-	// State.waitForStoppedMove();
     }
 
     private void driveCurve90d(boolean left) {
-	// toDrive += sampleUltra;
-	// OperatingSystem.displayText("to Drive" + String.valueOf(toDrive));
-	// Movement.moveDistance(10, speed);
-	// State.waitForStoppedMove();
-//	Movement.rotate(90 * (left ? -1 : 1), turnSpeed);
-//	State.waitForStoppedMove();
-//	Movement.moveDistance(45, speed);
-//	State.waitForStoppedMove();
-//	OperatingSystem.displayText("Drive Curve Completed");
-	Movement.rotate(180,turnSpeed);
+
+	Movement.rotate(90 * (left ? -1 : 1), turnSpeed);
+	State.waitForStoppedMove();
+	Movement.moveDistance(45, speed);
+	State.waitForStoppedMove();
+	OperatingSystem.displayText("Drive Curve Completed");
     }
 }
