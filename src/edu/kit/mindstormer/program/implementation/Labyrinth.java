@@ -79,6 +79,6 @@ public class Labyrinth extends AbstractProgram {
 //	Movement.moveDistance(45, speed);
 //	State.waitForStoppedMove();
 //	OperatingSystem.displayText("Drive Curve Completed");
-	Movement.moveRight(180,turnSpeed);
+	Movement.rotate(180,turnSpeed);
     }
 }
