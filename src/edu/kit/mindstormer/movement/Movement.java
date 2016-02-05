@@ -243,8 +243,6 @@ public final class Movement {
 		return Math.abs(Math.round(Constants.CM_TO_MOTOR_ANGLE * centimeterPerSecond * (bothWheels ? 0.5f : 1)));
 	}
 	
-
-	
 	private static void setMode(RegulatedMotor motor, boolean forward) {
 		if (forward) {
 			motor.forward();

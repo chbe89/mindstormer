@@ -106,7 +106,7 @@ public class OperatingSystem implements ProgramContext {
 		if (program == null)
 			return;
 
-		displayText("Currently selected program: " + program.getName());
+		displayText(program.getName());
 	}
 
 	public static void displayText(String text) {
