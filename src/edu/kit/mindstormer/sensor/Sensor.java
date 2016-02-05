@@ -8,9 +8,9 @@ import edu.kit.mindstormer.Constants;
 
 public class Sensor {
 	private static BaseSensor COLOR;
-	private static BaseSensor DISTANCE = new EV3UltrasonicSensor(Constants.DISTANCE_SENSOR_PORT);
-	private static BaseSensor TOUCH_RIGHT = new EV3TouchSensor(Constants.TOUCH_SENSOR_PORT);
-	private static BaseSensor TOUCH_LEFT = new EV3TouchSensor(Constants.TOUCH_SENSOR_PORT_2);
+	private static BaseSensor DISTANCE;
+	private static BaseSensor TOUCH_RIGHT;
+	private static BaseSensor TOUCH_LEFT;
 	
 	private static float[] colorSample;
 	private static float[] touchSampleRight;
@@ -19,6 +19,8 @@ public class Sensor {
 
 	
 	public static void init() {
+		initSensors();
+		
 		colorSample = new float[COLOR.sampleSize()];
 		touchSampleRight = new float[TOUCH_RIGHT.sampleSize()];
 		touchSampleLeft = new float[TOUCH_LEFT.sampleSize()];
