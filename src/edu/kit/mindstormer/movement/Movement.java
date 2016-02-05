@@ -178,15 +178,17 @@ public final class Movement {
 	}
 	
 	public static void holdDistance2(boolean forward, float centimeterPerSecond, float distance) {
+		float turningFactor = 7f / 8f;
+		
 	    float sample = Sensor.sampleDistance();
 		Delay.msDelay(200);
 		float difference = Sensor.sampleDistance() - sample;
 		if (Math.abs(difference) > 20) return;
 
 		if (difference > 0 && sample > distance) {
-			move(forward ,centimeterPerSecond,forward , (7f / 8f) * centimeterPerSecond);
+			move(forward,centimeterPerSecond, forward, turningFactor * centimeterPerSecond);
 		} else if (difference < 0 && sample < distance){
-			move(forward ,(7f / 8f) * centimeterPerSecond,forward , centimeterPerSecond);
+			move(forward, turningFactor * centimeterPerSecond, forward, centimeterPerSecond);
 		} else {
 			move(forward ,centimeterPerSecond);
 		}
