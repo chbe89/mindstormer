@@ -57,7 +57,7 @@ public final class HttpLogger {
 
 	private void postMessage(String parameter) throws IOException {
 		try {
-			String query = String.format("message=%s", URLEncoder.encode(parameter, CHARSET));
+			String query = "message=" + URLEncoder.encode(parameter, CHARSET);
 			String url = BASE_URL + "?" + query;
 			HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
 			connection.getResponseCode();
