@@ -22,9 +22,9 @@ public class Sensor {
 		initSensors();
 		
 		colorSample = new float[COLOR.sampleSize()];
+		distanceSample = new float[DISTANCE.sampleSize()];
 		touchSampleLeft = new float[TOUCH_LEFT.sampleSize()];
 		touchSampleRight = new float[TOUCH_RIGHT.sampleSize()];
-		distanceSample = new float[DISTANCE.sampleSize()];
 		
 		COLOR.setCurrentMode("Red");
 		DISTANCE.setCurrentMode("Distance");
