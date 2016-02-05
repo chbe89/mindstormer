@@ -181,6 +181,7 @@ public final class Movement {
 	    float sample = Sensor.sampleDistance();
 		Delay.msDelay(200);
 		float difference = Sensor.sampleDistance() - sample;
+		if (Math.abs(difference) > 20) return;
 
 		if (difference > 0 && sample > distance) {
 			move(forward ,centimeterPerSecond,forward , (7f / 8f) * centimeterPerSecond);
@@ -196,6 +197,7 @@ public final class Movement {
 		alignParallel(centimeterPerSecond, sampleDistance);
 		float sample = Sensor.sampleDistance();
 		float alignmentError = distance - sample;
+		
 		if (Math.abs(alignmentError) > Constants.MAX_ALIGNMENT_ERROR) {
 			rotate(90, 14);
 			State.waitForMotors(true, true);
