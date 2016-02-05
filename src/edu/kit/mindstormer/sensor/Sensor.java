@@ -9,12 +9,12 @@ import edu.kit.mindstormer.Constants;
 public class Sensor {
 	private static BaseSensor COLOR;
 	private static BaseSensor DISTANCE;
-	private static BaseSensor TOUCH_RIGHT;
 	private static BaseSensor TOUCH_LEFT;
+	private static BaseSensor TOUCH_RIGHT;
 	
 	private static float[] colorSample;
-	private static float[] touchSampleRight;
 	private static float[] touchSampleLeft;
+	private static float[] touchSampleRight;
 	private static float[] distanceSample;
 
 	
@@ -22,8 +22,8 @@ public class Sensor {
 		initSensors();
 		
 		colorSample = new float[COLOR.sampleSize()];
-		touchSampleRight = new float[TOUCH_RIGHT.sampleSize()];
 		touchSampleLeft = new float[TOUCH_LEFT.sampleSize()];
+		touchSampleRight = new float[TOUCH_RIGHT.sampleSize()];
 		distanceSample = new float[DISTANCE.sampleSize()];
 		
 		COLOR.setCurrentMode("Red");
@@ -37,8 +37,8 @@ public class Sensor {
 					switch(i) {
 						case 0: COLOR = new EV3ColorSensor(Constants.COLOR_SENSOR_PORT); break;
 						case 1: DISTANCE = new EV3UltrasonicSensor(Constants.DISTANCE_SENSOR_PORT); break;
-						case 2: TOUCH_RIGHT = new EV3TouchSensor(Constants.TOUCH_SENSOR_PORT); break;
-						case 3: TOUCH_RIGHT = new EV3TouchSensor(Constants.TOUCH_SENSOR_PORT); break;
+						case 2: TOUCH_LEFT = new EV3TouchSensor(Constants.TOUCH_SENSOR_PORT_LEFT); break;
+						case 3: TOUCH_RIGHT = new EV3TouchSensor(Constants.TOUCH_SENSOR_PORT_RIGHT); break;
 					}
 				} catch (Exception e) {
 					 continue;
@@ -54,14 +54,14 @@ public class Sensor {
 		return colorSample[0];
 	}
 	
-	public static float sampleTouchRight(){
-		TOUCH_RIGHT.fetchSample(touchSampleRight, 0);
-		return touchSampleRight[0];
-	}
-	
 	public static float sampleTouchLeft(){
 		TOUCH_LEFT.fetchSample(touchSampleLeft, 0);
 		return touchSampleLeft[0];
+	}
+	
+	public static float sampleTouchRight(){
+		TOUCH_RIGHT.fetchSample(touchSampleRight, 0);
+		return touchSampleRight[0];
 	}
 	
 	public static float sampleTouchBoth(){
