@@ -1,15 +1,13 @@
 package edu.kit.mindstormer.program.implementation;
+
 import edu.kit.mindstormer.program.AbstractProgram;
 
-public class Ramp extends AbstractProgram {
+public class ChainBridge extends AbstractProgram {
 
-	public Ramp() {
-		super("Ramp");
-	}
-	
+	@Override
 	public void run() {
-		
-		
+		// TODO Auto-generated method stub
 
 	}
+
 }
