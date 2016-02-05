@@ -4,10 +4,6 @@ import edu.kit.mindstormer.program.AbstractProgram;
 
 public class Seesaw extends AbstractProgram {
 
-	public Seesaw() {
-		super("Seesaw");
-	}
-	
 	public void run() {		
 		//Movement.driveForwardByDegrees(-600, 5000);
 		while (!State.stopped(true, true)) {
