@@ -23,7 +23,7 @@ public class Race extends AbstractProgram {
     public void run() {
 
 	while (!quit.get()) {
-	    Movement.move(speed);
+	    Movement.move(true, speed);
 	    while (Constants.MIN_WALL_DISTANCE < sampleUltra && sampleUltra < initialDistance
 		    && sampleTouch != Constants.TOUCH_SENSOR_PRESSED) {
 		sampleUltra = Sensor.sampleDistance();
@@ -33,9 +33,9 @@ public class Race extends AbstractProgram {
 	    if (sampleUltra < Constants.MIN_WALL_DISTANCE) {
 		OperatingSystem.displayText("DETECTED TOO CLOSE");
 		Movement.rotate(5, speed);
-		State.waitForStoppedMove();
+		State.waitForMovementMotors();
 		Movement.moveDistance(5, speed);
-		State.waitForStoppedMove();
+		State.waitForMovementMotors();
 		// Correct angleToWall
 	    }
 	}

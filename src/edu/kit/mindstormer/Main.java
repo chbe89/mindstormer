@@ -13,6 +13,7 @@ import edu.kit.mindstormer.program.implementation.Seesaw;
 import edu.kit.mindstormer.program.implementation.test.BlockingTest;
 import edu.kit.mindstormer.program.implementation.test.DistanceSensorTest;
 import edu.kit.mindstormer.program.implementation.test.MoveFixedDistance;
+import edu.kit.mindstormer.program.implementation.test.MovementTest;
 import edu.kit.mindstormer.program.implementation.test.NavigatorProgram;
 import edu.kit.mindstormer.program.implementation.test.ReadjustSensor;
 import edu.kit.mindstormer.util.HttpLogger;
@@ -23,6 +24,7 @@ public class Main {
 		Collection<Program> programs = new ArrayList<Program>();
 		programs.add(new Labyrinth());
 		programs.add(new BlockingTest());
+		programs.add(new MovementTest());
 		programs.add(new FollowLine());
 		programs.add(new Bridge());
 		programs.add(new Seesaw());

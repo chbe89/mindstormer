@@ -40,7 +40,7 @@ public class RollerBox extends AbstractProgram {
 	}
 
 	private void driveThroughBox() {
-		Movement.move(-speed);
+		Movement.move(false, speed);
 		while (!State.stopped(true, true))
 			if (Sensor.sampleDistance() > 20) {
 				Movement.stop();

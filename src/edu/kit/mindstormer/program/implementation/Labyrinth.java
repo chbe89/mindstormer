@@ -23,7 +23,7 @@ public class Labyrinth extends AbstractProgram {
 
 	    while (Constants.MIN_WALL_DISTANCE < sampleUltra && sampleUltra < Constants.MAX_WALL_DISTANCE
 		    && sampleTouch != Constants.TOUCH_SENSOR_PRESSED) {
-		Movement.holdDistance(speed, 15);
+		//Movement.holdDistance(speed, 15);
 		updateSensors();
 		OperatingSystem.displayText("T:" + String.valueOf(sampleTouch) + "U:" + String.valueOf(sampleUltra));
 	    }
@@ -57,12 +57,12 @@ public class Labyrinth extends AbstractProgram {
     private void backupAndTurn(boolean left, boolean toClose) {
 	if (toClose) {
 	    Movement.rotate(90 * (left ? 1 : -1), turnSpeed);
-	    State.waitForStoppedMove();
+	    State.waitForMovementMotors();
 	} else {
 	    Movement.moveDistance(-15, speed);
-	    State.waitForStoppedMove();
+	    State.waitForMovementMotors();
 	    Movement.rotate(90 * (left ? -1 : 1), turnSpeed);
-	    State.waitForStoppedMove();
+	    State.waitForMovementMotors();
 	}
 
 	// Movement.moveDistance(30, speed);
