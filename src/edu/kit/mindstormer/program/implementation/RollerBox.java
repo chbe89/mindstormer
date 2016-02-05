@@ -16,7 +16,6 @@ public class RollerBox extends AbstractProgram {
 	private static final HttpLogger logger = HttpLogger.getInstance();
 
 	public void run() {
-		
 		logger.log("Setting back from roller box (10 cm)");
 		setBack(10);
 
@@ -45,12 +44,12 @@ public class RollerBox extends AbstractProgram {
 
 	private void driveOut() {
 		Movement.moveDistance(-25, speed);
-		while (!State.stopped(true, true)) { }
+		State.waitForMovementMotors();
 	}
 
 	private void driveThroughBox() {
 		Movement.move(false, speed);
-		while (!State.stopped(true, true))
+		while (true)
 			if (Sensor.sampleDistance() > 20) {
 				Movement.stop();
 				break;
@@ -59,11 +58,11 @@ public class RollerBox extends AbstractProgram {
 
 	private void turnAround() {
 		Movement.rotate(180, rotationSpeed);
-		while (!State.stopped(true, true)) { }
+		State.waitForMovementMotors();
 	}
 
 	private void setBack(int distance) {
 		Movement.moveDistance(-distance, speed);
-		while (!State.stopped(true, true)) { }
+		State.waitForMovementMotors();
 	}
 }
