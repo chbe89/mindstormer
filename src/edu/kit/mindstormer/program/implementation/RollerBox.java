@@ -44,7 +44,7 @@ public class RollerBox extends AbstractProgram {
 	}
 
 	private void driveOut() {
-		Movement.moveDistance(25, -speed);
+		Movement.moveDistance(-25, speed);
 		while (!State.stopped(true, true)) { }
 	}
 
@@ -63,7 +63,7 @@ public class RollerBox extends AbstractProgram {
 	}
 
 	private void setBack(int distance) {
-		Movement.moveDistance(distance, -speed);
+		Movement.moveDistance(-distance, speed);
 		while (!State.stopped(true, true)) { }
 	}
 }
