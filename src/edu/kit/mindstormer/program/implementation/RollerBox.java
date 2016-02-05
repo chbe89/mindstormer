@@ -32,7 +32,7 @@ public class RollerBox extends AbstractProgram {
 		driveThroughBox();
 
 		// drive out of roller box
-		logger.log("Start driving out of roller box (25 cm)");
+		logger.log("Start driving out of roller box (35 cm)");
 		driveOut();
 
 		// reposition
@@ -43,7 +43,7 @@ public class RollerBox extends AbstractProgram {
 	}
 
 	private void driveOut() {
-		Movement.moveDistance(-25, speed);
+		Movement.moveDistance(-35, speed);
 		State.waitForMovementMotors();
 	}
 

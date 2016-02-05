@@ -32,28 +32,36 @@ public final class HttpLogger {
 		if (!enabled)
 			return;
 
-		try {
-			String logEntry = message;
-			postMessage(logEntry);
-		} catch (Exception e) {
-			enabled = false;
-			OperatingSystem.displayText("Log error: " + e.getMessage());
-		}
+		final String logEntry = message;
+		Runnable r = new Runnable() {
+			@Override
+			public void run() {
+				try {
+					postMessage(logEntry);
+				} catch (IOException e) {
+					enabled = false;
+					OperatingSystem.displayText("Log error: " + e.getMessage());
+				}
+			}
+
+		};
+		new Thread(r).start();
 	}
 
-//	private String format(String message) {
-//		StackTraceElement[] stackTrace = new Exception().getStackTrace();
-//		String name = stackTrace[stackTrace.length - 1].getClassName();
-//		name = pad(name.substring(name.lastIndexOf('.') + 1, name.length()), 15, ' ');
-//		return name + " | " + message;
-//	}
-//
-//	private String pad(String s, int width, char fill) {
-//		int validLength = Math.min(s.length(), width);
-//		String padded = s.substring(0, validLength);
-//		padded += new String(new char[width - validLength]).replace('\0', fill);
-//		return padded;
-//	}
+	// private String format(String message) {
+	// StackTraceElement[] stackTrace = new Exception().getStackTrace();
+	// String name = stackTrace[stackTrace.length - 1].getClassName();
+	// name = pad(name.substring(name.lastIndexOf('.') + 1, name.length()), 15,
+	// ' ');
+	// return name + " | " + message;
+	// }
+	//
+	// private String pad(String s, int width, char fill) {
+	// int validLength = Math.min(s.length(), width);
+	// String padded = s.substring(0, validLength);
+	// padded += new String(new char[width - validLength]).replace('\0', fill);
+	// return padded;
+	// }
 
 	private void postMessage(String parameter) throws IOException {
 		try {
