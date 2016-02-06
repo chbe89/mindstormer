@@ -7,10 +7,11 @@ import edu.kit.mindstormer.program.AbstractProgram;
 import edu.kit.mindstormer.sensor.Sensor;
 
 public class FollowLine extends AbstractProgram {
+	
+	private final int searchAngle = 25;
+	private final int forwardSpeed = 17;
+	private final int turnSpeed = 13;
 	private float sample;
-	private int searchAngle = 25;
-	private int forwardSpeed = 17;
-	private int turnSpeed = 13;
 	private int turnMultiplicator;
 
 	private boolean foundInFirstDirection = false;

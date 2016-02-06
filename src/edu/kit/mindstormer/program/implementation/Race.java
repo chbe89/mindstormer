@@ -9,7 +9,7 @@ import edu.kit.mindstormer.sensor.Sensor;
 
 public class Race extends AbstractProgram {
     private float sampleUltra;
-    private float sampleTouch;
+    private boolean sampleTouch;
     private final int speed = 15;
     private final int turnSpeed = 15;
 
@@ -27,12 +27,12 @@ public class Race extends AbstractProgram {
 	while (!quit.get()) {
 	    Movement.move(true,speed);
 	    while (Constants.MIN_WALL_DISTANCE < sampleUltra && sampleUltra < (initialDistance + 10.0f)
-		    && sampleTouch != Constants.TOUCH_SENSOR_PRESSED) {
+		    && !sampleTouch) {
 		sampleUltra = Sensor.sampleDistance();
 		sampleTouch = Sensor.sampleTouchBoth();
 	    }
 	    Movement.stop();
-	    if (sampleTouch == Constants.TOUCH_SENSOR_PRESSED) {
+	    if (sampleTouch) {
 		backupAndTurn(false);
 	    } else if (sampleUltra < Constants.MIN_WALL_DISTANCE) {
 		OperatingSystem.displayText("DETECTED TOO CLOSE");
