@@ -22,9 +22,9 @@ public class Sensor {
 		initSensors();
 		
 		colorSample = new float[COLOR.sampleSize()];
+		distanceSample = new float[DISTANCE.sampleSize()];
 		touchSampleLeft = new float[TOUCH_LEFT.sampleSize()];
 		touchSampleRight = new float[TOUCH_RIGHT.sampleSize()];
-		distanceSample = new float[DISTANCE.sampleSize()];
 		
 		COLOR.setCurrentMode("Red");
 		DISTANCE.setCurrentMode("Distance");
@@ -54,18 +54,18 @@ public class Sensor {
 		return colorSample[0];
 	}
 	
-	public static float sampleTouchLeft(){
+	public static boolean sampleTouchLeft(){
 		TOUCH_LEFT.fetchSample(touchSampleLeft, 0);
-		return touchSampleLeft[0];
+		return touchSampleLeft[0] > 0;
 	}
 	
-	public static float sampleTouchRight(){
+	public static boolean sampleTouchRight(){
 		TOUCH_RIGHT.fetchSample(touchSampleRight, 0);
-		return touchSampleRight[0];
+		return touchSampleRight[0] > 0;
 	}
 	
-	public static float sampleTouchBoth(){
-		return sampleTouchLeft() + sampleTouchRight();
+	public static boolean sampleTouchBoth(){
+		return sampleTouchLeft() || sampleTouchRight();
 	}
 	
 	public static float sampleDistance() {

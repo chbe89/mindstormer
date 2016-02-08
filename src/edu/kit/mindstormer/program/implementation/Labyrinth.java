@@ -9,7 +9,7 @@ import edu.kit.mindstormer.sensor.Sensor;
 
 public class Labyrinth extends AbstractProgram {
     float sampleUltra;
-    float sampleTouch;
+    boolean sampleTouch;
     final int speed = 22;
     final float turnSpeed = 18;
 
@@ -20,13 +20,13 @@ public class Labyrinth extends AbstractProgram {
 	    OperatingSystem.displayText("T:" + String.valueOf(sampleTouch) + "U:" + String.valueOf(sampleUltra));
 
 	    while (Constants.MIN_WALL_DISTANCE < sampleUltra && sampleUltra < Constants.MAX_WALL_DISTANCE
-		    && sampleTouch != Constants.TOUCH_SENSOR_PRESSED) {
+		    && !sampleTouch) {
 		Movement.holdDistance2(true, speed, 15);
 		updateSensors();
 		OperatingSystem.displayText("T:" + String.valueOf(sampleTouch) + "U:" + String.valueOf(sampleUltra));
 	    }
 	    Movement.stop();
-	    if (sampleTouch >= Constants.TOUCH_SENSOR_PRESSED) {
+	    if (sampleTouch) {
 		OperatingSystem.displayText("DETECTED TOUCH");
 		Movement.moveDistance(2, speed);
 		backupAndTurn(true, false);
