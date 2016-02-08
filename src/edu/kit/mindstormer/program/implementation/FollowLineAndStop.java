@@ -22,6 +22,8 @@ public class FollowLineAndStop extends AbstractProgram {
 	private boolean foundInFirstDirection = false;
 	private boolean foundInSecondDirection = false;
 
+	private int barcodeTimer = 1; //90000;
+
 	@Override
 	public void initialize() {
 		super.initialize();
@@ -32,8 +34,23 @@ public class FollowLineAndStop extends AbstractProgram {
 	@Override
 	public void run() {
 		boolean onLine = true;
+		long startTime = System.currentTimeMillis();
 		while (!quit.get() && onLine) {
-			onLine = searchLine();
+			long elapsedTime = System.currentTimeMillis() - startTime;
+			Sensor.sampleColor();
+			if (sample < Constants.LINE_COLOR_THRESHOLD && elapsedTime > barcodeTimer) {
+				int qrNr = searchQRCode();
+				if (qrNr > 0) {
+					OperatingSystem.displayText("Escaping with Barcode " + qrNr);
+					break;
+				}
+				else 
+					onLine = searchLine();
+			}
+			else {
+				onLine = searchLine();
+			}
+			
 			if (onLine)
 				moveAlongLine();
 			else {
@@ -50,6 +67,39 @@ public class FollowLineAndStop extends AbstractProgram {
 		Movement.stop();
 	}
 
+	private int searchQRCode() {
+		OperatingSystem.displayText("Searching BarCode");
+		Movement.moveDistance(6, 30);
+		State.waitForMovementMotors();
+		boolean qrFound = false;
+		while(!qrFound) {
+			sample = Sensor.sampleColor();
+			if (sample >= Constants.LINE_COLOR_THRESHOLD) {
+				OperatingSystem.displayText("BarCode Found!");
+				qrFound = true;
+			} else if (State.stopped(true, true)) {
+				OperatingSystem.displayText("BarCode NOT Found!");
+				break;
+			}
+		}
+		int qrNr = 0;
+		if (qrFound) {
+			while (sample >= Constants.LINE_COLOR_THRESHOLD) {
+				qrNr++;
+				OperatingSystem.displayText("BarCode " + qrNr + " Found!");
+				State.waitForMovementMotors();
+				Movement.moveDistance(5.0f, 30);
+				State.waitForMovementMotors();
+				sample = Sensor.sampleColor();
+			}
+		} else {
+			State.waitForMovementMotors();
+			Movement.moveDistance(-6, 30);
+		}
+		State.waitForMovementMotors();
+		return qrNr;
+	}
+	
 	private void moveAlongLine() {
 		OperatingSystem.displayText("Moving along line");
 		Movement.move(true, forwardSpeed, true, forwardSpeed);
