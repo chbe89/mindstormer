@@ -43,7 +43,7 @@ public final class Constants {
 	
 	public final static float MIN_WALL_DISTANCE = 4.0f;
 	
-	public final static float MAX_WALL_DISTANCE = 30.0f;
+	public final static float MAX_WALL_DISTANCE = 40.0f;
 	
 	public static HttpLogger LOGGER = HttpLogger.getInstance();
 
