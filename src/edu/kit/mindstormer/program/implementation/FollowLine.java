@@ -16,7 +16,7 @@ public class FollowLine extends AbstractProgram {
 
 	private boolean foundInFirstDirection = false;
 	private boolean foundInSecondDirection = false;
-
+	
 	@Override
 	public void initialize() {
 		super.initialize();
@@ -25,13 +25,51 @@ public class FollowLine extends AbstractProgram {
 	}
 
 	public void run() {
+		long startTime = System.currentTimeMillis();
 		while (!quit.get()) {
-			searchLine();
+			long elapsedTime = System.currentTimeMillis() - startTime;
+			if (elapsedTime > 500) {
+				if (searchQRCode() > 0) 
+					break;
+				else 
+					searchLine();
+			}
+			else {
+				searchLine();
+			}
 			moveAlongLine();
 		}
 		Movement.stop();
 	}
-
+	
+	private int searchQRCode() {
+		Movement.moveDistance(7, 30);
+		boolean qrFound = false;
+		while(!qrFound) {
+			Sensor.sampleColor();
+			if (sample >= Constants.LINE_COLOR_THRESHOLD)
+				qrFound = true;
+			if (State.stopped(true, true))
+				break;
+		}
+		int qrNr = 0;
+		if (qrFound) {
+			qrNr = 1;
+			while (sample >= Constants.LINE_COLOR_THRESHOLD) {
+				State.waitForMovementMotors();
+				Movement.moveDistance(2.5f, 30);
+				State.waitForMovementMotors();
+				Sensor.sampleColor();
+				qrNr++;
+			}
+		} else {
+			State.waitForMovementMotors();
+			Movement.moveDistance(-7, 30);
+		}
+		State.waitForMovementMotors();
+		return qrNr;
+	}
+	
 	private void moveAlongLine() {
 		Movement.move(true, forwardSpeed, true, forwardSpeed);
 		while (sample >= Constants.LINE_COLOR_THRESHOLD) {
