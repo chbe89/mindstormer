@@ -23,7 +23,7 @@ public class Labyrinth extends AbstractProgram {
 	    OperatingSystem.displayText("T:" + String.valueOf(sampleTouch) + "U:" + String.valueOf(sampleUltra));
 
 	    while (Constants.MIN_WALL_DISTANCE < sampleUltra && sampleUltra < Constants.MAX_WALL_DISTANCE
-		    && sampleTouch != Constants.TOUCH_SENSOR_PRESSED) {
+		    && sampleTouch == Constants.TOUCH_SENSOR_UNPRESSED) {
 		Movement.holdDistance2(true, speed, distanceToWall);
 		updateSensors();
 		OperatingSystem.displayText("T:" + String.valueOf(sampleTouch) + "U:" + String.valueOf(sampleUltra));
