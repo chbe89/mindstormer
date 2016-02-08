@@ -1,8 +1,9 @@
 #!/bin/bash
 while :
 do
-	LOG=$(curl --silent -X GET 192.168.0.213:5000)
-	echo $LOG | sed 's/<br>/\'$'\n/g'
+	LOG=$(curl --silent -X GET 127.0.0.1:5000)
+	LOG=$(echo $LOG | sed 's/<br>/\'$'\n/g')
+	echo $LOG
 	sleep 4
 	clear
 done
