@@ -7,6 +7,7 @@ import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.program.Program;
 import edu.kit.mindstormer.program.implementation.Bridge;
+import edu.kit.mindstormer.program.implementation.ChainBridge;
 import edu.kit.mindstormer.program.implementation.FollowLine;
 import edu.kit.mindstormer.program.implementation.FollowLineAndStop;
 import edu.kit.mindstormer.program.implementation.Labyrinth;
@@ -49,6 +50,7 @@ public class Main {
 	private static void installPrograms() {
 		programs.clear();
 		programs.add(new Labyrinth());
+		programs.add(new ChainBridge());
 		programs.add(new Race());
 		programs.add(new BlockingTest());
 		programs.add(new MovementTest());

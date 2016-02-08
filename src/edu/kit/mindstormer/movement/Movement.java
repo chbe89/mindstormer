@@ -180,7 +180,7 @@ public final class Movement {
 	public static void holdDistance2(boolean forward, float centimeterPerSecond, float distance) {
 		float turningCentimeterPerSecond = 7f / 8f * centimeterPerSecond;
 		
-	    float sample = Sensor.sampleDistance();
+		float sample = Sensor.sampleDistance();
 		Delay.msDelay(50);
 		float difference = Sensor.sampleDistance() - sample;
 		if (Math.abs(difference) > 20) return;
@@ -225,7 +225,7 @@ public final class Movement {
 		stop();
 		float sampleDifference = (sample - Sensor.sampleDistance());
 		Delay.msDelay(10);
-		float correctionAngle =  (sampleDistance > 0 ? -1.f : 1.f) * (float) Math.toDegrees(Math.atan(sampleDifference / sampleDistance));
+		float correctionAngle = (float) Math.toDegrees(Math.atan(sampleDifference / sampleDistance));
 		
 		rotate(correctionAngle, 14);
 		while (!State.stopped(true, true)) {}

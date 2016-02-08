@@ -17,17 +17,16 @@ public class Race extends AbstractProgram {
 
     public Race() {
 	super("Race");
-	sampleUltra = Sensor.sampleDistance();
-	initialDistance = sampleUltra;
-	sampleTouch = Sensor.sampleTouchBoth();
     }
 
     public void run() {
+	sampleUltra = Sensor.sampleDistance();
+	initialDistance = sampleUltra;
+	sampleTouch = Sensor.sampleTouchBoth();
 
 	while (!quit.get()) {
-	    Movement.move(true,speed);
-	    while (Constants.MIN_WALL_DISTANCE < sampleUltra && sampleUltra < (initialDistance + 10.0f)
-		    && !sampleTouch) {
+	    while (Constants.MIN_WALL_DISTANCE < sampleUltra && sampleUltra < (initialDistance + 10.0f) && !sampleTouch) {
+		Movement.holdDistance2(true, speed, initialDistance);
 		sampleUltra = Sensor.sampleDistance();
 		sampleTouch = Sensor.sampleTouchBoth();
 	    }
@@ -42,7 +41,6 @@ public class Race extends AbstractProgram {
 		State.waitForMovementMotors();
 	    } else {
 		OperatingSystem.displayText("DETECTED TOO FAR");
-		Movement.holdDistance2(true,speed, initialDistance);
 	    }
 	}
 
