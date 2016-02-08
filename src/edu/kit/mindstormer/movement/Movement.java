@@ -90,6 +90,15 @@ public final class Movement {
 		moveRight(motorAngle, centimeterPerSecond);
 		leftMotor.endSynchronization();
 	}
+	
+	public static void moveDistance(float distanceLeft, float centimeterPerSecondLeft, float distanceRight, float centimeterPerSecondRight) {
+		int motorAngleLeft = getMotorAngleForDistance(distanceLeft);
+		int motorAngleRight = getMotorAngleForDistance(distanceRight);
+		leftMotor.startSynchronization();
+		moveLeft(motorAngleLeft, centimeterPerSecondLeft);
+		moveRight(motorAngleRight, centimeterPerSecondRight);
+		leftMotor.endSynchronization();
+	}
 
 	public static void stop() {
 		leftMotor.startSynchronization();

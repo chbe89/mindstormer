@@ -10,6 +10,7 @@ import edu.kit.mindstormer.program.implementation.Bridge;
 import edu.kit.mindstormer.program.implementation.FollowLine;
 import edu.kit.mindstormer.program.implementation.FollowLineAndStop;
 import edu.kit.mindstormer.program.implementation.Labyrinth;
+import edu.kit.mindstormer.program.implementation.Parkours;
 import edu.kit.mindstormer.program.implementation.Race;
 import edu.kit.mindstormer.program.implementation.RollerBox;
 import edu.kit.mindstormer.program.implementation.Seesaw;
@@ -61,5 +62,16 @@ public class Main {
 		programs.add(new DistanceSensorTest());
 		programs.add(new NavigatorProgram());
 		programs.add(new ReadjustSensor());
+		
+		/*
+			programs.add(new Parkours(0));
+			programs.add(new Parkours(1));
+			programs.add(new Parkours(2));
+			programs.add(new Parkours(3));
+			programs.add(new Parkours(4));
+			programs.add(new Parkours(5));
+			programs.add(new Parkours(6));
+			programs.add(new Parkours(7));
+		*/
 	}
 }
