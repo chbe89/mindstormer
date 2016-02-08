@@ -9,9 +9,10 @@ import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.sensor.Sensor;
 
 public class Labyrinth extends AbstractProgram {
-    //distance to Wall 15 speed 30 trunSpeed 20
+    // distance to Wall 15 speed 30 trunSpeed 20
     float sampleUltra;
-    float sampleTouch;
+    float sampleLine;
+    boolean sampleTouch;
     final int speed = 35;
     final float turnSpeed = 25;
     final float distanceToWall = 15;
@@ -23,13 +24,13 @@ public class Labyrinth extends AbstractProgram {
 	    OperatingSystem.displayText("T:" + String.valueOf(sampleTouch) + "U:" + String.valueOf(sampleUltra));
 
 	    while (Constants.MIN_WALL_DISTANCE < sampleUltra && sampleUltra < Constants.MAX_WALL_DISTANCE
-		    && sampleTouch == Constants.TOUCH_SENSOR_UNPRESSED) {
+		    && !sampleTouch) {
 		Movement.holdDistance2(true, speed, distanceToWall);
 		updateSensors();
 		OperatingSystem.displayText("T:" + String.valueOf(sampleTouch) + "U:" + String.valueOf(sampleUltra));
 	    }
 	    Movement.stop();
-	    if (sampleTouch >= Constants.TOUCH_SENSOR_PRESSED) {
+	    if (sampleTouch) {
 		OperatingSystem.displayText("DETECTED TOUCH");
 		Movement.moveDistance(2, speed);
 		backupAndTurn(true, false);
@@ -48,6 +49,7 @@ public class Labyrinth extends AbstractProgram {
     private void updateSensors() {
 	sampleUltra = Sensor.sampleDistance();
 	sampleTouch = Sensor.sampleTouchBoth();
+	sampleLine = Sensor.sampleColor();
     }
 
     private void backupAndTurn(boolean left, boolean toClose) {
@@ -65,19 +67,23 @@ public class Labyrinth extends AbstractProgram {
     private void driveCurve90d(boolean left) {
 	Movement.moveDistance(-distanceToWall, speed);
 	State.waitForMovementMotors();
-	//speed 15 / 8
+	// speed 15 / 8
 	Movement.move(true, 22.5f, true, 12f);
 	updateSensors();
-	while(sampleTouch == Constants.TOUCH_SENSOR_UNPRESSED){
-		updateSensors();
-		OperatingSystem.displayText("Ultra:" + String.valueOf(sampleUltra) + "T:" + String.valueOf(sampleTouch));
-		Delay.msDelay(50);
+	while (!sampleTouch && sampleLine < Constants.LINE_COLOR_THRESHOLD) {
+	    updateSensors();
+	    OperatingSystem.displayText("Ultra:" + String.valueOf(sampleUltra) + "T:" + String.valueOf(sampleTouch));
+	    Delay.msDelay(50);
 	}
 	Movement.stop();
-//	Movement.rotate(90 * (left ? -1 : 1), turnSpeed);
-//	State.waitForMovementMotors();
-//	Movement.moveDistance(45, speed);
-//	State.waitForMovementMotors();
+
+	if (sampleLine < Constants.LINE_COLOR_THRESHOLD) {
+	    
+	}
+	// Movement.rotate(90 * (left ? -1 : 1), turnSpeed);
+	// State.waitForMovementMotors();
+	// Movement.moveDistance(45, speed);
+	// State.waitForMovementMotors();
 	OperatingSystem.displayText("Drive Curve Completed");
     }
 }
