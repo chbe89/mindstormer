@@ -28,6 +28,12 @@ public class FollowLine extends AbstractProgram {
 			searchLine();
 			moveAlongLine();
 		}
+
+	}
+
+	@Override
+	public void terminate() {
+		super.terminate();
 		Movement.stop();
 	}
 
