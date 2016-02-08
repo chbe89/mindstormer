@@ -8,6 +8,7 @@ import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.program.Program;
 import edu.kit.mindstormer.program.implementation.Bridge;
 import edu.kit.mindstormer.program.implementation.FollowLine;
+import edu.kit.mindstormer.program.implementation.FollowLineAndStop;
 import edu.kit.mindstormer.program.implementation.Labyrinth;
 import edu.kit.mindstormer.program.implementation.Race;
 import edu.kit.mindstormer.program.implementation.RollerBox;
@@ -52,6 +53,7 @@ public class Main {
 		programs.add(new BlockingTest());
 		programs.add(new MovementTest());
 		programs.add(new FollowLine());
+		programs.add(new FollowLineAndStop());
 		programs.add(new Bridge());
 		programs.add(new Seesaw());
 		programs.add(new RollerBox());

@@ -1,22 +1,27 @@
 package edu.kit.mindstormer.program.implementation;
 
+import lejos.hardware.Button;
+import lejos.hardware.Key;
 import edu.kit.mindstormer.Constants;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
 import edu.kit.mindstormer.program.AbstractProgram;
+import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.sensor.Sensor;
 
-public class FollowLine extends AbstractProgram {
-	
-	private final int searchAngle = 25;
-	private final int forwardSpeed = 17;
-	private final int turnSpeed = 13;
+public class FollowLineAndStop extends AbstractProgram {
 	private float sample;
+	// private int searchAngle = 25;
+	private int forwardSpeed = 17;
+	private int turnSpeed = 13;
 	private int turnMultiplicator;
+
+	// private int[] searchAngles = {45, 145, 200, 100};
+	private int[] searchAngles = { 30, 60, 90, 120, 180, 240 };
 
 	private boolean foundInFirstDirection = false;
 	private boolean foundInSecondDirection = false;
-	
+
 	@Override
 	public void initialize() {
 		super.initialize();
@@ -24,22 +29,19 @@ public class FollowLine extends AbstractProgram {
 		turnMultiplicator = 1;
 	}
 
+	@Override
 	public void run() {
-		long startTime = System.currentTimeMillis();
-		while (!quit.get()) {
-			long elapsedTime = System.currentTimeMillis() - startTime;
-			if (elapsedTime > 500) {
-				if (searchQRCode() > 0) 
-					break;
-				else 
-					searchLine();
-			}
+		boolean onLine = true;
+		while (!quit.get() && onLine) {
+			onLine = searchLine();
+			if (onLine)
+				moveAlongLine();
 			else {
-				searchLine();
+				OperatingSystem.displayText("Didn't find line. Correcting angle");
+				// correct position
+				Button.ESCAPE.simulateEvent(Key.KEY_RELEASED);
 			}
-			moveAlongLine();
 		}
-
 	}
 
 	@Override
@@ -47,36 +49,9 @@ public class FollowLine extends AbstractProgram {
 		super.terminate();
 		Movement.stop();
 	}
-	
-	private int searchQRCode() {
-		Movement.moveDistance(7, 30);
-		boolean qrFound = false;
-		while(!qrFound) {
-			Sensor.sampleColor();
-			if (sample >= Constants.LINE_COLOR_THRESHOLD)
-				qrFound = true;
-			if (State.stopped(true, true))
-				break;
-		}
-		int qrNr = 0;
-		if (qrFound) {
-			qrNr = 1;
-			while (sample >= Constants.LINE_COLOR_THRESHOLD) {
-				State.waitForMovementMotors();
-				Movement.moveDistance(2.5f, 30);
-				State.waitForMovementMotors();
-				Sensor.sampleColor();
-				qrNr++;
-			}
-		} else {
-			State.waitForMovementMotors();
-			Movement.moveDistance(-7, 30);
-		}
-		State.waitForMovementMotors();
-		return qrNr;
-	}
-	
+
 	private void moveAlongLine() {
+		OperatingSystem.displayText("Moving along line");
 		Movement.move(true, forwardSpeed, true, forwardSpeed);
 		while (sample >= Constants.LINE_COLOR_THRESHOLD) {
 			sample = Sensor.sampleColor();
@@ -84,32 +59,36 @@ public class FollowLine extends AbstractProgram {
 		Movement.stop();
 	}
 
-	private void searchLine() {
+	private boolean searchLine() {
+		OperatingSystem.displayText("Searching for line");
 		foundInFirstDirection = false;
 		foundInSecondDirection = false;
 
 		boolean keepSearching = !foundInFirstDirection && !foundInSecondDirection;
-		while (keepSearching) {
-			foundInFirstDirection = searchByAngle(turnMultiplicator * searchAngle);
+		for (int i = 0; i < searchAngles.length && keepSearching; i++) {
+			foundInFirstDirection = searchByAngle(turnMultiplicator * searchAngles[i]);
 
 			if (!foundInFirstDirection) {
-				increaseSearchRange();
-				foundInSecondDirection = searchByAngle(-turnMultiplicator * searchAngle);
+				i++;
+				foundInSecondDirection = searchByAngle(-turnMultiplicator * searchAngles[i]);
 			}
-			increaseSearchRange();
+
+			keepSearching = !foundInFirstDirection && !foundInSecondDirection;
 		}
 
+		OperatingSystem.displayText("Found line in direction: " + directionToString());
 		Movement.stop();
 		resetSearchRange();
+		return foundInFirstDirection || foundInSecondDirection;
 	}
 
 	private void resetSearchRange() {
 		turnMultiplicator = (turnMultiplicator > 0 ? 1 : -1) * (foundInSecondDirection ? -1 : 1);
 	}
 
-	private void increaseSearchRange() {
-		turnMultiplicator += turnMultiplicator > 0 ? 1 : -1;
-	}
+	// private void increaseSearchRange() {
+	// turnMultiplicator += turnMultiplicator > 0 ? 1 : -1;
+	// }
 
 	private boolean searchByAngle(float angle) {
 		Movement.rotate(angle, turnSpeed);
@@ -121,5 +100,11 @@ public class FollowLine extends AbstractProgram {
 			return true;
 		}
 		return false;
+	}
+
+	private String directionToString() {
+		if (turnMultiplicator > 0)
+			return "LEFT";
+		return "RIGHT";
 	}
 }
