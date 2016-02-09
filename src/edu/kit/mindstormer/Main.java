@@ -11,13 +11,10 @@ import edu.kit.mindstormer.program.implementation.ChainBridge;
 import edu.kit.mindstormer.program.implementation.FollowLine;
 import edu.kit.mindstormer.program.implementation.FollowLineAndStop;
 import edu.kit.mindstormer.program.implementation.Labyrinth;
-import edu.kit.mindstormer.program.implementation.Parkours;
 import edu.kit.mindstormer.program.implementation.Race;
 import edu.kit.mindstormer.program.implementation.RollerBox;
 import edu.kit.mindstormer.program.implementation.Seesaw;
 import edu.kit.mindstormer.program.implementation.test.BlockingTest;
-import edu.kit.mindstormer.program.implementation.test.DistanceSensorTest;
-import edu.kit.mindstormer.program.implementation.test.MoveFixedDistance;
 import edu.kit.mindstormer.program.implementation.test.MovementTest;
 import edu.kit.mindstormer.program.implementation.test.NavigatorProgram;
 import edu.kit.mindstormer.program.implementation.test.ReadjustSensor;
@@ -29,6 +26,8 @@ public class Main {
 	private static final Collection<Program> programs = new ArrayList<Program>();
 	
     public static void main(String[] args) {
+    	HttpLogger.disable();
+    	
     	initHardware();
     	installPrograms();
 		printLog();
@@ -60,8 +59,6 @@ public class Main {
 		programs.add(new Bridge());
 		programs.add(new Seesaw());
 		programs.add(new RollerBox());
-		programs.add(new MoveFixedDistance());
-		programs.add(new DistanceSensorTest());
 		programs.add(new NavigatorProgram());
 		programs.add(new ReadjustSensor());
 		

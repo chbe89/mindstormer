@@ -39,7 +39,7 @@ public final class HttpLogger {
 					postMessage(message);
 				} catch (IOException e) {
 					enabled = false;
-					OperatingSystem.displayText("Log error: " + e.getMessage());
+//					OperatingSystem.displayText("Log error: " + e.getMessage());
 				}
 			}
 
@@ -72,4 +72,5 @@ public final class HttpLogger {
 			OperatingSystem.displayText("URL error: " + e.getMessage());
 		}
 	}
+	
 }
