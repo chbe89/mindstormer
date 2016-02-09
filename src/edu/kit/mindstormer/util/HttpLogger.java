@@ -6,8 +6,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import edu.kit.mindstormer.program.OperatingSystem;
-
 public final class HttpLogger {
 
 	private static String CHARSET = "UTF-8";
@@ -69,7 +67,6 @@ public final class HttpLogger {
 			HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
 			connection.getResponseCode();
 		} catch (UnsupportedEncodingException e) {
-			OperatingSystem.displayText("URL error: " + e.getMessage());
 		}
 	}
 	
