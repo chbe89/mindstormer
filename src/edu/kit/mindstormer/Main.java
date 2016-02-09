@@ -24,8 +24,8 @@ import edu.kit.mindstormer.util.HttpLogger;
 
 public class Main {
 
-	private static final Collection<Program> programs = new ArrayList<Program>();
-	
+    private static final Collection<Program> programs = new ArrayList<Program>();
+
     public static void main(String[] args) {
     	HttpLogger.disable();
     	
@@ -37,16 +37,16 @@ public class Main {
 		os.run();
     }
 
-	private static void initHardware() {
-		Movement.init();
-		Sensor.init();
-	}
+    private static void initHardware() {
+	Movement.init();
+	Sensor.init();
+    }
 
-	private static void printLog() {
-		HttpLogger logger = HttpLogger.getInstance();
-		logger.log("Starting OS with " + programs.size() + " programs.");
-		logger.log("Programs = " + programs.toString());
-	}
+    private static void printLog() {
+	HttpLogger logger = HttpLogger.getInstance();
+	logger.log("Starting OS with " + programs.size() + " programs.");
+	logger.log("Programs = " + programs.toString());
+    }
 
 	private static void installPrograms() {
 		programs.clear();

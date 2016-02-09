@@ -10,33 +10,33 @@ public class ChainBridge extends AbstractProgram {
 
 	@Override
 	public void run() {
-		Movement.moveDistance(-10, 10);
-		State.waitForMovementMotors();
-		Movement.rotate(180, 10);
-		State.waitForMovementMotors();
-		Movement.moveDistance(-20, 10);
-		State.waitForMovementMotors();
+		Movement.move(true, 20);
+		while(!Sensor.sampleTouchBoth());
 
+		Movement.moveCircle(-90, true, 7, 10);
+		State.waitForMovementMotors();
+		
+		Movement.moveDistance(-50, 10);
+		State.waitForMovementMotors();
+		
 		Sound.beep();
 		Movement.stop();
-		while (Sensor.sampleDistance() < 20) {
+		while(Sensor.sampleDistance() < 40) {
 			Movement.holdDistance2(false, 10, 10);
 		}
 		Sound.beep();
-
+		
 		Movement.move(true, 10);
-		while (Sensor.sampleDistance() > 20)
-			;
-		Movement.alignParallel(40, 10);
+		while(Sensor.sampleDistance() > 20);
+		Movement.alignParallel(40, 10, 30);
 		Movement.moveDistance(-40, 10);
 		State.waitForMovementMotors();
-		Movement.moveDistance(-150, 35);
+		Movement.moveDistance(-170, 35);
 		State.waitForMovementMotors();
-
+		
 		Movement.move(false, 10);
-		while (Sensor.sampleDistance() > 20)
-			;
-		while (Sensor.sampleDistance() < 20) {
+		while(Sensor.sampleDistance() > 20);
+		while(Sensor.sampleDistance() < 20) {
 			Movement.holdDistance2(false, 10, 10);
 		}
 	}

@@ -31,8 +31,9 @@ public final class Constants {
 
 	public final static int SENSOR_MOTOR_SPEED = 800;
 
-	public final static float LINE_COLOR_THRESHOLD = 0.15f;
-
+	public final static float LINE_COLOR_THRESHOLD = 0.08f;
+	public final static float LINE_COLOR_THRESHOLD_LAB = 0.15f;
+	
 	public final static int ACCELERATION = 1000;
 
 //	public final static float TOUCH_SENSOR_PRESSED = 1.0f;
