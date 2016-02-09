@@ -2,7 +2,6 @@ package edu.kit.mindstormer.program.implementation;
 
 import lejos.hardware.Button;
 import lejos.hardware.Key;
-import lejos.utility.Delay;
 import edu.kit.mindstormer.Constants;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
@@ -17,14 +16,14 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 	private int turnSpeed = 13;
 	private int turnMultiplicator;
 
-	// private int[] searchAngles = {45, 145, 200, 100};
-	private int[] searchAngles = { 30, 60, 90, 120, 180, 240 };
-	private int[] miniSearchAngles = { 30, 60 };
-	
+	private int[] searchAngles = {30, 60, 120, 180, 120, 30};
+	//private int[] searchAngles = { 30, 60, 90, 120, 180, 240 };
+	private int[] miniSearchAngles = { 30, 60, 90 };
+
 	private boolean foundInFirstDirection = false;
 	private boolean foundInSecondDirection = false;
 
-	private int barcodeTimer = 1; //90000;
+	private int barcodeTimer = 1; // 90000;
 
 	@Override
 	public void initialize() {
@@ -40,36 +39,47 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 		while (!quit.get() && onLine) {
 			long elapsedTime = System.currentTimeMillis() - startTime;
 			sample = Sensor.sampleColor();
-			if (sample < Constants.LINE_COLOR_THRESHOLD && elapsedTime > barcodeTimer) {
-				
-				Movement.moveDistance(10, 20);
-				State.waitForMovementMotors();
-				float wallDistance = Sensor.sampleDistance();
-				OperatingSystem.displayText("Wall Distance: " + wallDistance);
-				
-				//Delay.msDelay(1000);
-				if (wallDistance > 35 && wallDistance < 45) {
-					/*while (wallDistance < 50) {
-						Movement.holdDistance2(true, 15, 40);
-					}*/
-					Movement.alignParallel(wallDistance, 15);
-					State.waitForMovementMotors();
-					Movement.move(true, 20);
-					while (!Sensor.sampleTouchBoth()) {
-						
-					}
-					Movement.stop();
-					return; // Seesaw done
-				} else {
-					Movement.moveDistance(-10, 20);
+			if (sample < Constants.LINE_COLOR_THRESHOLD) {
+				if (elapsedTime > barcodeTimer) {
+					Movement.moveDistance(3, 15);
 					State.waitForMovementMotors();
 					onLine = searchLine();
+					
+					if (!onLine) {
+						Movement.moveDistance(-3, 15);
+						State.waitForMovementMotors();
+						Movement.move(true, 35);
+						while (!Sensor.sampleTouchBoth());
+						
+						OperatingSystem.displayText("Wall TOUCHED + CIRCLE");
+						Movement.moveCircle(-90, false, 25, 15);
+						State.waitForMovementMotors();
+						OperatingSystem.displayText("CIRCLE COMPLETE");
+						return;
+					}
+				} else {
+					onLine = searchLine();
 				}
+				
+				/*
+				 * Movement.moveDistance(10, 20); State.waitForMovementMotors();
+				 * float wallDistance = Sensor.sampleDistance();
+				 * OperatingSystem.displayText("Wall Distance: " +
+				 * wallDistance);
+				 * 
+				 * //Delay.msDelay(1000); if (wallDistance > 35 && wallDistance
+				 * < 45) {
+				 * 
+				 * Movement.alignParallel(wallDistance, 15);
+				 * State.waitForMovementMotors(); Movement.move(true, 20); while
+				 * (!Sensor.sampleTouchBoth()) {
+				 * 
+				 * } Movement.stop(); return; // Seesaw done } else {
+				 * Movement.moveDistance(-10, 20);
+				 * State.waitForMovementMotors(); onLine = searchLine(); }
+				 */
 			}
-			else {
-				onLine = searchLine();
-			}
-			
+
 			if (onLine)
 				moveAlongLine();
 			else {
@@ -91,7 +101,7 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 		Movement.moveDistance(11, 30);
 		State.waitForMovementMotors();
 		boolean qrFound = false;
-		while(!qrFound) {
+		while (!qrFound) {
 			sample = Sensor.sampleColor();
 			if (sample >= Constants.LINE_COLOR_THRESHOLD) {
 				OperatingSystem.displayText("BarCode Found!");
@@ -112,7 +122,7 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 		State.waitForMovementMotors();
 		return qrNr;
 	}
-	
+
 	private int scanBarcodeWhileDriving() {
 		int qrNr = 0;
 		boolean black = true;
@@ -130,44 +140,29 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 					black = true;
 				if (black && isSilver(sample)) {
 					silver = true;
-					//Movement.stop();
+					// Movement.stop();
 				}
 			}
 		}
-		
-		//Movement.moveDistance(7.5f, 20);
+
+		// Movement.moveDistance(7.5f, 20);
 		State.waitForMovementMotors();
 		return qrNr;
 	}
-/*	
-	private int scanBarcodeWhileDriving2() {
-		int qrNr = 0;
-		boolean black = true;
-		boolean silver = true;
-		while (silver && black) {
-			qrNr++;
-			OperatingSystem.displayText("BarCode " + qrNr + " Found!");
-			State.waitForMovementMotors();
-			Movement.moveDistance(6.0f, 30);
-			black = false;
-			silver = false;
-			while (!State.stopped(true, true)) {
-				sample = Sensor.sampleColor();
-				if (sample < Constants.LINE_COLOR_THRESHOLD)
-					black = true;
-				if (black && sample >= Constants.LINE_COLOR_THRESHOLD) {
-					silver = true;
-					Movement.stop();
-				}
-			}
-			sample = Sensor.sampleColor();
-		}
-		
-		Movement.moveDistance(7.5f, 30);
-		State.waitForMovementMotors();
-		return qrNr;
-	}
-	*/
+
+	/*
+	 * private int scanBarcodeWhileDriving2() { int qrNr = 0; boolean black =
+	 * true; boolean silver = true; while (silver && black) { qrNr++;
+	 * OperatingSystem.displayText("BarCode " + qrNr + " Found!");
+	 * State.waitForMovementMotors(); Movement.moveDistance(6.0f, 30); black =
+	 * false; silver = false; while (!State.stopped(true, true)) { sample =
+	 * Sensor.sampleColor(); if (sample < Constants.LINE_COLOR_THRESHOLD) black
+	 * = true; if (black && sample >= Constants.LINE_COLOR_THRESHOLD) { silver =
+	 * true; Movement.stop(); } } sample = Sensor.sampleColor(); }
+	 * 
+	 * Movement.moveDistance(7.5f, 30); State.waitForMovementMotors(); return
+	 * qrNr; }
+	 */
 	private void moveAlongLine() {
 		OperatingSystem.displayText("Moving along line");
 		Movement.move(true, forwardSpeed, true, forwardSpeed);
@@ -194,9 +189,11 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 			keepSearching = !foundInFirstDirection && !foundInSecondDirection;
 		}
 
+		State.waitForMovementMotors();
 		OperatingSystem.displayText("Found line in direction: " + directionToString());
 		Movement.stop();
 		resetSearchRange();
+
 		return foundInFirstDirection || foundInSecondDirection;
 	}
 
@@ -221,12 +218,12 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 		Movement.stop();
 		resetSearchRange();
 		if (!(foundInFirstDirection || foundInSecondDirection)) {
-			Movement.rotate(turnMultiplicator * miniSearchAngles[miniSearchAngles.length - 1], 20);
+			Movement.rotate(turnMultiplicator * miniSearchAngles[miniSearchAngles.length - 1], turnSpeed);
 			State.waitForMovementMotors();
 		}
 		return foundInFirstDirection || foundInSecondDirection;
 	}
-	
+
 	private void resetSearchRange() {
 		turnMultiplicator = (turnMultiplicator > 0 ? 1 : -1) * (foundInSecondDirection ? -1 : 1);
 	}
@@ -252,23 +249,23 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 			return "LEFT";
 		return "RIGHT";
 	}
-	
+
 	public static boolean searchLineAfter() {
 		boolean found = false;
 		int speed = 30;
 		int radius = 9;
 		OperatingSystem.displayText("Suche Rechtsbogen");
-		
+
 		Movement.rotate(-20, 20);
 		State.waitForMovementMotors();
 		Movement.moveCircle(180, true, radius, 20);
-		
+
 		while (isBlack(Sensor.sampleColor()) && !State.stopped(true, true)) {
 		}
 		if (isSilver(Sensor.sampleColor()))
 			found = true;
 		Movement.stop();
-		
+
 		if (!found) {
 			OperatingSystem.displayText("Suche Linksbogen");
 			Movement.moveCircle(-180, true, radius, 20);
@@ -282,7 +279,7 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 				found = true;
 			Movement.stop();
 		}
-		
+
 		if (!found) {
 			OperatingSystem.displayText("Suche Gradeaus");
 			Movement.moveCircle(-180, true, radius, 20);
@@ -290,21 +287,21 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 			Movement.rotate(-20, 20);
 			State.waitForMovementMotors();
 			Movement.moveDistance(60, 30);
-			while(isBlack(Sensor.sampleColor()) && !State.stopped(true, true)) {
+			while (isBlack(Sensor.sampleColor()) && !State.stopped(true, true)) {
 			}
 			if (isSilver(Sensor.sampleColor()))
 				found = true;
 		}
-		
-		return found;		
+
+		return found;
 	}
-	
+
 	private static boolean isBlack(float sample) {
 		return sample < Constants.LINE_COLOR_THRESHOLD;
 	}
-	
-	
+
 	private static boolean isSilver(float sample) {
 		return sample >= Constants.LINE_COLOR_THRESHOLD;
 	}
+
 }
