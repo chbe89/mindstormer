@@ -69,7 +69,6 @@ public class Labyrinth extends AbstractProgram {
 		State.waitForMovementMotors();
 		// speed 15 / 8
 		Movement.move(true, 22.5f, true, 12f);
-		//Movement.moveDistance(50, 25, 25, 12.5f);
 		updateSensors();
 		while (!sampleTouch && sampleLine < Constants.LINE_COLOR_THRESHOLD) {
 			updateSensors();

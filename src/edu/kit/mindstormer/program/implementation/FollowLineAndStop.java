@@ -18,7 +18,8 @@ public class FollowLineAndStop extends AbstractProgram {
 
 	// private int[] searchAngles = {45, 145, 200, 100};
 	private int[] searchAngles = { 30, 60, 90, 120, 180, 240 };
-
+	private int[] miniSearchAngles = { 30, 60 };
+	
 	private boolean foundInFirstDirection = false;
 	private boolean foundInSecondDirection = false;
 
@@ -37,15 +38,24 @@ public class FollowLineAndStop extends AbstractProgram {
 		long startTime = System.currentTimeMillis();
 		while (!quit.get() && onLine) {
 			long elapsedTime = System.currentTimeMillis() - startTime;
-			Sensor.sampleColor();
+			sample = Sensor.sampleColor();
+			miniSearchLine();
+			sample = Sensor.sampleColor();
 			if (sample < Constants.LINE_COLOR_THRESHOLD && elapsedTime > barcodeTimer) {
-				int qrNr = searchQRCode();
+				//miniSearchLine();
+				int qrNr = searchBarcode();
 				if (qrNr > 0) {
-					OperatingSystem.displayText("Escaping with Barcode " + qrNr);
-					break;
+					OperatingSystem.displayText("read Barcode " + qrNr);
+					if (searchLineAfter()) {
+						OperatingSystem.displayText("Found Line after");
+					} else {
+						OperatingSystem.displayText("couldn't find Line after");
+					}
+					return; // Barcode found and read
 				}
-				else 
+				else {
 					onLine = searchLine();
+				}
 			}
 			else {
 				onLine = searchLine();
@@ -67,7 +77,7 @@ public class FollowLineAndStop extends AbstractProgram {
 		Movement.stop();
 	}
 
-	private int searchQRCode() {
+	private int searchBarcode() {
 		OperatingSystem.displayText("Searching BarCode");
 		Movement.moveDistance(11, 30);
 		State.waitForMovementMotors();
@@ -182,6 +192,29 @@ public class FollowLineAndStop extends AbstractProgram {
 		return foundInFirstDirection || foundInSecondDirection;
 	}
 
+	private boolean miniSearchLine() {
+		OperatingSystem.displayText("miniSearchLine");
+		foundInFirstDirection = false;
+		foundInSecondDirection = false;
+
+		boolean keepSearching = !foundInFirstDirection && !foundInSecondDirection;
+		for (int i = 0; i < miniSearchAngles.length && keepSearching; i++) {
+			foundInFirstDirection = searchByAngle(turnMultiplicator * miniSearchAngles[i]);
+
+			if (!foundInFirstDirection) {
+				i++;
+				foundInSecondDirection = searchByAngle(-turnMultiplicator * miniSearchAngles[i]);
+			}
+
+			keepSearching = !foundInFirstDirection && !foundInSecondDirection;
+		}
+
+		OperatingSystem.displayText("Found line in direction: " + directionToString());
+		Movement.stop();
+		resetSearchRange();
+		return foundInFirstDirection || foundInSecondDirection;
+	}
+	
 	private void resetSearchRange() {
 		turnMultiplicator = (turnMultiplicator > 0 ? 1 : -1) * (foundInSecondDirection ? -1 : 1);
 	}
@@ -206,5 +239,51 @@ public class FollowLineAndStop extends AbstractProgram {
 		if (turnMultiplicator > 0)
 			return "LEFT";
 		return "RIGHT";
+	}
+	
+	public static boolean searchLineAfter() {
+		boolean found = false;
+		int speed = 30;
+		OperatingSystem.displayText("Suche Rechtsbogen");
+		Movement.moveDistance(15, 15, 10, 10);
+		
+		while (isBlack(Sensor.sampleColor()) && !State.stopped(true, true)) {
+			if (isSilver(Sensor.sampleColor()))
+					found = true;
+		}
+		Movement.stop();
+		
+		if (!found) {
+			OperatingSystem.displayText("Suche Linksbogen");
+			Movement.moveDistance(-15, 15, -10, 10);
+			State.waitForMovementMotors();
+			Movement.moveDistance(10, 10, 15, 15);
+			while (isBlack(Sensor.sampleColor()) && !State.stopped(true, true)) {
+				if (isSilver(Sensor.sampleColor()))
+					found = true;
+			}
+			Movement.stop();
+		}
+		
+		if (!found) {
+			OperatingSystem.displayText("Suche Gradeaus");
+			Movement.moveDistance(-10, 10, -15, 15);
+			Movement.moveDistance(60, 30);
+			while(isBlack(Sensor.sampleColor()) && !State.stopped(true, true)) {
+				if (isSilver(Sensor.sampleColor()))
+					found = true;
+			}
+		}
+		
+		return found;		
+	}
+	
+	private static boolean isBlack(float sample) {
+		return sample < Constants.LINE_COLOR_THRESHOLD;
+	}
+	
+	
+	private static boolean isSilver(float sample) {
+		return sample >= Constants.LINE_COLOR_THRESHOLD;
 	}
 }
