@@ -7,7 +7,7 @@ import edu.kit.mindstormer.sensor.Sensor;
 public class Bridge extends AbstractProgram {
 	float sample;
 	private static final int sensorRotation = 75;
-	private final int speed = -32;
+
 	public Bridge() {
 		super("Bridge");
 	}
@@ -18,15 +18,9 @@ public class Bridge extends AbstractProgram {
 		
 		while (!quit.get()) {
 			sample = Sensor.sampleDistance();
-			Movement.move(false, speed, false, speed - (speed / 5));
-			int i = 0;
-			while (i < 3) {
+			Movement.move(false, -24, false, -20);
+			while (sample < 8f) {
 				sample = Sensor.sampleDistance();
-				if (sample >= 8f) {
-					i++;
-				} else {
-					i = 0;
-				}
 			}
 			Movement.stop();
 			Movement.rotate(20, 20);
