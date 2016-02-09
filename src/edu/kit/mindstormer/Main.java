@@ -10,6 +10,7 @@ import edu.kit.mindstormer.program.implementation.Bridge;
 import edu.kit.mindstormer.program.implementation.ChainBridge;
 import edu.kit.mindstormer.program.implementation.FollowLine;
 import edu.kit.mindstormer.program.implementation.FollowLineAndStop;
+import edu.kit.mindstormer.program.implementation.FollowLineLiftToSeesaw;
 import edu.kit.mindstormer.program.implementation.Labyrinth;
 import edu.kit.mindstormer.program.implementation.Race;
 import edu.kit.mindstormer.program.implementation.RollerBox;
@@ -50,6 +51,7 @@ public class Main {
 	private static void installPrograms() {
 		programs.clear();
 		programs.add(new Labyrinth());
+		programs.add(new FollowLineLiftToSeesaw());
 		programs.add(new ChainBridge());
 		programs.add(new Race());
 		programs.add(new BlockingTest());
