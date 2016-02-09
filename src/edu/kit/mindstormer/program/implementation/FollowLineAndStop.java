@@ -69,7 +69,7 @@ public class FollowLineAndStop extends AbstractProgram {
 
 	private int searchQRCode() {
 		OperatingSystem.displayText("Searching BarCode");
-		Movement.moveDistance(6, 30);
+		Movement.moveDistance(11, 30);
 		State.waitForMovementMotors();
 		boolean qrFound = false;
 		while(!qrFound) {
@@ -84,22 +84,72 @@ public class FollowLineAndStop extends AbstractProgram {
 		}
 		int qrNr = 0;
 		if (qrFound) {
-			while (sample >= Constants.LINE_COLOR_THRESHOLD) {
-				qrNr++;
-				OperatingSystem.displayText("BarCode " + qrNr + " Found!");
-				State.waitForMovementMotors();
-				Movement.moveDistance(5.0f, 30);
-				State.waitForMovementMotors();
-				sample = Sensor.sampleColor();
-			}
+			qrNr = scanBarcodeWhileDriving();
 		} else {
+			// drive back
 			State.waitForMovementMotors();
-			Movement.moveDistance(-6, 30);
+			Movement.moveDistance(-11, 30);
 		}
 		State.waitForMovementMotors();
 		return qrNr;
 	}
 	
+	private int scanBarcodeWhileDriving() {
+		int qrNr = 0;
+		boolean black = true;
+		boolean silver = true;
+		while (silver && black) {
+			qrNr++;
+			OperatingSystem.displayText("BarCode " + qrNr + " Found!");
+			State.waitForMovementMotors();
+			Movement.moveDistance(6.0f, 30);
+			black = false;
+			silver = false;
+			while (!State.stopped(true, true)) {
+				sample = Sensor.sampleColor();
+				if (sample < Constants.LINE_COLOR_THRESHOLD)
+					black = true;
+				if (black && sample >= Constants.LINE_COLOR_THRESHOLD) {
+					silver = true;
+					Movement.stop();
+				}
+			}
+			sample = Sensor.sampleColor();
+		}
+		
+		Movement.moveDistance(7.5f, 30);
+		State.waitForMovementMotors();
+		return qrNr;
+	}
+/*	
+	private int scanBarcodeWhileDriving2() {
+		int qrNr = 0;
+		boolean black = true;
+		boolean silver = true;
+		while (silver && black) {
+			qrNr++;
+			OperatingSystem.displayText("BarCode " + qrNr + " Found!");
+			State.waitForMovementMotors();
+			Movement.moveDistance(6.0f, 30);
+			black = false;
+			silver = false;
+			while (!State.stopped(true, true)) {
+				sample = Sensor.sampleColor();
+				if (sample < Constants.LINE_COLOR_THRESHOLD)
+					black = true;
+				if (black && sample >= Constants.LINE_COLOR_THRESHOLD) {
+					silver = true;
+					Movement.stop();
+				}
+			}
+			sample = Sensor.sampleColor();
+		}
+		
+		Movement.moveDistance(7.5f, 30);
+		State.waitForMovementMotors();
+		return qrNr;
+	}
+	*/
 	private void moveAlongLine() {
 		OperatingSystem.displayText("Moving along line");
 		Movement.move(true, forwardSpeed, true, forwardSpeed);
