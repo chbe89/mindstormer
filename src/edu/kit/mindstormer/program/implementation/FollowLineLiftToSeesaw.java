@@ -2,6 +2,7 @@ package edu.kit.mindstormer.program.implementation;
 
 import lejos.hardware.Button;
 import lejos.hardware.Key;
+import lejos.utility.Delay;
 import edu.kit.mindstormer.Constants;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
@@ -9,7 +10,7 @@ import edu.kit.mindstormer.program.AbstractProgram;
 import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.sensor.Sensor;
 
-public class FollowLineAndStop extends AbstractProgram {
+public class FollowLineLiftToSeesaw extends AbstractProgram {
 	private float sample;
 	// private int searchAngle = 25;
 	private int forwardSpeed = 17;
@@ -40,18 +41,28 @@ public class FollowLineAndStop extends AbstractProgram {
 			long elapsedTime = System.currentTimeMillis() - startTime;
 			sample = Sensor.sampleColor();
 			if (sample < Constants.LINE_COLOR_THRESHOLD && elapsedTime > barcodeTimer) {
-				miniSearchLine();
-				int qrNr = searchBarcode();
-				if (qrNr > 0) {
-					OperatingSystem.displayText("read Barcode " + qrNr);
-					if (searchLineAfter()) {
-						OperatingSystem.displayText("Found Line after");
-					} else {
-						OperatingSystem.displayText("couldn't find Line after");
+				
+				Movement.moveDistance(10, 20);
+				State.waitForMovementMotors();
+				float wallDistance = Sensor.sampleDistance();
+				OperatingSystem.displayText("Wall Distance: " + wallDistance);
+				
+				//Delay.msDelay(1000);
+				if (wallDistance > 35 && wallDistance < 45) {
+					/*while (wallDistance < 50) {
+						Movement.holdDistance2(true, 15, 40);
+					}*/
+					Movement.alignParallel(wallDistance, 15);
+					State.waitForMovementMotors();
+					Movement.move(true, 20);
+					while (!Sensor.sampleTouchBoth()) {
+						
 					}
-					return; // Barcode found and read
-				}
-				else {
+					Movement.stop();
+					return; // Seesaw done
+				} else {
+					Movement.moveDistance(-10, 20);
+					State.waitForMovementMotors();
 					onLine = searchLine();
 				}
 			}

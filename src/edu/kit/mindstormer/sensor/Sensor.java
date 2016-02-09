@@ -78,7 +78,11 @@ public class Sensor {
 	public static boolean sampleTouchBoth() {
 		return sampleTouchLeft() || sampleTouchRight();
 	}
-
+	
+	public static boolean sampleTouch(){
+		return sampleTouchLeft() && sampleTouchRight();
+	}
+	
 	public static float sampleDistance() {
 		DISTANCE.fetchSample(distanceSample, 0);
 		return 100 * distanceSample[0];

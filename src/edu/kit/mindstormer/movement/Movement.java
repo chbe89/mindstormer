@@ -217,11 +217,11 @@ public final class Movement {
 	}
 	
 	
-	public static void moveParallel(float centimeterPerSecond, float distance, float sampleDistance) {
+	public static void moveParallel(float centimeterPerSecond, float distance, float sampleDistance, float returnDistance) {
 		float correctionAngle;
 		do {
-			alignParallel(sampleDistance, centimeterPerSecond);
-			correctionAngle = alignParallel(-sampleDistance, centimeterPerSecond);
+			alignParallel(sampleDistance, centimeterPerSecond, returnDistance);
+			correctionAngle = alignParallel(-sampleDistance, centimeterPerSecond, returnDistance);
 		} while (correctionAngle > 3);
 		
 		float sample = Sensor.sampleDistance();
@@ -237,9 +237,9 @@ public final class Movement {
 		}
 	}
 	
-	public static float alignParallel(float sampleDistance, float centimeterPerSecond) {
+	public static float alignParallel(float sampleDistance, float centimeterPerSecond, float returnDistance) {
 		float sample = Sensor.sampleDistance();
-		if (sample > 30f) {
+		if (sample > returnDistance) {
 			return 0;
 		}
 		moveDistance(sampleDistance, centimeterPerSecond);

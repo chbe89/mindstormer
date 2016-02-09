@@ -15,7 +15,7 @@ public class BlockingTest extends AbstractProgram {
 			//boolean infiniteDistance = true;
 			//OperatingSystem.displayText("InfiniteDistance: " + infiniteDistance);
 			//Delay.msDelay(100);
-			Movement.moveParallel(20, 20, 30);
+			//Movement.moveParallel(20, 20, 30);
 		}
 		
 		

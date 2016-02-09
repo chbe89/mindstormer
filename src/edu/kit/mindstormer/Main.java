@@ -10,6 +10,7 @@ import edu.kit.mindstormer.program.implementation.Bridge;
 import edu.kit.mindstormer.program.implementation.ChainBridge;
 import edu.kit.mindstormer.program.implementation.FollowLine;
 import edu.kit.mindstormer.program.implementation.FollowLineAndStop;
+import edu.kit.mindstormer.program.implementation.FollowLineLiftToSeesaw;
 import edu.kit.mindstormer.program.implementation.Labyrinth;
 import edu.kit.mindstormer.program.implementation.Race;
 import edu.kit.mindstormer.program.implementation.RollerBox;
@@ -24,8 +25,8 @@ import edu.kit.mindstormer.util.HttpLogger;
 
 public class Main {
 
-	private static final Collection<Program> programs = new ArrayList<Program>();
-	
+    private static final Collection<Program> programs = new ArrayList<Program>();
+
     public static void main(String[] args) {
     	initHardware();
     	installPrograms();
@@ -35,20 +36,21 @@ public class Main {
 		os.run();
     }
 
-	private static void initHardware() {
-		Movement.init();
-		Sensor.init();
-	}
+    private static void initHardware() {
+	Movement.init();
+	Sensor.init();
+    }
 
-	private static void printLog() {
-		HttpLogger logger = HttpLogger.getInstance();
-		logger.log("Starting OS with " + programs.size() + " programs.");
-		logger.log("Programs = " + programs.toString());
-	}
+    private static void printLog() {
+	HttpLogger logger = HttpLogger.getInstance();
+	logger.log("Starting OS with " + programs.size() + " programs.");
+	logger.log("Programs = " + programs.toString());
+    }
 
 	private static void installPrograms() {
 		programs.clear();
 		programs.add(new Labyrinth());
+		programs.add(new FollowLineLiftToSeesaw());
 		programs.add(new ChainBridge());
 		programs.add(new Race());
 		programs.add(new BlockingTest());

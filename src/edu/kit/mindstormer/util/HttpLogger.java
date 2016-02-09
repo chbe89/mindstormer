@@ -67,6 +67,7 @@ public final class HttpLogger {
 			HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
 			connection.getResponseCode();
 		} catch (UnsupportedEncodingException e) {
+//			OperatingSystem.displayText("URL error: " + e.getMessage());
 		}
 	}
 	
