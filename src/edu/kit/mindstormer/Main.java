@@ -11,7 +11,6 @@ import edu.kit.mindstormer.program.implementation.ChainBridge;
 import edu.kit.mindstormer.program.implementation.FollowLine;
 import edu.kit.mindstormer.program.implementation.FollowLineAndStop;
 import edu.kit.mindstormer.program.implementation.Labyrinth;
-import edu.kit.mindstormer.program.implementation.Parkours;
 import edu.kit.mindstormer.program.implementation.Race;
 import edu.kit.mindstormer.program.implementation.RollerBox;
 import edu.kit.mindstormer.program.implementation.Seesaw;
@@ -27,6 +26,8 @@ public class Main {
 	private static final Collection<Program> programs = new ArrayList<Program>();
 	
     public static void main(String[] args) {
+    	HttpLogger.disable();
+    	
     	initHardware();
     	installPrograms();
 		printLog();
