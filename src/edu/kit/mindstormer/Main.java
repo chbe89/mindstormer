@@ -16,6 +16,7 @@ import edu.kit.mindstormer.program.implementation.Race;
 import edu.kit.mindstormer.program.implementation.RollerBox;
 import edu.kit.mindstormer.program.implementation.Seesaw;
 import edu.kit.mindstormer.program.implementation.test.BlockingTest;
+import edu.kit.mindstormer.program.implementation.test.ColorSampler;
 import edu.kit.mindstormer.program.implementation.test.MovementTest;
 import edu.kit.mindstormer.program.implementation.test.NavigatorProgram;
 import edu.kit.mindstormer.program.implementation.test.ReadjustSensor;
@@ -27,8 +28,6 @@ public class Main {
     private static final Collection<Program> programs = new ArrayList<Program>();
 
     public static void main(String[] args) {
-    	HttpLogger.disable();
-    	
     	initHardware();
     	installPrograms();
 		printLog();
@@ -63,6 +62,7 @@ public class Main {
 		programs.add(new RollerBox());
 		programs.add(new NavigatorProgram());
 		programs.add(new ReadjustSensor());
+		programs.add(new ColorSampler());
 		
 		/*
 			programs.add(new Parkours(0));

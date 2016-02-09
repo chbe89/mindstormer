@@ -17,8 +17,9 @@ import edu.kit.mindstormer.util.TimePad;
 
 public class ReadjustSensor extends AbstractProgram {
 
-	private final SensorKeyListener listener = new SensorKeyListener();
 	private CountDownLatch latch = new CountDownLatch(1);
+	private final AtomicBoolean move = new AtomicBoolean();
+	private final SensorKeyListener listener = new SensorKeyListener(move, this);
 
 	@Override
 	public void initialize() {
@@ -42,6 +43,7 @@ public class ReadjustSensor extends AbstractProgram {
 				Thread.currentThread().interrupt();
 			}
 		}
+
 	}
 
 	@Override
@@ -55,10 +57,31 @@ public class ReadjustSensor extends AbstractProgram {
 		latch.countDown();
 	}
 
+	private void checkAndMove(int angle) {
+		move.set(false);
+		Delay.msDelay(15);
+		if (move.compareAndSet(false, true)) {
+			moveSensor(angle);
+		}
+	}
+
+	private void moveSensor(int angle) {
+		while (move.get()) {
+			Movement.rotateSensorMotor(angle);
+			State.waitForSensorMotor();
+		}
+	}
+
 	private static class SensorKeyListener implements KeyListener {
 
 		private final TimePad pad = new TimePad(75);
-		private final AtomicBoolean move = new AtomicBoolean();
+		private final AtomicBoolean move;
+		private final ReadjustSensor readjustSensor;
+
+		public SensorKeyListener(AtomicBoolean move, ReadjustSensor readjustSensor) {
+			this.move = move;
+			this.readjustSensor = readjustSensor;
+		}
 
 		@Override
 		public void keyPressed(Key k) {
@@ -74,11 +97,21 @@ public class ReadjustSensor extends AbstractProgram {
 			switch (key) {
 			case DOWN:
 				OperatingSystem.displayText("Moving sensor down...");
-				checkAndMove(-1);
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						readjustSensor.checkAndMove(-1);
+					}
+				}).start();
 				break;
 			case UP:
 				OperatingSystem.displayText("Moving sensor up...");
-				checkAndMove(1);
+				new Thread(new Runnable() {
+					@Override
+					public void run() {
+						readjustSensor.checkAndMove(1);
+					}
+				}).start();
 				break;
 			case ENTER:
 				move.set(false);
@@ -86,21 +119,6 @@ public class ReadjustSensor extends AbstractProgram {
 				break;
 			default:
 				break;
-			}
-		}
-
-		private void checkAndMove(int angle) {
-			move.set(false);
-			Delay.msDelay(15);
-			if (move.compareAndSet(false, true)) {
-				moveSensor(angle);
-			}
-		}
-
-		private void moveSensor(int angle) {
-			while (move.get()) {
-				Movement.rotateSensorMotor(angle);
-				State.waitForSensorMotor();
 			}
 		}
 	}

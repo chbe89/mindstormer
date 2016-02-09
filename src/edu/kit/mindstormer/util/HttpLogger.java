@@ -6,8 +6,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import edu.kit.mindstormer.program.OperatingSystem;
-
 public final class HttpLogger {
 
 	private static String CHARSET = "UTF-8";
