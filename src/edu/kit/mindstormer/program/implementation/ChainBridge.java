@@ -13,10 +13,13 @@ public class ChainBridge extends AbstractProgram {
 	public void run() {
 		Movement.move(true, 20);
 		while(!Sensor.sampleTouchBoth());
-		
+		/*
 		Movement.moveDistance(-22, 10);
 		State.waitForMovementMotors();	
 		Movement.rotate(-90, 10);
+		State.waitForMovementMotors();
+		*/
+		Movement.moveCircle(-90, true, 9, 10);
 		State.waitForMovementMotors();
 		
 		Movement.moveDistance(-50, 10);
@@ -34,7 +37,7 @@ public class ChainBridge extends AbstractProgram {
 		Movement.alignParallel(40, 10);
 		Movement.moveDistance(-40, 10);
 		State.waitForMovementMotors();
-		Movement.moveDistance(-150, 35);
+		Movement.moveDistance(-170, 35);
 		State.waitForMovementMotors();
 		
 		Movement.move(false, 10);
