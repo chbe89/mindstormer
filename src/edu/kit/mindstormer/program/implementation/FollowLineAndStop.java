@@ -18,7 +18,8 @@ public class FollowLineAndStop extends AbstractProgram {
 
 	// private int[] searchAngles = {45, 145, 200, 100};
 	private int[] searchAngles = { 30, 60, 90, 120, 180, 240 };
-
+	private int[] miniSearchAngles = { 30, 60 };
+	
 	private boolean foundInFirstDirection = false;
 	private boolean foundInSecondDirection = false;
 
@@ -37,15 +38,24 @@ public class FollowLineAndStop extends AbstractProgram {
 		long startTime = System.currentTimeMillis();
 		while (!quit.get() && onLine) {
 			long elapsedTime = System.currentTimeMillis() - startTime;
-			Sensor.sampleColor();
+			sample = Sensor.sampleColor();
+			miniSearchLine();
+			sample = Sensor.sampleColor();
 			if (sample < Constants.LINE_COLOR_THRESHOLD && elapsedTime > barcodeTimer) {
-				int qrNr = searchQRCode();
+				//miniSearchLine();
+				int qrNr = searchBarcode();
 				if (qrNr > 0) {
-					OperatingSystem.displayText("Escaping with Barcode " + qrNr);
-					break;
+					OperatingSystem.displayText("read Barcode " + qrNr);
+					if (searchLineAfter()) {
+						OperatingSystem.displayText("Found Line after");
+					} else {
+						OperatingSystem.displayText("couldn't find Line after");
+					}
+					return; // Barcode found and read
 				}
-				else 
+				else {
 					onLine = searchLine();
+				}
 			}
 			else {
 				onLine = searchLine();
@@ -67,9 +77,9 @@ public class FollowLineAndStop extends AbstractProgram {
 		Movement.stop();
 	}
 
-	private int searchQRCode() {
+	private int searchBarcode() {
 		OperatingSystem.displayText("Searching BarCode");
-		Movement.moveDistance(6, 30);
+		Movement.moveDistance(11, 30);
 		State.waitForMovementMotors();
 		boolean qrFound = false;
 		while(!qrFound) {
@@ -84,22 +94,71 @@ public class FollowLineAndStop extends AbstractProgram {
 		}
 		int qrNr = 0;
 		if (qrFound) {
-			while (sample >= Constants.LINE_COLOR_THRESHOLD) {
-				qrNr++;
-				OperatingSystem.displayText("BarCode " + qrNr + " Found!");
-				State.waitForMovementMotors();
-				Movement.moveDistance(5.0f, 30);
-				State.waitForMovementMotors();
-				sample = Sensor.sampleColor();
-			}
+			qrNr = scanBarcodeWhileDriving();
 		} else {
+			// drive back
 			State.waitForMovementMotors();
-			Movement.moveDistance(-6, 30);
+			Movement.moveDistance(-11, 30);
 		}
 		State.waitForMovementMotors();
 		return qrNr;
 	}
 	
+	private int scanBarcodeWhileDriving() {
+		int qrNr = 0;
+		boolean black = true;
+		boolean silver = true;
+		while (silver && black) {
+			qrNr++;
+			OperatingSystem.displayText("BarCode " + qrNr + " Found!");
+			State.waitForMovementMotors();
+			black = false;
+			silver = false;
+			Movement.moveDistance(6.0f, 20);
+			while (!State.stopped(true, true)) {
+				sample = Sensor.sampleColor();
+				if (isBlack(sample))
+					black = true;
+				if (black && isSilver(sample)) {
+					silver = true;
+					Movement.stop();
+				}
+			}
+		}
+		
+		//Movement.moveDistance(7.5f, 20);
+		State.waitForMovementMotors();
+		return qrNr;
+	}
+/*	
+	private int scanBarcodeWhileDriving2() {
+		int qrNr = 0;
+		boolean black = true;
+		boolean silver = true;
+		while (silver && black) {
+			qrNr++;
+			OperatingSystem.displayText("BarCode " + qrNr + " Found!");
+			State.waitForMovementMotors();
+			Movement.moveDistance(6.0f, 30);
+			black = false;
+			silver = false;
+			while (!State.stopped(true, true)) {
+				sample = Sensor.sampleColor();
+				if (sample < Constants.LINE_COLOR_THRESHOLD)
+					black = true;
+				if (black && sample >= Constants.LINE_COLOR_THRESHOLD) {
+					silver = true;
+					Movement.stop();
+				}
+			}
+			sample = Sensor.sampleColor();
+		}
+		
+		Movement.moveDistance(7.5f, 30);
+		State.waitForMovementMotors();
+		return qrNr;
+	}
+	*/
 	private void moveAlongLine() {
 		OperatingSystem.displayText("Moving along line");
 		Movement.move(true, forwardSpeed, true, forwardSpeed);
@@ -132,6 +191,33 @@ public class FollowLineAndStop extends AbstractProgram {
 		return foundInFirstDirection || foundInSecondDirection;
 	}
 
+	private boolean miniSearchLine() {
+		OperatingSystem.displayText("miniSearchLine");
+		foundInFirstDirection = false;
+		foundInSecondDirection = false;
+
+		boolean keepSearching = !foundInFirstDirection && !foundInSecondDirection;
+		for (int i = 0; i < miniSearchAngles.length && keepSearching; i++) {
+			foundInFirstDirection = searchByAngle(turnMultiplicator * miniSearchAngles[i]);
+
+			if (!foundInFirstDirection) {
+				i++;
+				foundInSecondDirection = searchByAngle(-turnMultiplicator * miniSearchAngles[i]);
+			}
+
+			keepSearching = !foundInFirstDirection && !foundInSecondDirection;
+		}
+
+		OperatingSystem.displayText("Found line in direction: " + directionToString());
+		Movement.stop();
+		resetSearchRange();
+		if (!(foundInFirstDirection || foundInSecondDirection)) {
+			Movement.rotate(turnMultiplicator * miniSearchAngles[miniSearchAngles.length - 1], 20);
+			State.waitForMovementMotors();
+		}
+		return foundInFirstDirection || foundInSecondDirection;
+	}
+	
 	private void resetSearchRange() {
 		turnMultiplicator = (turnMultiplicator > 0 ? 1 : -1) * (foundInSecondDirection ? -1 : 1);
 	}
@@ -156,5 +242,60 @@ public class FollowLineAndStop extends AbstractProgram {
 		if (turnMultiplicator > 0)
 			return "LEFT";
 		return "RIGHT";
+	}
+	
+	public static boolean searchLineAfter() {
+		boolean found = false;
+		int speed = 30;
+		int radius = 9;
+		OperatingSystem.displayText("Suche Rechtsbogen");
+		
+		Movement.rotate(-20, 20);
+		State.waitForMovementMotors();
+		Movement.moveCircle(180, true, radius, 20);
+		
+		while (isBlack(Sensor.sampleColor()) && !State.stopped(true, true)) {
+		}
+		if (isSilver(Sensor.sampleColor()))
+			found = true;
+		Movement.stop();
+		
+		if (!found) {
+			OperatingSystem.displayText("Suche Linksbogen");
+			Movement.moveCircle(-180, true, radius, 20);
+			State.waitForMovementMotors();
+			Movement.rotate(40, 20);
+			State.waitForMovementMotors();
+			Movement.moveCircle(180, false, radius, 20);
+			while (isBlack(Sensor.sampleColor()) && !State.stopped(true, true)) {
+			}
+			if (isSilver(Sensor.sampleColor()))
+				found = true;
+			Movement.stop();
+		}
+		
+		if (!found) {
+			OperatingSystem.displayText("Suche Gradeaus");
+			Movement.moveCircle(-180, true, radius, 20);
+			State.waitForMovementMotors();
+			Movement.rotate(-20, 20);
+			State.waitForMovementMotors();
+			Movement.moveDistance(60, 30);
+			while(isBlack(Sensor.sampleColor()) && !State.stopped(true, true)) {
+			}
+			if (isSilver(Sensor.sampleColor()))
+				found = true;
+		}
+		
+		return found;		
+	}
+	
+	private static boolean isBlack(float sample) {
+		return sample < Constants.LINE_COLOR_THRESHOLD;
+	}
+	
+	
+	private static boolean isSilver(float sample) {
+		return sample >= Constants.LINE_COLOR_THRESHOLD;
 	}
 }

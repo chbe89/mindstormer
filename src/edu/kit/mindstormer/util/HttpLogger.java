@@ -72,4 +72,5 @@ public final class HttpLogger {
 //			OperatingSystem.displayText("URL error: " + e.getMessage());
 		}
 	}
+	
 }

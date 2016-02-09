@@ -45,7 +45,7 @@ public class Labyrinth extends AbstractProgram {
 	    } else if (sampleLine > Constants.LINE_COLOR_THRESHOLD) {
 		OperatingSystem.displayText("Lab END");
 		endLabyrinth = true;
-	    }else{
+	    } else {
 		OperatingSystem.displayText("ERROR UNDEFINED STATE");
 	    }
 	}
@@ -88,11 +88,5 @@ public class Labyrinth extends AbstractProgram {
 	    OperatingSystem.displayText("END LAB");
 	    Delay.msDelay(2000);
 	}
-	// Movement.rotate(90 * (left ? -1 : 1), turnSpeed);
-	// State.waitForMovementMotors();
-	// Movement.moveDistance(45, speed);
-	// State.waitForMovementMotors();
-	OperatingSystem.displayText("Drive Curve Completed");
     }
-
 }
