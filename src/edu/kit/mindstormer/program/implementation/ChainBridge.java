@@ -7,19 +7,24 @@ import edu.kit.mindstormer.sensor.Sensor;
 import lejos.hardware.Sound;
 
 public class ChainBridge extends AbstractProgram {
+	float[] followLineSearchAngles = {45, 145, 200, 100};
 
 	@Override
 	public void run() {
-		Movement.moveDistance(-10, 10);
+		Movement.move(true, 20);
+		while(!Sensor.sampleTouchBoth());
+		
+		Movement.moveDistance(-22, 10);
+		State.waitForMovementMotors();	
+		Movement.rotate(-90, 10);
 		State.waitForMovementMotors();
-		Movement.rotate(180, 10);
-		State.waitForMovementMotors();
-		Movement.moveDistance(-20, 10);
+		
+		Movement.moveDistance(-50, 10);
 		State.waitForMovementMotors();
 		
 		Sound.beep();
 		Movement.stop();
-		while(Sensor.sampleDistance() < 20) {
+		while(Sensor.sampleDistance() < 40) {
 			Movement.holdDistance2(false, 10, 10);
 		}
 		Sound.beep();
