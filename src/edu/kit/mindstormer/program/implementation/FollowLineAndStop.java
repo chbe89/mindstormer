@@ -112,22 +112,21 @@ public class FollowLineAndStop extends AbstractProgram {
 			qrNr++;
 			OperatingSystem.displayText("BarCode " + qrNr + " Found!");
 			State.waitForMovementMotors();
-			Movement.moveDistance(6.0f, 30);
 			black = false;
 			silver = false;
+			Movement.moveDistance(6.0f, 20);
 			while (!State.stopped(true, true)) {
 				sample = Sensor.sampleColor();
-				if (sample < Constants.LINE_COLOR_THRESHOLD)
+				if (isBlack(sample))
 					black = true;
-				if (black && sample >= Constants.LINE_COLOR_THRESHOLD) {
+				if (black && isSilver(sample)) {
 					silver = true;
 					Movement.stop();
 				}
 			}
-			sample = Sensor.sampleColor();
 		}
 		
-		Movement.moveDistance(7.5f, 30);
+		//Movement.moveDistance(7.5f, 20);
 		State.waitForMovementMotors();
 		return qrNr;
 	}
@@ -212,6 +211,10 @@ public class FollowLineAndStop extends AbstractProgram {
 		OperatingSystem.displayText("Found line in direction: " + directionToString());
 		Movement.stop();
 		resetSearchRange();
+		if (!(foundInFirstDirection || foundInSecondDirection)) {
+			Movement.rotate(turnMultiplicator * miniSearchAngles[miniSearchAngles.length - 1], 20);
+			State.waitForMovementMotors();
+		}
 		return foundInFirstDirection || foundInSecondDirection;
 	}
 	
@@ -244,35 +247,44 @@ public class FollowLineAndStop extends AbstractProgram {
 	public static boolean searchLineAfter() {
 		boolean found = false;
 		int speed = 30;
+		int radius = 9;
 		OperatingSystem.displayText("Suche Rechtsbogen");
-		Movement.moveDistance(15, 15, 10, 10);
+		
+		Movement.rotate(-20, 20);
+		State.waitForMovementMotors();
+		Movement.moveCircle(180, true, radius, 20);
 		
 		while (isBlack(Sensor.sampleColor()) && !State.stopped(true, true)) {
-			if (isSilver(Sensor.sampleColor()))
-					found = true;
 		}
+		if (isSilver(Sensor.sampleColor()))
+			found = true;
 		Movement.stop();
 		
 		if (!found) {
 			OperatingSystem.displayText("Suche Linksbogen");
-			Movement.moveDistance(-15, 15, -10, 10);
+			Movement.moveCircle(-180, true, radius, 20);
 			State.waitForMovementMotors();
-			Movement.moveDistance(10, 10, 15, 15);
+			Movement.rotate(40, 20);
+			State.waitForMovementMotors();
+			Movement.moveCircle(180, false, radius, 20);
 			while (isBlack(Sensor.sampleColor()) && !State.stopped(true, true)) {
-				if (isSilver(Sensor.sampleColor()))
-					found = true;
 			}
+			if (isSilver(Sensor.sampleColor()))
+				found = true;
 			Movement.stop();
 		}
 		
 		if (!found) {
 			OperatingSystem.displayText("Suche Gradeaus");
-			Movement.moveDistance(-10, 10, -15, 15);
+			Movement.moveCircle(-180, true, radius, 20);
+			State.waitForMovementMotors();
+			Movement.rotate(-20, 20);
+			State.waitForMovementMotors();
 			Movement.moveDistance(60, 30);
 			while(isBlack(Sensor.sampleColor()) && !State.stopped(true, true)) {
-				if (isSilver(Sensor.sampleColor()))
-					found = true;
 			}
+			if (isSilver(Sensor.sampleColor()))
+				found = true;
 		}
 		
 		return found;		
