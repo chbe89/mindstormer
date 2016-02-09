@@ -16,25 +16,27 @@ public class ChainBridge extends AbstractProgram {
 		State.waitForMovementMotors();
 		Movement.moveDistance(-20, 10);
 		State.waitForMovementMotors();
-		
+
 		Sound.beep();
 		Movement.stop();
-		while(Sensor.sampleDistance() < 20) {
+		while (Sensor.sampleDistance() < 20) {
 			Movement.holdDistance2(false, 10, 10);
 		}
 		Sound.beep();
-		
+
 		Movement.move(true, 10);
-		while(Sensor.sampleDistance() > 20);
+		while (Sensor.sampleDistance() > 20)
+			;
 		Movement.alignParallel(40, 10);
 		Movement.moveDistance(-40, 10);
 		State.waitForMovementMotors();
 		Movement.moveDistance(-150, 35);
 		State.waitForMovementMotors();
-		
+
 		Movement.move(false, 10);
-		while(Sensor.sampleDistance() > 20);
-		while(Sensor.sampleDistance() < 20) {
+		while (Sensor.sampleDistance() > 20)
+			;
+		while (Sensor.sampleDistance() < 20) {
 			Movement.holdDistance2(false, 10, 10);
 		}
 	}
