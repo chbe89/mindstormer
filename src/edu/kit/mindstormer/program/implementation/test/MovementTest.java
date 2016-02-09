@@ -15,7 +15,9 @@ public class MovementTest extends AbstractProgram {
 	}
 	
 	public void run() {
-		combinedMovementTest1();
+		moveCircleTest();
+		Delay.msDelay(2000);
+		/*combinedMovementTest1();
 		Delay.msDelay(2000);
 		combinedMovementTest2();
 		Delay.msDelay(2000);
@@ -24,7 +26,7 @@ public class MovementTest extends AbstractProgram {
 		moveDistanceTest(20, 10);
 		Delay.msDelay(2000);
 		rotateTest(90, 10); 
-		Delay.msDelay(2000);
+		Delay.msDelay(2000);*/
 		
 		
 		while (!quit.get()) {
@@ -82,5 +84,16 @@ public class MovementTest extends AbstractProgram {
 		Movement.move(true, 10);
 		Delay.msDelay(1000);
 		Movement.stop();
+	}
+	
+	private void moveCircleTest() {
+		Movement.moveCircle(360, true, 10, 10);
+		State.waitForMovementMotors();
+		Movement.moveCircle(-360, true, 10, 10);
+		State.waitForMovementMotors();
+		Movement.moveCircle(360, false, 10, 10);
+		State.waitForMovementMotors();
+		Movement.moveCircle(-360, false, 10, 10);
+		State.waitForMovementMotors();
 	}
 }

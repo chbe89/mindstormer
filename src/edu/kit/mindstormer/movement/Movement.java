@@ -99,6 +99,19 @@ public final class Movement {
 		moveRight(motorAngleRight, centimeterPerSecondRight);
 		leftMotor.endSynchronization();
 	}
+	
+	public static void moveCircle(float degrees, boolean circleToRight, float radius, float innerWheelCentimeterPerSecond) {
+		float outerRadius = radius + Constants.WHEEL_DISTANCE;
+		float innerDistance = degreesAndRadiusToDistance(degrees, radius);
+		float outerDistance = degreesAndRadiusToDistance(degrees, outerRadius);
+		float driveTime = innerDistance / innerWheelCentimeterPerSecond;
+		float outerWheelCentimeterPerSecond = outerDistance / driveTime;
+		if (circleToRight) {
+			moveDistance(outerDistance, outerWheelCentimeterPerSecond, innerDistance, innerWheelCentimeterPerSecond);
+		} else {
+			moveDistance(innerDistance, innerWheelCentimeterPerSecond, outerDistance, outerWheelCentimeterPerSecond);
+		}
+	}
 
 	public static void stop() {
 		leftMotor.startSynchronization();
@@ -266,4 +279,9 @@ public final class Movement {
 			motor.backward();
 		}
 	}
+	
+	private static float degreesAndRadiusToDistance(float degrees, float radius) {
+		return (float) Math.PI * radius * degrees / 180f;
+	}
+	
 }

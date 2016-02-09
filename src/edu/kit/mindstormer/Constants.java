@@ -41,6 +41,8 @@ public final class Constants {
 //
 //	public final static float BOTH_TOUCH_SENSOR_PRESSED = 2.0f;
 	
+	public final static float WHEEL_DISTANCE = 17.5f;
+	
 	public final static float MIN_WALL_DISTANCE = 4.0f;
 	
 	public final static float MAX_WALL_DISTANCE = 40.0f;
