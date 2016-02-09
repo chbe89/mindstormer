@@ -24,42 +24,42 @@ import edu.kit.mindstormer.util.HttpLogger;
 
 public class Main {
 
-	private static final Collection<Program> programs = new ArrayList<Program>();
-	
+    private static final Collection<Program> programs = new ArrayList<Program>();
+
     public static void main(String[] args) {
-    	initHardware();
-    	installPrograms();
-		printLog();
-		
-		OperatingSystem os = OperatingSystem.withPrograms(programs);
-		os.run();
+	initHardware();
+	installPrograms();
+	printLog();
+
+	OperatingSystem os = OperatingSystem.withPrograms(programs);
+	os.run();
     }
 
-	private static void initHardware() {
-		Movement.init();
-		Sensor.init();
-	}
+    private static void initHardware() {
+	Movement.init();
+	Sensor.init();
+    }
 
-	private static void printLog() {
-		HttpLogger logger = HttpLogger.getInstance();
-		logger.log("Starting OS with " + programs.size() + " programs.");
-		logger.log("Programs = " + programs.toString());
-	}
+    private static void printLog() {
+	HttpLogger logger = HttpLogger.getInstance();
+	logger.log("Starting OS with " + programs.size() + " programs.");
+	logger.log("Programs = " + programs.toString());
+    }
 
-	private static void installPrograms() {
-		programs.clear();
-		programs.add(new Labyrinth());
-		programs.add(new Race());
-		programs.add(new BlockingTest());
-		programs.add(new MovementTest());
-		programs.add(new FollowLine());
-		programs.add(new FollowLineAndStop());
-		programs.add(new Bridge());
-		programs.add(new Seesaw());
-		programs.add(new RollerBox());
-		programs.add(new MoveFixedDistance());
-		programs.add(new DistanceSensorTest());
-		programs.add(new NavigatorProgram());
-		programs.add(new ReadjustSensor());
-	}
+    private static void installPrograms() {
+	programs.clear();
+	programs.add(new Labyrinth());
+	programs.add(new Race());
+	programs.add(new BlockingTest());
+	programs.add(new MovementTest());
+	programs.add(new FollowLine());
+	programs.add(new FollowLineAndStop());
+	programs.add(new Bridge());
+	programs.add(new Seesaw());
+	programs.add(new RollerBox());
+	programs.add(new MoveFixedDistance());
+	programs.add(new DistanceSensorTest());
+	programs.add(new NavigatorProgram());
+	programs.add(new ReadjustSensor());
+    }
 }

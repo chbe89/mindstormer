@@ -39,7 +39,7 @@ public final class HttpLogger {
 					postMessage(message);
 				} catch (IOException e) {
 					enabled = false;
-					OperatingSystem.displayText("Log error: " + e.getMessage());
+//					OperatingSystem.displayText("Log error: " + e.getMessage());
 				}
 			}
 
@@ -69,7 +69,7 @@ public final class HttpLogger {
 			HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
 			connection.getResponseCode();
 		} catch (UnsupportedEncodingException e) {
-			OperatingSystem.displayText("URL error: " + e.getMessage());
+//			OperatingSystem.displayText("URL error: " + e.getMessage());
 		}
 	}
 }

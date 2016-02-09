@@ -1,5 +1,6 @@
 package edu.kit.mindstormer.program.implementation;
 
+import lejos.hardware.Sound;
 import lejos.utility.Delay;
 import edu.kit.mindstormer.Constants;
 import edu.kit.mindstormer.movement.Movement;
@@ -16,15 +17,16 @@ public class Labyrinth extends AbstractProgram {
     final int speed = 35;
     final float turnSpeed = 25;
     final float distanceToWall = 15;
+    boolean endLabyrinth = false;
 
     public void run() {
 
-	while (!quit.get()) {
+	while (!quit.get() && !endLabyrinth) {
 	    updateSensors();
 	    OperatingSystem.displayText("T:" + String.valueOf(sampleTouch) + "U:" + String.valueOf(sampleUltra));
 
 	    while (Constants.MIN_WALL_DISTANCE < sampleUltra && sampleUltra < Constants.MAX_WALL_DISTANCE
-		    && !sampleTouch) {
+		    && !sampleTouch && sampleLine > Constants.LINE_COLOR_THRESHOLD) {
 		Movement.holdDistance2(true, speed, distanceToWall);
 		updateSensors();
 		OperatingSystem.displayText("T:" + String.valueOf(sampleTouch) + "U:" + String.valueOf(sampleUltra));
@@ -34,13 +36,16 @@ public class Labyrinth extends AbstractProgram {
 		OperatingSystem.displayText("DETECTED TOUCH");
 		Movement.moveDistance(2, speed);
 		backupAndTurn(true, false);
-	    } else if (sampleUltra >= Constants.MAX_WALL_DISTANCE) {
+	    } else if (sampleUltra >= Constants.MAX_WALL_DISTANCE && !endLabyrinth) {
 		OperatingSystem.displayText("DETECTED NO WALL");
 		driveCurve90d(false);
 	    } else if (sampleUltra < Constants.MIN_WALL_DISTANCE) {
 		OperatingSystem.displayText("DETECTED TOO CLOSE");
 		backupAndTurn(true, true);
-	    } else {
+	    } else if (sampleLine > Constants.LINE_COLOR_THRESHOLD) {
+		OperatingSystem.displayText("Lab END");
+		endLabyrinth = true;
+	    }else{
 		OperatingSystem.displayText("ERROR UNDEFINED STATE");
 	    }
 	}
@@ -70,15 +75,18 @@ public class Labyrinth extends AbstractProgram {
 	// speed 15 / 8
 	Movement.move(true, 22.5f, true, 12f);
 	updateSensors();
-	while (!sampleTouch && sampleLine < Constants.LINE_COLOR_THRESHOLD) {
+
+	while (!sampleTouch && sampleLine > Constants.LINE_COLOR_THRESHOLD && !endLabyrinth) {
+	    OperatingSystem.displayText("L: " + String.valueOf(sampleLine) + "T: " + String.valueOf(sampleTouch));
 	    updateSensors();
-	    OperatingSystem.displayText("Ultra:" + String.valueOf(sampleUltra) + "T:" + String.valueOf(sampleTouch));
-	    Delay.msDelay(50);
 	}
 	Movement.stop();
-
-	if (sampleLine < Constants.LINE_COLOR_THRESHOLD) {
-	    
+	if (sampleLine > Constants.LINE_COLOR_THRESHOLD && !endLabyrinth) {
+	    Sound.beepSequenceUp();
+	    endLabyrinth = true;
+	    Movement.stop();
+	    OperatingSystem.displayText("END LAB");
+	    Delay.msDelay(2000);
 	}
 	// Movement.rotate(90 * (left ? -1 : 1), turnSpeed);
 	// State.waitForMovementMotors();
@@ -86,4 +94,5 @@ public class Labyrinth extends AbstractProgram {
 	// State.waitForMovementMotors();
 	OperatingSystem.displayText("Drive Curve Completed");
     }
+
 }
