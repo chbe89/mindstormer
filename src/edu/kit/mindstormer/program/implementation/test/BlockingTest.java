@@ -10,7 +10,7 @@ public class BlockingTest extends AbstractProgram {
 	public void run() {
 		//Movement.moveParallel(15, 20);
 		//Movement.rotate(360, 5);
-	    Movement.rotateSensorMotor(-10);
+	    Movement.rotateSensorMotor(10);
 		while (!quit.get()) {
 			//Movement.moveParallel(15, 15);
 			//boolean infiniteDistance = true;
