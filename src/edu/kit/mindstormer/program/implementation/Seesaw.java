@@ -5,8 +5,6 @@ import edu.kit.mindstormer.movement.State;
 import edu.kit.mindstormer.program.AbstractProgram;
 import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.sensor.Sensor;
-import lejos.hardware.Button;
-import lejos.hardware.Key;
 import lejos.hardware.Sound;
 import lejos.utility.Delay;
 
@@ -20,45 +18,47 @@ public class Seesaw extends AbstractProgram {
 
 	private int[] searchAngles = { 30, 60, 120, 180, 120, 30 };
 
-
 	private boolean foundInFirstDirection = false;
 	private boolean foundInSecondDirection = false;
 
 	private int barcodeTimer = 8000; // 90000;
+	
+	@Override
+	public void initialize() {
+		super.initialize();
+		sample = 0f;
+		turnMultiplicator = 1;
+	}
 	
 	public void run() {		
 
 		boolean onLine = true;
 		long startTime = System.currentTimeMillis();
 		long elapsedTime = 0;
-		boolean yoloDrive = false;
-		while (!quit.get() && onLine && !yoloDrive) {
+		while (!quit.get() && onLine) {
 			sample = Sensor.sampleColor();
 			
 			if (sample < Constants.LINE_COLOR_THRESHOLD) {
 				elapsedTime = System.currentTimeMillis() - startTime;
 				if (elapsedTime > barcodeTimer) {
-					Sound.beepSequenceUp();
-					Movement.move(true, 40);
-					yoloDrive = true;
+					break;
 				} else {
 					// normal linesearch
 					onLine = searchLine();
 				}
 			}
 
-			if (onLine && !yoloDrive)
+			if (onLine)
 				moveAlongLine();
 		}
-		boolean touch = false;
-		while(!State.stopped(true, true)) {
-			touch = Sensor.sampleTouchBoth();
-			if (touch) 
-				Movement.stop();
-		}
+		Sound.beepSequenceUp();
+		Movement.move(true, 25);
+		while(!Sensor.sampleTouchBoth());
+		Movement.stop();
 		
 		Sound.beep();
-		Delay.msDelay(3000);
+		State.waitForMovementMotors();
+		//Delay.msDelay(3000);
 		Movement.moveDistance(-15, 20);
 	    State.waitForMovementMotors();
 	    Movement.rotate(90 , turnSpeed);

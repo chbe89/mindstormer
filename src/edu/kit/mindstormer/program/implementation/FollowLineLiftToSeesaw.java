@@ -1,7 +1,5 @@
 package edu.kit.mindstormer.program.implementation;
 
-import lejos.hardware.Button;
-import lejos.hardware.Key;
 import lejos.hardware.Sound;
 import lejos.utility.Delay;
 import edu.kit.mindstormer.Constants;
@@ -25,7 +23,7 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 	private boolean foundInFirstDirection = false;
 	private boolean foundInSecondDirection = false;
 
-	private int barcodeTimer = 1; // 90000;
+	private int barcodeTimer = 200000; // 90000;
 
 	@Override
 	public void initialize() {
@@ -46,8 +44,8 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 				if (elapsedTime > barcodeTimer) {
 					// linesearch after elapsed time
 					onLine = miniSearchLine();
-					Sound.buzz();
-					Delay.msDelay(30);
+					//Sound.buzz();
+					Delay.msDelay(10);
 					
 					if (!onLine) {
 						Movement.moveDistance(33, 10);
@@ -77,15 +75,15 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 							}
 						}
 
-						Sound.buzz();
-						Delay.msDelay(30);
+						//Sound.buzz();
+						Delay.msDelay(10);
 						
 						
 						if (barcodeCounter >= 4) {
-							OperatingSystem.displayText("Barcode was Found!! " + barcodeCounter);
+							//OperatingSystem.displayText("Barcode was Found!! " + barcodeCounter);
 							float dif = distanceStart - distanceStop;
-							OperatingSystem.displayText("Count: " + barcodeCounter + "Dif: " + dif);
-							Delay.msDelay(100);
+							//OperatingSystem.displayText("Count: " + barcodeCounter + "Dif: " + dif);
+							//Delay.msDelay(100);
 							if (dif > 1.7) {
 								Movement.rotate(-20, 15);
 							} else if (dif < -1.7) {
@@ -136,7 +134,7 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 		
 		State.waitForMovementMotors();
 
-		new Seesaw().run();
+		//new Seesaw().run();
 	}
 
 	@Override
