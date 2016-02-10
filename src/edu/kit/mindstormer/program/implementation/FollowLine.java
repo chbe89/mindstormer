@@ -5,80 +5,59 @@ import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
 import edu.kit.mindstormer.program.AbstractProgram;
 import edu.kit.mindstormer.sensor.Sensor;
-import lejos.hardware.Sound;
 
 public class FollowLine extends AbstractProgram {
-	
-	private final int searchAngle = 25;
-	private final int forwardSpeed = 17;
-	private final int turnSpeed = 13;
 	private float sample;
+	private int searchAngle = 25;
+	private int forwardSpeed = 17;
+	private int turnSpeed = 13;
 	private int turnMultiplicator;
-
-	private boolean foundInFirstDirection = false;
-	private boolean foundInSecondDirection = false;
-
-	@Override
-	public void initialize() {
-		super.initialize();
+	
+	
+	public FollowLine() {
+		super("FollowLine");
+	}
+	
+	public void run() {
 		sample = 0f;
 		turnMultiplicator = 1;
-	}
-
-	public void run() {
-		long startTime = System.currentTimeMillis();
 		long elapsedTime = 0;
-		boolean onLine = true;
-		while (!quit.get() && elapsedTime < 120_000 && onLine) {
+		long startTime = System.currentTimeMillis();
+		while (!quit.get() && elapsedTime < 120_000 ) {
 			elapsedTime = System.currentTimeMillis() - startTime;
-			onLine = searchLine();
-			moveAlongLine();
-		}
-		Sound.beepSequenceUp();
-		Movement.stop();
-	}
-
-	private void moveAlongLine() {
-		Movement.move(true, forwardSpeed, true, forwardSpeed);
-		while (sample >= Constants.LINE_COLOR_THRESHOLD) {
-			sample = Sensor.sampleColor();
+			find();
+				
+			Movement.move(true, forwardSpeed, true, forwardSpeed);
+		    while (sample >= Constants.LINE_COLOR_THRESHOLD) {
+		    	sample = Sensor.sampleColor();
+		    }
+		    Movement.stop();
 		}
 		Movement.stop();
 	}
-
-	private boolean searchLine() {
-		foundInFirstDirection = false;
-		foundInSecondDirection = false;
-
-		boolean keepSearching = !foundInFirstDirection && !foundInSecondDirection;
-		while (keepSearching) {
-			foundInFirstDirection = searchByAngle(turnMultiplicator * searchAngle);
-
-			if (!foundInFirstDirection) {
-				increaseSearchRange();
-				foundInSecondDirection = searchByAngle(-turnMultiplicator * searchAngle);
+	
+	private void find() {
+		boolean found1 = false;
+		boolean found2 = false;
+		while(!found1 && !found2) {
+			found1 = find(turnMultiplicator * searchAngle);
+			
+			if (!found1) {
+				turnMultiplicator += turnMultiplicator > 0 ? 1 : -1;
+				found2 = find(-turnMultiplicator * searchAngle);
 			}
-			increaseSearchRange();
+			turnMultiplicator += turnMultiplicator > 0 ? 1 : -1;
+			
 		}
-
 		Movement.stop();
-		resetSearchRange();
-		return foundInFirstDirection || foundInSecondDirection;
+		turnMultiplicator = (turnMultiplicator > 0 ? 1 : -1) * (found2 ? -1 : 1);
 	}
-
-	private void resetSearchRange() {
-		turnMultiplicator = (turnMultiplicator > 0 ? 1 : -1) * (foundInSecondDirection ? -1 : 1);
-	}
-
-	private void increaseSearchRange() {
-		turnMultiplicator += turnMultiplicator > 0 ? 1 : -1;
-	}
-
-	private boolean searchByAngle(float angle) {
+	
+	private boolean find(float angle) {
 		Movement.rotate(angle, turnSpeed);
 		while (sample < Constants.LINE_COLOR_THRESHOLD && !State.stopped(true, true)) {
 			sample = Sensor.sampleColor();
-		}
+	    }
 		if (sample >= Constants.LINE_COLOR_THRESHOLD) {
 			Movement.stop();
 			return true;
