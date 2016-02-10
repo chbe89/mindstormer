@@ -47,7 +47,7 @@ public class ChainBridge extends AbstractProgram {
 		while(!Sensor.sampleTouchBoth());
 		Movement.moveCircle(-90, true, 7, 10);
 		State.waitForMovementMotors();
-		Movement.moveDistance(50, 10);
+		Movement.moveDistance(40, 10);
 		State.waitForMovementMotors();
 		Movement.stop();
 		

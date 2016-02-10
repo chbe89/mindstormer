@@ -1,7 +1,5 @@
 package edu.kit.mindstormer.program.implementation;
 
-import lejos.hardware.Button;
-import lejos.hardware.Key;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
 import edu.kit.mindstormer.program.AbstractProgram;
