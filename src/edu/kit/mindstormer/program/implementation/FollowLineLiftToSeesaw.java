@@ -35,7 +35,8 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 	@Override
 	public void run() {
 		boolean onLine = true;
-		// new FollowLine().run();
+		
+		new FollowLine().run();
 
 		mainloop: while (!quit.get() && onLine) {
 			sample = Sensor.sampleColor();

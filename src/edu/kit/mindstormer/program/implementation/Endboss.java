@@ -11,7 +11,7 @@ public class Endboss extends AbstractProgram {
 	}
 
 	public void run() {
-		Movement.moveCircle(14, true, 100, 30);
+		Movement.moveCircle(14, true, 100, 22);
 		State.waitForMovementMotors();
 		Movement.move(true, 50);
 		while (!quit.get())
