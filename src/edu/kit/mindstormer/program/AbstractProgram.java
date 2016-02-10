@@ -35,11 +35,6 @@ public abstract class AbstractProgram implements Program {
 	public void terminate() {
 		quit.set(true);
 	}
-	
-	@Override
-	public int compareTo(Program o) {
-		return name.compareTo(o.getName());
-	}
 
 	@Override
 	public String toString() {

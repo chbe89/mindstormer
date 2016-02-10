@@ -2,7 +2,7 @@ package edu.kit.mindstormer.program;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public interface Program extends Comparable<Program> {
+public interface Program {
 
 	public static final AtomicBoolean quit = new AtomicBoolean();
 
