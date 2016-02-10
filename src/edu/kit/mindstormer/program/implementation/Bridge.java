@@ -28,7 +28,7 @@ public class Bridge extends AbstractProgram {
 
 	private long time;
 
-	public void run() {
+	public void run() { 
 		boolean isStartPhase = true;
 
 		Movement.moveDistance(-10, SPEED);
@@ -89,7 +89,7 @@ public class Bridge extends AbstractProgram {
 		}
 
 		Movement.stop();
-		
+	
 		// correct position
 		
 		Movement.rotateSensorMotor(-SENSOR_ROTATION);
@@ -106,13 +106,26 @@ public class Bridge extends AbstractProgram {
 		
 		positionInElevator();
 		sendElevatorDown();
-		Delay.msDelay(5000);
+		Delay.msDelay(1000);
+		Movement.moveDistance(-3, 10);
+		Delay.msDelay(4000);
+		Movement.moveDistance(-15, 10);
+		State.waitForMovementMotors();
 		
-		Movement.moveDistance(25, SPEED);
+		Movement.moveDistance(35, SPEED);
 		State.waitForMovementMotors();
 
+		Movement.moveCircle(360, true, 22, 15);
+		while (!State.stopped(true, true)) {
+			if (isSilver(Sensor.sampleColor())) {
+				Movement.stop();
+			}
+		}
+		
+		
 		// Call quit, if program terminated successfully (in order to restore
 		// state)
+		//positionInElevator();
 	}
 
 	private void sendElevatorDown() {
@@ -127,9 +140,49 @@ public class Bridge extends AbstractProgram {
 	}
 
 	private void positionInElevator() {
+		boolean firstTime = true;
+		boolean needsCorrection = true;
+		while (needsCorrection) {
+			if (firstTime) {
+				Movement.moveDistance(30, 20);
+				firstTime = false;
+			} else {
+				Movement.moveDistance(22, 20);
+			}
+			
+			boolean leftTouch = false;
+			boolean rightTouch = false;
+			while (!State.stopped(true, true)) {
+				if (Sensor.sampleTouchLeft()) {
+					if (!Sensor.sampleTouchRight())
+						leftTouch = true;
+				} else if (Sensor.sampleTouchRight()) {
+					if (!Sensor.sampleTouchLeft())
+						rightTouch = true;
+				}
+			}
+			
+			if (leftTouch) {
+				Movement.moveDistance(-20, 10);
+				State.waitForMovementMotors();
+				Movement.rotate(15, 10);
+				State.waitForMovementMotors();
+				
+			} else if (rightTouch) {
+				Movement.moveDistance(-20, 10);
+				State.waitForMovementMotors();
+				Movement.rotate(-15, 10);
+				State.waitForMovementMotors();
+			} else {
+				needsCorrection = false;
+			}
+		}
+		
+		
 		Movement.move(true, SPEED);
 		while (!Sensor.sampleTouchBoth());
 		Movement.stop();
+		
 	}
 
 	private void waitForColorSignal() {
@@ -139,6 +192,7 @@ public class Bridge extends AbstractProgram {
 			color = Sensor.sampleColor();
 		}
 		Sensor.setColorMode(ColorMode.RED);
+		color = Sensor.sampleColor();
 	}
 
 	private void requestElevator() {
@@ -161,5 +215,9 @@ public class Bridge extends AbstractProgram {
 		} catch (IOException e) {
 			// do nothing
 		}
+	}
+	
+	private static boolean isSilver(float sample) {
+		return sample >= Constants.LINE_COLOR_THRESHOLD;
 	}
 }

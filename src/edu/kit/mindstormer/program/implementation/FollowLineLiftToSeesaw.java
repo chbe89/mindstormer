@@ -126,6 +126,13 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 			else {
 				Movement.moveDistance(-4, 10);
 				State.waitForMovementMotors();
+				onLine = searchLine();
+				if (!onLine) {
+					Movement.moveDistance(-4, 10);
+					State.waitForMovementMotors();
+					onLine = searchLine();
+				}
+					
 				OperatingSystem.displayText("Didn't find line. Correcting angle");
 			}
 		}
