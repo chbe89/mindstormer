@@ -9,6 +9,7 @@ import edu.kit.mindstormer.program.Program;
 import edu.kit.mindstormer.program.implementation.Bridge;
 import edu.kit.mindstormer.program.implementation.ChainBridge;
 import edu.kit.mindstormer.program.implementation.Endboss;
+import edu.kit.mindstormer.program.implementation.FollowLine;
 import edu.kit.mindstormer.program.implementation.FollowLineBasic;
 import edu.kit.mindstormer.program.implementation.FollowLineLiftToSeesaw;
 import edu.kit.mindstormer.program.implementation.Labyrinth;
@@ -50,6 +51,7 @@ public class Main {
 		programs.add(new Endboss());
 		programs.add(new NavigatorProgram());
 		programs.add(new ReadjustSensor());
+		programs.add(new FollowLine());
 		
 		for (int i = 0; i < 8; i++) {
 			programs.add(new Parkours(i));
