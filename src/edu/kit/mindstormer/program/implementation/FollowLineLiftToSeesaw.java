@@ -2,7 +2,6 @@ package edu.kit.mindstormer.program.implementation;
 
 import lejos.hardware.Button;
 import lejos.hardware.Key;
-import lejos.utility.Delay;
 import edu.kit.mindstormer.Constants;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
@@ -17,9 +16,9 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 	private int turnSpeed = 13;
 	private int turnMultiplicator;
 
-	// private int[] searchAngles = {45, 145, 200, 100};
-	private int[] searchAngles = { 30, 60, 90, 120, 180, 240 };
-	private int[] miniSearchAngles = { 30, 60 };
+	private int[] searchAngles = {30, 60, 120, 180, 120, 30};
+	//private int[] searchAngles = { 30, 60, 90, 120, 180, 240 };
+	private int[] miniSearchAngles = { 30, 60, 90 };
 
 	private boolean foundInFirstDirection = false;
 	private boolean foundInSecondDirection = false;
@@ -40,35 +39,45 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 		while (!quit.get() && onLine) {
 			long elapsedTime = System.currentTimeMillis() - startTime;
 			sample = Sensor.sampleColor();
-			if (sample < Constants.LINE_COLOR_THRESHOLD && elapsedTime > barcodeTimer) {
-
-				Movement.moveDistance(10, 20);
-				State.waitForMovementMotors();
-				float wallDistance = Sensor.sampleDistance();
-				OperatingSystem.displayText("Wall Distance: " + wallDistance);
-
-				// Delay.msDelay(1000);
-				if (wallDistance > 35 && wallDistance < 45) {
-					/*
-					 * while (wallDistance < 50) { Movement.holdDistance2(true,
-					 * 15, 40); }
-					 */
-					// TODO fix
-					// Movement.alignParallel(wallDistance, 15);
-					State.waitForMovementMotors();
-					Movement.move(true, 20);
-					while (!Sensor.sampleTouchBoth()) {
-
-					}
-					Movement.stop();
-					return; // Seesaw done
-				} else {
-					Movement.moveDistance(-10, 20);
+			if (sample < Constants.LINE_COLOR_THRESHOLD) {
+				if (elapsedTime > barcodeTimer) {
+					Movement.moveDistance(3, 15);
 					State.waitForMovementMotors();
 					onLine = searchLine();
+					
+					if (!onLine) {
+						Movement.moveDistance(-3, 15);
+						State.waitForMovementMotors();
+						Movement.move(true, 35);
+						while (!Sensor.sampleTouchBoth());
+						
+						OperatingSystem.displayText("Wall TOUCHED + CIRCLE");
+						Movement.moveCircle(-90, false, 25, 15);
+						State.waitForMovementMotors();
+						OperatingSystem.displayText("CIRCLE COMPLETE");
+						return;
+					}
+				} else {
+					onLine = searchLine();
 				}
-			} else {
-				onLine = searchLine();
+				
+				/*
+				 * Movement.moveDistance(10, 20); State.waitForMovementMotors();
+				 * float wallDistance = Sensor.sampleDistance();
+				 * OperatingSystem.displayText("Wall Distance: " +
+				 * wallDistance);
+				 * 
+				 * //Delay.msDelay(1000); if (wallDistance > 35 && wallDistance
+				 * < 45) {
+				 * 
+				 * Movement.alignParallel(wallDistance, 15);
+				 * State.waitForMovementMotors(); Movement.move(true, 20); while
+				 * (!Sensor.sampleTouchBoth()) {
+				 * 
+				 * } Movement.stop(); return; // Seesaw done } else {
+				 * Movement.moveDistance(-10, 20);
+				 * State.waitForMovementMotors(); onLine = searchLine(); }
+				 */
 			}
 
 			if (onLine)
@@ -180,9 +189,11 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 			keepSearching = !foundInFirstDirection && !foundInSecondDirection;
 		}
 
+		State.waitForMovementMotors();
 		OperatingSystem.displayText("Found line in direction: " + directionToString());
 		Movement.stop();
 		resetSearchRange();
+
 		return foundInFirstDirection || foundInSecondDirection;
 	}
 
@@ -207,7 +218,7 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 		Movement.stop();
 		resetSearchRange();
 		if (!(foundInFirstDirection || foundInSecondDirection)) {
-			Movement.rotate(turnMultiplicator * miniSearchAngles[miniSearchAngles.length - 1], 20);
+			Movement.rotate(turnMultiplicator * miniSearchAngles[miniSearchAngles.length - 1], turnSpeed);
 			State.waitForMovementMotors();
 		}
 		return foundInFirstDirection || foundInSecondDirection;
@@ -292,4 +303,5 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 	private static boolean isSilver(float sample) {
 		return sample >= Constants.LINE_COLOR_THRESHOLD;
 	}
+
 }

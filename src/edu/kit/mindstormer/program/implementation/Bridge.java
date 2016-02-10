@@ -1,8 +1,13 @@
 package edu.kit.mindstormer.program.implementation;
 
+import java.io.IOException;
+
 import lejos.hardware.Button;
 import lejos.hardware.Key;
+import lejos.utility.Delay;
 import edu.kit.mindstormer.Constants;
+import edu.kit.mindstormer.com.ComModule;
+import edu.kit.mindstormer.com.Communication;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
 import edu.kit.mindstormer.program.AbstractProgram;
@@ -11,8 +16,11 @@ import edu.kit.mindstormer.sensor.Sensor;
 
 public class Bridge extends AbstractProgram {
 
-	private static final int SPEED = -27;
+	private final ComModule com = Communication.getModule();
+	
+	private static final int SPEED = 28;
 	private static final int SENSOR_ROTATION = 75;
+	private static final int ROTATION_SPEED = 30;
 
 	private float distanceSample;
 	private float colorSample;
@@ -23,9 +31,11 @@ public class Bridge extends AbstractProgram {
 		boolean isStartPhase = true;
 		boolean arrivedAtElevator = false;
 
+		Movement.rotate(180, ROTATION_SPEED);
+		State.waitForMovementMotors();
+		
 		Movement.rotateSensorMotor(SENSOR_ROTATION);
-		while (!State.stoppedSensor())
-			;
+		while (!State.stoppedSensor());
 
 		time = System.currentTimeMillis();
 		search_line: while (!quit.get()) {
@@ -46,7 +56,7 @@ public class Bridge extends AbstractProgram {
 
 			while (i < 3 && chancesForLine < 3) {
 				distanceSample = Sensor.sampleDistance();
-				if (distanceSample >= 8f) {
+				if (distanceSample >= 8) {
 					i++;
 				} else {
 					i = 0;
@@ -54,7 +64,6 @@ public class Bridge extends AbstractProgram {
 
 				if (!isStartPhase) {
 					colorSample = Sensor.sampleColor();
-					OperatingSystem.displayText("COLOR: " + colorSample);
 					if (colorSample >= Constants.WOOD_COLOR_THRESHOLD) {
 						chancesForLine++;
 					} else
@@ -76,15 +85,35 @@ public class Bridge extends AbstractProgram {
 		}
 
 		Movement.stop();
-		OperatingSystem.displayText("Setting back.");
-		Movement.moveDistance(-25, SPEED);
-		State.waitForMovementMotors();
-
-		Movement.stop();
 		Movement.rotateSensorMotor(-SENSOR_ROTATION);
 		while (!State.stoppedSensor()) {
 		}
-
+		
+		
+		try {
+			while(!com.requestStatus()) {
+				Delay.msDelay(330);
+			}
+			OperatingSystem.displayText("Elevator is free. Starting request.");
+		} catch (IOException e) {
+			// do nothing
+		}
+		
+		try {
+			while(!com.requestElevator()) {
+				Delay.msDelay(330);
+			}
+			OperatingSystem.displayText("Requested elevator");
+		} catch (IOException e) {
+			// do nothing
+		}
+		
+		Movement.rotate(180, ROTATION_SPEED);
+		State.waitForMovementMotors();
+		
+//		Movement.moveDistance(10, SPEED);
+		
+		// Call quit, if program terminated successfully (in order to restore state)
 		if (arrivedAtElevator)
 			Button.ESCAPE.simulateEvent(Key.KEY_RELEASED);
 	}
