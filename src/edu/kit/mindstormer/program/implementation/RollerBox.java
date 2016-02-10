@@ -47,8 +47,6 @@ public class RollerBox extends AbstractProgram {
 		Movement.rotate(10, 10);
 		State.waitForMovementMotors();
 		
-		
-		Button.ESCAPE.simulateEvent(Key.KEY_RELEASED);
 	}
 
 	private void driveOut() {

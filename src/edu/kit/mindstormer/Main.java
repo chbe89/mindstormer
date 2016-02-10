@@ -9,16 +9,12 @@ import edu.kit.mindstormer.program.Program;
 import edu.kit.mindstormer.program.implementation.Bridge;
 import edu.kit.mindstormer.program.implementation.ChainBridge;
 import edu.kit.mindstormer.program.implementation.Endboss;
-import edu.kit.mindstormer.program.implementation.FollowLine;
-import edu.kit.mindstormer.program.implementation.FollowLineAndStop;
 import edu.kit.mindstormer.program.implementation.FollowLineLiftToSeesaw;
 import edu.kit.mindstormer.program.implementation.Labyrinth;
+import edu.kit.mindstormer.program.implementation.Parkours;
 import edu.kit.mindstormer.program.implementation.Race;
 import edu.kit.mindstormer.program.implementation.RollerBox;
 import edu.kit.mindstormer.program.implementation.Seesaw;
-import edu.kit.mindstormer.program.implementation.test.BlockingTest;
-import edu.kit.mindstormer.program.implementation.test.ColorSampler;
-import edu.kit.mindstormer.program.implementation.test.MovementTest;
 import edu.kit.mindstormer.program.implementation.test.NavigatorProgram;
 import edu.kit.mindstormer.program.implementation.test.ReadjustSensor;
 import edu.kit.mindstormer.sensor.Sensor;
@@ -52,6 +48,10 @@ public class Main {
 		programs.add(new Endboss());
 		programs.add(new NavigatorProgram());
 		programs.add(new ReadjustSensor());
+		
+		for (int i = 0; i < 8; i++) {
+			programs.add(new Parkours(i));
+		}
 		
 		/*
 		 * programs.add(new Parkours(0)); programs.add(new Parkours(1));
