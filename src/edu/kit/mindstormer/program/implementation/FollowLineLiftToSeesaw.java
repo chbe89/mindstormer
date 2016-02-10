@@ -2,6 +2,8 @@ package edu.kit.mindstormer.program.implementation;
 
 import lejos.hardware.Button;
 import lejos.hardware.Key;
+import lejos.hardware.Sound;
+import lejos.utility.Delay;
 import edu.kit.mindstormer.Constants;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
@@ -16,9 +18,9 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 	private int turnSpeed = 13;
 	private int turnMultiplicator;
 
-	private int[] searchAngles = {30, 60, 120, 180, 120, 30};
-	//private int[] searchAngles = { 30, 60, 90, 120, 180, 240 };
-	private int[] miniSearchAngles = { 30, 60, 90 };
+	private int[] searchAngles = { 30, 60, 120, 180, 120, 30 };
+	// private int[] searchAngles = { 30, 60, 90, 120, 180, 240 };
+	private int[] miniSearchAngles = { 30, 60, 90, 60 };
 
 	private boolean foundInFirstDirection = false;
 	private boolean foundInSecondDirection = false;
@@ -37,47 +39,60 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 		boolean onLine = true;
 		long startTime = System.currentTimeMillis();
 		while (!quit.get() && onLine) {
-			long elapsedTime = System.currentTimeMillis() - startTime;
 			sample = Sensor.sampleColor();
 			if (sample < Constants.LINE_COLOR_THRESHOLD) {
+				long elapsedTime = System.currentTimeMillis() - startTime;
 				if (elapsedTime > barcodeTimer) {
-					Movement.moveDistance(3, 15);
-					State.waitForMovementMotors();
-					onLine = searchLine();
+					// linesearch after elapsed time
+					onLine = miniSearchLine();
+					Sound.buzz();
+					Delay.msDelay(200);
 					
 					if (!onLine) {
-						Movement.moveDistance(-3, 15);
-						State.waitForMovementMotors();
-						Movement.move(true, 35);
-						while (!Sensor.sampleTouchBoth());
+						Movement.moveDistance(33, 10);
+												
+						boolean black = true;
+						boolean silver = false;
+						int barcodeCounter = 0;
+
+						while (!State.stopped(true, true)) {
+							sample = Sensor.sampleColor();
+							if (silver && isBlack(sample)) {
+								black = true;
+								silver = false;
+							}
+							if (black && isSilver(sample)) {
+								silver = true;
+								black = false;
+								Sound.beep();
+								barcodeCounter++;
+								OperatingSystem.displayText("Barcounter: " + barcodeCounter);
+							}
+						}
+
+						Sound.buzz();
+						Delay.msDelay(200);
 						
-						OperatingSystem.displayText("Wall TOUCHED + CIRCLE");
-						Movement.moveCircle(-90, false, 25, 15);
-						State.waitForMovementMotors();
-						OperatingSystem.displayText("CIRCLE COMPLETE");
-						return;
+						
+						if (barcodeCounter >= 3) {
+							OperatingSystem.displayText("Barcode was Found!! " + barcodeCounter);
+							Movement.moveCircle(30, true, 50, 15);
+							if (isSilver(Sensor.sampleColor())) {
+								Movement.stop();
+								startTime = System.currentTimeMillis();
+							}
+							State.waitForMovementMotors();
+						} else {
+							Movement.moveDistance(-33, 10);
+							State.waitForMovementMotors();
+							onLine = searchLine();
+							State.waitForMovementMotors();
+						}
 					}
 				} else {
+					// normal linesearch
 					onLine = searchLine();
 				}
-				
-				/*
-				 * Movement.moveDistance(10, 20); State.waitForMovementMotors();
-				 * float wallDistance = Sensor.sampleDistance();
-				 * OperatingSystem.displayText("Wall Distance: " +
-				 * wallDistance);
-				 * 
-				 * //Delay.msDelay(1000); if (wallDistance > 35 && wallDistance
-				 * < 45) {
-				 * 
-				 * Movement.alignParallel(wallDistance, 15);
-				 * State.waitForMovementMotors(); Movement.move(true, 20); while
-				 * (!Sensor.sampleTouchBoth()) {
-				 * 
-				 * } Movement.stop(); return; // Seesaw done } else {
-				 * Movement.moveDistance(-10, 20);
-				 * State.waitForMovementMotors(); onLine = searchLine(); }
-				 */
 			}
 
 			if (onLine)
@@ -217,10 +232,7 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 		OperatingSystem.displayText("Found line in direction: " + directionToString());
 		Movement.stop();
 		resetSearchRange();
-		if (!(foundInFirstDirection || foundInSecondDirection)) {
-			Movement.rotate(turnMultiplicator * miniSearchAngles[miniSearchAngles.length - 1], turnSpeed);
-			State.waitForMovementMotors();
-		}
+		State.waitForMovementMotors();
 		return foundInFirstDirection || foundInSecondDirection;
 	}
 

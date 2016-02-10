@@ -8,6 +8,7 @@ import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.program.Program;
 import edu.kit.mindstormer.program.implementation.Bridge;
 import edu.kit.mindstormer.program.implementation.ChainBridge;
+import edu.kit.mindstormer.program.implementation.Endboss;
 import edu.kit.mindstormer.program.implementation.FollowLine;
 import edu.kit.mindstormer.program.implementation.FollowLineAndStop;
 import edu.kit.mindstormer.program.implementation.FollowLineLiftToSeesaw;
@@ -21,7 +22,6 @@ import edu.kit.mindstormer.program.implementation.test.MovementTest;
 import edu.kit.mindstormer.program.implementation.test.NavigatorProgram;
 import edu.kit.mindstormer.program.implementation.test.ReadjustSensor;
 import edu.kit.mindstormer.sensor.Sensor;
-import edu.kit.mindstormer.util.HttpLogger;
 
 public class Main {
 
@@ -42,9 +42,6 @@ public class Main {
     }
 
     private static void printLog() {
-	HttpLogger logger = HttpLogger.getInstance();
-	logger.log("Starting OS with " + programs.size() + " programs.");
-	logger.log("Programs = " + programs.toString());
     }
 
 	private static void installPrograms() {
@@ -63,6 +60,7 @@ public class Main {
 		programs.add(new NavigatorProgram());
 		programs.add(new ReadjustSensor());
 		programs.add(new ColorSampler());
+		programs.add(new Endboss());
 		
 		/*
 			programs.add(new Parkours(0));

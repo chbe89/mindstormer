@@ -1,6 +1,5 @@
 package edu.kit.mindstormer;
 
-import edu.kit.mindstormer.util.HttpLogger;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 
@@ -53,7 +52,8 @@ public final class Constants {
 	
 	public final static float MAX_WALL_DISTANCE = 40.0f;
 	
-	public static HttpLogger LOGGER = HttpLogger.getInstance();
+	public final static float WALL_DISTANCE_RACE = 70.0f;
+	
 
 	private Constants() {
 	}
