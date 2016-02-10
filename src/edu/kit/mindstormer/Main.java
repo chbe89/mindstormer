@@ -12,10 +12,10 @@ import edu.kit.mindstormer.program.implementation.Bridge;
 import edu.kit.mindstormer.program.implementation.ChainBridge;
 import edu.kit.mindstormer.program.implementation.Endboss;
 import edu.kit.mindstormer.program.implementation.FollowLine;
-import edu.kit.mindstormer.program.implementation.FollowLineBasic;
 import edu.kit.mindstormer.program.implementation.FollowLineLiftToSeesaw;
 import edu.kit.mindstormer.program.implementation.Labyrinth;
 import edu.kit.mindstormer.program.implementation.Parkours;
+import edu.kit.mindstormer.program.implementation.Parkours2;
 import edu.kit.mindstormer.program.implementation.Race;
 import edu.kit.mindstormer.program.implementation.RollerBox;
 import edu.kit.mindstormer.program.implementation.Seesaw;
@@ -57,6 +57,10 @@ public class Main {
 		
 		for (int i = 0; i < 8; i++) {
 			programs.add(new Parkours(i));
+		}
+		
+		for (int i = 0; i < 8; i++) {
+			programs.add(new Parkours2(i));
 		}
 		
 		programs.add(new AfterBox());

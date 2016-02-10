@@ -9,7 +9,7 @@ import edu.kit.mindstormer.program.AbstractProgram;
 import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.sensor.Sensor;
 
-public class FollowLineLiftToSeesaw extends AbstractProgram {
+public class FollowLineLiftToSeesaw2 extends AbstractProgram {
 	private float sample;
 	// private int searchAngle = 25;
 	private int forwardSpeed = 17;
@@ -36,6 +36,8 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 	public void run() {
 		boolean onLine = true;
 		
+		new FollowLine().run();
+
 		mainloop: while (!quit.get() && onLine) {
 			sample = Sensor.sampleColor();
 			if (sample < Constants.LINE_COLOR_THRESHOLD) {
