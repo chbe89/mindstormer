@@ -4,7 +4,6 @@ import edu.kit.mindstormer.program.AbstractProgram;
 
 public class Parkours extends AbstractProgram {
 	float sample;
-	private static final int sensorRotation = 75;
 
 	final int skip;
 
@@ -16,21 +15,21 @@ public class Parkours extends AbstractProgram {
 	private static String getName(int skip) {
 		switch (skip) {
 		case 0:
-			return "Parkour ganz";
+			return "P ganz";
 		case 1:
-			return "Parkour ab Bridge";
+			return "P ab Bridge";
 		case 2:
-			return "Parkour ab LineFollow";
+			return "P ab FollowLineLift";
 		case 3:
-			return "Parkour ab Seesaw";
+			return "P ab Seesaw";
 		case 4:
-			return "Parkour ab LineFollow2";
+			return "P ab ChainBridge";
 		case 5:
-			return "Parkour ab ChainBridge";
+			return "P ab RollerBox";
 		case 6:
-			return "Parkour ab RollerBox";
+			return "P ab Race";
 		case 7:
-			return "Parkour ab Race";
+			return "P ab Endboss";
 		}
 		return "Parkour undefined";
 	}
