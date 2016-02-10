@@ -60,7 +60,5 @@ public class Main {
 		 * programs.add(new Parkours(4)); programs.add(new Parkours(5));
 		 * programs.add(new Parkours(6)); programs.add(new Parkours(7));
 		 */
-		
-		Collections.sort(programs);
 	}
 }
