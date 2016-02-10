@@ -25,24 +25,20 @@ import edu.kit.mindstormer.sensor.Sensor;
 
 public class Main {
 
-    private static final Collection<Program> programs = new ArrayList<Program>();
+	private static final Collection<Program> programs = new ArrayList<Program>();
 
-    public static void main(String[] args) {
-    	initHardware();
-    	installPrograms();
-		printLog();
-		
+	public static void main(String[] args) {
+		initHardware();
+		installPrograms();
+
 		OperatingSystem os = OperatingSystem.withPrograms(programs);
 		os.run();
-    }
+	}
 
-    private static void initHardware() {
-	Movement.init();
-	Sensor.init();
-    }
-
-    private static void printLog() {
-    }
+	private static void initHardware() {
+		Movement.init();
+		Sensor.init();
+	}
 
 	private static void installPrograms() {
 		programs.clear();
@@ -58,14 +54,10 @@ public class Main {
 		programs.add(new ReadjustSensor());
 		
 		/*
-			programs.add(new Parkours(0));
-			programs.add(new Parkours(1));
-			programs.add(new Parkours(2));
-			programs.add(new Parkours(3));
-			programs.add(new Parkours(4));
-			programs.add(new Parkours(5));
-			programs.add(new Parkours(6));
-			programs.add(new Parkours(7));
-		*/
+		 * programs.add(new Parkours(0)); programs.add(new Parkours(1));
+		 * programs.add(new Parkours(2)); programs.add(new Parkours(3));
+		 * programs.add(new Parkours(4)); programs.add(new Parkours(5));
+		 * programs.add(new Parkours(6)); programs.add(new Parkours(7));
+		 */
 	}
 }

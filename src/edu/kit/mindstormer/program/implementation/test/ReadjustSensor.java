@@ -36,7 +36,7 @@ public class ReadjustSensor extends AbstractProgram {
 	}
 
 	private void nonBlockingWait() {
-		while (true) {
+		while (!quit.get()) {
 			try {
 				latch.await();
 			} catch (InterruptedException e) {

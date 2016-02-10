@@ -35,6 +35,8 @@ public final class Constants {
 	
 	
 	public static final float WOOD_COLOR_THRESHOLD = 0.35f;
+	
+	public static final float ELEVATOR_LIGHT_THRESHOLD = 0.21f;
 
 	public final static int ACCELERATION = 1000;
 
