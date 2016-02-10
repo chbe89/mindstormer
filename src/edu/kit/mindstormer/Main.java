@@ -6,6 +6,8 @@ import java.util.List;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.program.Program;
+import edu.kit.mindstormer.program.implementation.AfterBox;
+import edu.kit.mindstormer.program.implementation.AfterChain;
 import edu.kit.mindstormer.program.implementation.Bridge;
 import edu.kit.mindstormer.program.implementation.ChainBridge;
 import edu.kit.mindstormer.program.implementation.Endboss;
@@ -56,6 +58,9 @@ public class Main {
 		for (int i = 0; i < 8; i++) {
 			programs.add(new Parkours(i));
 		}
+		
+		programs.add(new AfterBox());
+		programs.add(new AfterChain());
 		
 		/*
 		 * programs.add(new Parkours(0)); programs.add(new Parkours(1));
