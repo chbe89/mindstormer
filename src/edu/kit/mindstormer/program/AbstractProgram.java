@@ -32,6 +32,11 @@ public abstract class AbstractProgram implements Program {
 	}
 	
 	@Override
+	public int compareTo(Program o) {
+		return name.compareTo(o.getName());
+	}
+
+	@Override
 	public String toString() {
 		return "Program [" + name + "]";
 	}

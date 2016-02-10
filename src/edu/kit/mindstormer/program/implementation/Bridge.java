@@ -2,8 +2,6 @@ package edu.kit.mindstormer.program.implementation;
 
 import java.io.IOException;
 
-import lejos.hardware.Button;
-import lejos.hardware.Key;
 import lejos.utility.Delay;
 import edu.kit.mindstormer.Constants;
 import edu.kit.mindstormer.com.ComModule;
@@ -32,7 +30,6 @@ public class Bridge extends AbstractProgram {
 
 	public void run() {
 		boolean isStartPhase = true;
-		boolean arrivedAtElevator = false;
 
 		Movement.moveDistance(-10, SPEED);
 		State.waitForMovementMotors();
@@ -83,7 +80,6 @@ public class Bridge extends AbstractProgram {
 
 			if (chancesForLine >= GAP_LIVES) {
 				OperatingSystem.displayText("Found elevator's line border!");
-				arrivedAtElevator = true;
 				break search_line;
 			}
 
@@ -93,6 +89,9 @@ public class Bridge extends AbstractProgram {
 		}
 
 		Movement.stop();
+		
+		// correct position
+		
 		Movement.rotateSensorMotor(-SENSOR_ROTATION);
 		State.waitForSensorMotor();
 
@@ -103,18 +102,17 @@ public class Bridge extends AbstractProgram {
 		State.waitForMovementMotors();
 
 		waitForColorSignal();
-		Delay.msDelay(1000)
-		;
+		Delay.msDelay(3000);
+		
 		positionInElevator();
 		sendElevatorDown();
+		Delay.msDelay(5000);
 		
 		Movement.moveDistance(10, SPEED);
 		State.waitForMovementMotors();
 
 		// Call quit, if program terminated successfully (in order to restore
 		// state)
-		if (arrivedAtElevator)
-			Button.ESCAPE.simulateEvent(Key.KEY_RELEASED);
 	}
 
 	private void sendElevatorDown() {
@@ -137,10 +135,8 @@ public class Bridge extends AbstractProgram {
 	private void waitForColorSignal() {
 		Sensor.setColorMode(ColorMode.AMBIENT);
 		float color = Sensor.sampleColor();
-		OperatingSystem.displayText("C = " + String.valueOf(color));
 		while (color < Constants.ELEVATOR_LIGHT_THRESHOLD){
 			color = Sensor.sampleColor();
-			OperatingSystem.displayText("Loop = " + String.valueOf(color));
 		}
 		Sensor.setColorMode(ColorMode.RED);
 	}

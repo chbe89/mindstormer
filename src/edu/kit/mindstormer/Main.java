@@ -1,7 +1,8 @@
 package edu.kit.mindstormer;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.program.OperatingSystem;
@@ -25,7 +26,7 @@ import edu.kit.mindstormer.sensor.Sensor;
 
 public class Main {
 
-	private static final Collection<Program> programs = new ArrayList<Program>();
+	private static final List<Program> programs = new ArrayList<Program>();
 
 	public static void main(String[] args) {
 		initHardware();
@@ -64,5 +65,7 @@ public class Main {
 		 * programs.add(new Parkours(4)); programs.add(new Parkours(5));
 		 * programs.add(new Parkours(6)); programs.add(new Parkours(7));
 		 */
+		
+		Collections.sort(programs);
 	}
 }
