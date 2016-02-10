@@ -47,20 +47,15 @@ public class Main {
 	private static void installPrograms() {
 		programs.clear();
 		programs.add(new Labyrinth());
-		programs.add(new FollowLineLiftToSeesaw());
-		programs.add(new ChainBridge());
-		programs.add(new Race());
-		programs.add(new BlockingTest());
-		programs.add(new MovementTest());
-		programs.add(new FollowLine());
-		programs.add(new FollowLineAndStop());
 		programs.add(new Bridge());
+		programs.add(new FollowLineLiftToSeesaw());
 		programs.add(new Seesaw());
+		programs.add(new ChainBridge());
 		programs.add(new RollerBox());
+		programs.add(new Race());
+		programs.add(new Endboss());
 		programs.add(new NavigatorProgram());
 		programs.add(new ReadjustSensor());
-		programs.add(new ColorSampler());
-		programs.add(new Endboss());
 		
 		/*
 			programs.add(new Parkours(0));
