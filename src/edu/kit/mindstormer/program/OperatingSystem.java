@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import edu.kit.mindstormer.util.HttpLogger;
 import lejos.hardware.BrickFinder;
 import lejos.hardware.Button;
 import lejos.hardware.Sound;
@@ -115,8 +114,6 @@ public class OperatingSystem implements ProgramContext {
 
 		display.clear();
 		display.drawString(text, width / 2 , height , GraphicsLCD.BASELINE | GraphicsLCD.HCENTER);
-		// display.refresh();
-		HttpLogger.getInstance().log(text);
 	}
 
 	@Override
