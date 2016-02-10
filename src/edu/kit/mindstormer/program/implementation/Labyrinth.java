@@ -17,16 +17,19 @@ public class Labyrinth extends AbstractProgram {
     final int speed = 35;
     final float turnSpeed = 25;
     final float distanceToWall = 15;
-    boolean endLabyrinth = false;
+    boolean silverLineFound = false;
+    int counterLabEnd = 0;
+    int endLabyrinth = 0;
 
     public void run() {
+	OperatingSystem.displayText("E:"+ counterLabEnd);
 
-	while (!quit.get() && !endLabyrinth) {
+	while (!quit.get() && (endLabyrinth < 3) ) {
 	    updateSensors();
 	    OperatingSystem.displayText("T:" + String.valueOf(sampleTouch) + "U:" + String.valueOf(sampleUltra));
 
 	    while (Constants.MIN_WALL_DISTANCE < sampleUltra && sampleUltra < Constants.MAX_WALL_DISTANCE
-		    && !sampleTouch && sampleLine > Constants.LINE_COLOR_THRESHOLD) {
+		    && !sampleTouch) {
 		Movement.holdDistance2(true, speed, distanceToWall);
 		updateSensors();
 		OperatingSystem.displayText("T:" + String.valueOf(sampleTouch) + "U:" + String.valueOf(sampleUltra));
@@ -36,19 +39,19 @@ public class Labyrinth extends AbstractProgram {
 		OperatingSystem.displayText("DETECTED TOUCH");
 		Movement.moveDistance(2, speed);
 		backupAndTurn(true, false);
-	    } else if (sampleUltra >= Constants.MAX_WALL_DISTANCE && !endLabyrinth) {
+	    } else if (sampleUltra >= Constants.MAX_WALL_DISTANCE) {
 		OperatingSystem.displayText("DETECTED NO WALL");
 		driveCurve90d(false);
-	    } else if (sampleUltra < Constants.MIN_WALL_DISTANCE) {
+	    } else if (sampleUltra <= Constants.MIN_WALL_DISTANCE) {
 		OperatingSystem.displayText("DETECTED TOO CLOSE");
 		backupAndTurn(true, true);
-	    } else if (sampleLine > Constants.LINE_COLOR_THRESHOLD) {
-		OperatingSystem.displayText("Lab END");
-		endLabyrinth = true;
 	    } else {
+		OperatingSystem.displayText("T:" + String.valueOf(sampleTouch) + "L:" + String.valueOf(sampleLine));
 		OperatingSystem.displayText("ERROR UNDEFINED STATE");
 	    }
 	}
+	
+	Movement.moveDistance(65, speed);
     }
 
     private void updateSensors() {
@@ -67,6 +70,10 @@ public class Labyrinth extends AbstractProgram {
 	    Movement.rotate(90 * (left ? -1 : 1), turnSpeed);
 	    State.waitForMovementMotors();
 	}
+	if (silverLineFound) {
+	    Sound.beep();
+	    endLabyrinth++;
+	}
     }
 
     private void driveCurve90d(boolean left) {
@@ -76,17 +83,22 @@ public class Labyrinth extends AbstractProgram {
 	Movement.move(true, 22.5f, true, 12f);
 	updateSensors();
 
-	while (!sampleTouch && sampleLine > Constants.LINE_COLOR_THRESHOLD && !endLabyrinth) {
+	while (!sampleTouch) {
 	    OperatingSystem.displayText("L: " + String.valueOf(sampleLine) + "T: " + String.valueOf(sampleTouch));
 	    updateSensors();
+	    if (sampleLine > Constants.LINE_COLOR_THRESHOLD_LAB) {
+		counterLabEnd++;
+		if (counterLabEnd >= 3) {
+		    silverLineFound = true;
+		    Sound.beepSequenceUp();
+		}
+	    } else {
+
+		counterLabEnd = 0;
+
+	    }
 	}
 	Movement.stop();
-	if (sampleLine > Constants.LINE_COLOR_THRESHOLD && !endLabyrinth) {
-	    Sound.beepSequenceUp();
-	    endLabyrinth = true;
-	    Movement.stop();
-	    OperatingSystem.displayText("END LAB");
-	    Delay.msDelay(2000);
-	}
+
     }
 }
