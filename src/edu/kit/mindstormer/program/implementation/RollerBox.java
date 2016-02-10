@@ -51,9 +51,9 @@ public class RollerBox extends AbstractProgram {
 		Sound.beepSequenceUp();
 		Movement.stop();*/
 		
-		Movement.moveCircle(110, false, 10, rotationSpeed);
+		Movement.moveCircle(110, false, 10, 15);
 		State.waitForMovementMotors();
-		Movement.moveDistance(60, 25);
+		Movement.moveDistance(100, 25);
 		State.waitForMovementMotors();
 		Movement.rotate(10, 10);
 		State.waitForMovementMotors();
@@ -63,7 +63,7 @@ public class RollerBox extends AbstractProgram {
 	}
 
 	private void driveOut() {
-		Movement.moveDistance(-35, speed);
+		Movement.moveDistance(-15, speed);
 		State.waitForMovementMotors();
 	}
 
