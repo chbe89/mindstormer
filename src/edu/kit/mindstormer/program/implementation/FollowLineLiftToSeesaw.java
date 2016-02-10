@@ -54,7 +54,8 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 						boolean black = true;
 						boolean silver = false;
 						int barcodeCounter = 0;
-
+						float distanceStart = 0;
+						float distanceStop = 0;
 						while (!State.stopped(true, true)) {
 							sample = Sensor.sampleColor();
 							if (silver && isBlack(sample)) {
@@ -65,6 +66,11 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 								silver = true;
 								black = false;
 								Sound.beep();
+								if (barcodeCounter == 1) {
+									distanceStart = Sensor.sampleDistance();
+								} else {
+									distanceStop = Sensor.sampleDistance();
+								}
 								barcodeCounter++;
 								OperatingSystem.displayText("Barcounter: " + barcodeCounter);
 							}
@@ -74,13 +80,38 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 						Delay.msDelay(200);
 						
 						
-						if (barcodeCounter >= 3) {
+						if (barcodeCounter >= 4) {
 							OperatingSystem.displayText("Barcode was Found!! " + barcodeCounter);
-							Movement.moveCircle(30, true, 50, 15);
-							if (isSilver(Sensor.sampleColor())) {
-								Movement.stop();
-								startTime = System.currentTimeMillis();
+							float dif = distanceStart - distanceStop;
+							OperatingSystem.displayText("Count: " + barcodeCounter + "Dif: " + dif);
+							Delay.msDelay(2000);
+							if (dif > 5) {
+								Movement.rotate(15, 15);
+							} else if (dif < -5) {
+								Movement.rotate(-15, 15);
 							}
+							State.waitForMovementMotors();
+							
+							if (distanceStart > distanceStop) {
+								Movement.moveCircle(90, false, 10, 15);
+							} else {
+								Movement.moveCircle(90, true, 10, 15);
+							}
+							
+							while (!State.stopped(true, true)) {
+								if (isSilver(Sensor.sampleColor())) {
+									Movement.stop();
+									OperatingSystem.displayText("Line found - Goodbye!");
+									return;
+								}
+							}
+							OperatingSystem.displayText("Line after Barcode not found");
+							
+						} else if (barcodeCounter >= 3) {
+							// Barcode schräg gelesen
+							Movement.moveDistance(-37, 10);
+							State.waitForMovementMotors();
+							onLine = searchLine();
 							State.waitForMovementMotors();
 						} else {
 							Movement.moveDistance(-33, 10);
