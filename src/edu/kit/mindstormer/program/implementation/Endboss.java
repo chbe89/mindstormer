@@ -10,7 +10,7 @@ public class Endboss extends AbstractProgram {
 	}
 	
 	public void run() {
-		Movement.moveCircle(14, true, 100, 10);
+		Movement.moveCircle(14, true, 100, 30);
 		State.waitForMovementMotors();
 		Movement.move(true, 50);
 		while(!quit.get());
