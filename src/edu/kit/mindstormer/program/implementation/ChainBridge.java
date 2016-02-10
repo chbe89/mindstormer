@@ -16,7 +16,7 @@ public class ChainBridge extends AbstractProgram {
 		Movement.moveCircle(-90, true, 7, 10);
 		State.waitForMovementMotors();
 		
-		Movement.moveDistance(-50, 10);
+		Movement.moveDistance(-40, 10);
 		State.waitForMovementMotors();
 		
 		Sound.beep();
@@ -26,19 +26,31 @@ public class ChainBridge extends AbstractProgram {
 		}
 		Sound.beep();
 		
-		Movement.move(true, 10);
-		while(Sensor.sampleDistance() > 20);
-		Movement.alignParallel(40, 10, 30);
-		Movement.moveDistance(-40, 10);
-		State.waitForMovementMotors();
-		Movement.moveDistance(-170, 35);
+		//Movement.move(true, 10);
+		//while(Sensor.sampleDistance() > 20);
+		//Movement.alignParallel(40, 10, 30);
+		//Movement.moveDistance(-40, 10);
+		//State.waitForMovementMotors();
+		Movement.moveDistance(-170, 45);
 		State.waitForMovementMotors();
 		
 		Movement.move(false, 10);
-		while(Sensor.sampleDistance() > 20);
-		while(Sensor.sampleDistance() < 20) {
+		while(Sensor.sampleDistance() > 25);
+		while(Sensor.sampleDistance() < 15) {
 			Movement.holdDistance2(false, 10, 10);
 		}
+		Movement.moveDistance(20, 10);
+		State.waitForMovementMotors();
+		Movement.rotate(180, 10);
+		State.waitForMovementMotors();
+		Movement.move(true, 30);
+		while(!Sensor.sampleTouchBoth());
+		Movement.moveCircle(-90, true, 7, 10);
+		State.waitForMovementMotors();
+		Movement.moveDistance(50, 10);
+		State.waitForMovementMotors();
+		Movement.stop();
+		
 	}
 
 }

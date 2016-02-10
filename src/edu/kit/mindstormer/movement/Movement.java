@@ -222,7 +222,7 @@ public final class Movement {
 		do {
 			alignParallel(sampleDistance, centimeterPerSecond, returnDistance);
 			correctionAngle = alignParallel(-sampleDistance, centimeterPerSecond, returnDistance);
-		} while (correctionAngle > 3);
+		} while (Math.abs(correctionAngle) > 3);
 		
 		float sample = Sensor.sampleDistance();
 		float alignmentError = distance - sample;
@@ -249,9 +249,9 @@ public final class Movement {
 		Delay.msDelay(10);
 		float correctionAngle = (float) Math.toDegrees(Math.atan(sampleDifference / sampleDistance));
 		
-		rotate(correctionAngle, 14);
+		rotate(-correctionAngle, 14);
 		while (!State.stopped(true, true)) {}
-		return correctionAngle;
+		return -correctionAngle;
 	}
 
 	
