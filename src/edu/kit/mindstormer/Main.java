@@ -1,7 +1,6 @@
 package edu.kit.mindstormer;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import edu.kit.mindstormer.movement.Movement;
@@ -10,6 +9,7 @@ import edu.kit.mindstormer.program.Program;
 import edu.kit.mindstormer.program.implementation.Bridge;
 import edu.kit.mindstormer.program.implementation.ChainBridge;
 import edu.kit.mindstormer.program.implementation.Endboss;
+import edu.kit.mindstormer.program.implementation.FollowLineBasic;
 import edu.kit.mindstormer.program.implementation.FollowLineLiftToSeesaw;
 import edu.kit.mindstormer.program.implementation.Labyrinth;
 import edu.kit.mindstormer.program.implementation.Parkours;
@@ -42,6 +42,7 @@ public class Main {
 		programs.add(new Labyrinth());
 		programs.add(new Bridge());
 		programs.add(new FollowLineLiftToSeesaw());
+		//programs.add(new FollowLineBasic());
 		programs.add(new Seesaw());
 		programs.add(new ChainBridge());
 		programs.add(new RollerBox());

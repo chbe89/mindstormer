@@ -21,7 +21,7 @@ public class Seesaw extends AbstractProgram {
 	private boolean foundInFirstDirection = false;
 	private boolean foundInSecondDirection = false;
 
-	private int barcodeTimer = 8000; // 90000;
+	private int barcodeTimer = 10000; // 90000;
 	
 	@Override
 	public void initialize() {
@@ -52,7 +52,7 @@ public class Seesaw extends AbstractProgram {
 				moveAlongLine();
 		}
 		Sound.beepSequenceUp();
-		Movement.move(true, 25);
+		Movement.move(true, 30);
 		while(!Sensor.sampleTouchBoth());
 		Movement.stop();
 		

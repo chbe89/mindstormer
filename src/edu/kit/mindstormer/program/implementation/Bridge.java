@@ -108,7 +108,7 @@ public class Bridge extends AbstractProgram {
 		sendElevatorDown();
 		Delay.msDelay(5000);
 		
-		Movement.moveDistance(10, SPEED);
+		Movement.moveDistance(25, SPEED);
 		State.waitForMovementMotors();
 
 		// Call quit, if program terminated successfully (in order to restore

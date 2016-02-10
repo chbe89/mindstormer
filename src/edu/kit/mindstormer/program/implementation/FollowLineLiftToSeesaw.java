@@ -16,14 +16,14 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 	private int turnSpeed = 13;
 	private int turnMultiplicator;
 
-	private int[] searchAngles = { 30, 60, 120, 180, 120, 30 };
+	private int[] searchAngles = { 30, 60, 120, 180, 210, 90 };
 	// private int[] searchAngles = { 30, 60, 90, 120, 180, 240 };
-	private int[] miniSearchAngles = { 30, 60, 90, 60 };
+	private int[] miniSearchAngles = { 30, 60, 120, 180, 100, 10 };
 
 	private boolean foundInFirstDirection = false;
 	private boolean foundInSecondDirection = false;
 
-	private int barcodeTimer = 200000; // 90000;
+	private int barcodeTimer = 1; // 90000;
 
 	@Override
 	public void initialize() {
@@ -35,106 +35,104 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 	@Override
 	public void run() {
 		boolean onLine = true;
-		long startTime = System.currentTimeMillis();
-		
+		// new FollowLine().run();
+
 		mainloop: while (!quit.get() && onLine) {
 			sample = Sensor.sampleColor();
 			if (sample < Constants.LINE_COLOR_THRESHOLD) {
-				long elapsedTime = System.currentTimeMillis() - startTime;
-				if (elapsedTime > barcodeTimer) {
-					// linesearch after elapsed time
-					onLine = miniSearchLine();
-					//Sound.buzz();
-					Delay.msDelay(10);
-					
-					if (!onLine) {
-						Movement.moveDistance(33, 10);
-												
-						boolean black = true;
-						boolean silver = false;
-						int barcodeCounter = 0;
-						float distanceStart = 0;
-						float distanceStop = 0;
-						while (!State.stopped(true, true)) {
-							sample = Sensor.sampleColor();
-							if (silver && isBlack(sample)) {
-								black = true;
-								silver = false;
-							}
-							if (black && isSilver(sample)) {
-								silver = true;
-								black = false;
-								Sound.beep();
-								if (barcodeCounter == 1) {
-									distanceStart = Sensor.sampleDistance();
-								} else {
-									distanceStop = Sensor.sampleDistance();
-								}
-								barcodeCounter++;
-								OperatingSystem.displayText("Barcounter: " + barcodeCounter);
-							}
-						}
+				// linesearch after elapsed time
+				onLine = miniSearchLine();
+				// Sound.buzz();
+				// Delay.msDelay(10);
 
-						//Sound.buzz();
-						Delay.msDelay(10);
-						
-						
-						if (barcodeCounter >= 4) {
-							//OperatingSystem.displayText("Barcode was Found!! " + barcodeCounter);
-							float dif = distanceStart - distanceStop;
-							//OperatingSystem.displayText("Count: " + barcodeCounter + "Dif: " + dif);
-							//Delay.msDelay(100);
-							if (dif > 1.7) {
-								Movement.rotate(-20, 15);
-							} else if (dif < -1.7) {
-								Movement.rotate(20, 15);
-							}
-							State.waitForMovementMotors();
-							
-							if (distanceStart > distanceStop) {
-								Movement.moveCircle(90, false, 25, 15);
+				if (!onLine) {
+					Movement.moveDistance(33, 10);
+
+					boolean black = true;
+					boolean silver = false;
+					int barcodeCounter = 0;
+					float distanceStart = 0;
+					float distanceStop = 0;
+					while (!State.stopped(true, true)) {
+						sample = Sensor.sampleColor();
+						if (silver && isBlack(sample)) {
+							black = true;
+							silver = false;
+						}
+						if (black && isSilver(sample)) {
+							silver = true;
+							black = false;
+							Sound.beep();
+							if (barcodeCounter == 1) {
+								distanceStart = Sensor.sampleDistance();
 							} else {
-								Movement.moveCircle(90, true, 25, 15);
+								distanceStop = Sensor.sampleDistance();
 							}
-							
-							while (!State.stopped(true, true)) {
-								if (isSilver(Sensor.sampleColor())) {
-									Movement.stop();
-									OperatingSystem.displayText("Line found!");
-									break mainloop; //startTime = System.currentTimeMillis();
-								}
-							}
-							OperatingSystem.displayText("Line after Barcode not found");
-							
-						} else if (barcodeCounter >= 3) {
-							// Barcode schräg gelesen
-							Movement.moveDistance(-37, 10);
-							State.waitForMovementMotors();
-							onLine = searchLine();
-							State.waitForMovementMotors();
-						} else {
-							Movement.moveDistance(-33, 10);
-							State.waitForMovementMotors();
-							onLine = searchLine();
-							State.waitForMovementMotors();
+							barcodeCounter++;
+							OperatingSystem.displayText("Barcounter: " + barcodeCounter);
 						}
 					}
-				} else {
-					// normal linesearch
-					onLine = searchLine();
+
+					// Sound.buzz();
+					// Delay.msDelay(10);
+
+					if (barcodeCounter >= 4) {
+						// OperatingSystem.displayText("Barcode was Found!! " +
+						// barcodeCounter);
+						float dif = distanceStart - distanceStop;
+						// OperatingSystem.displayText("Count: " +
+						// barcodeCounter + "Dif: " + dif);
+						// Delay.msDelay(100);
+						if (dif > 1.7) {
+							Movement.rotate(-20, 15);
+						} else if (dif < -1.7) {
+							Movement.rotate(20, 15);
+						}
+						State.waitForMovementMotors();
+
+						if (distanceStart > distanceStop) {
+							Movement.moveCircle(90, false, 25, 15);
+						} else {
+							Movement.moveCircle(90, true, 25, 15);
+						}
+
+						while (!State.stopped(true, true)) {
+							if (isSilver(Sensor.sampleColor())) {
+								Movement.stop();
+								//OperatingSystem.displayText("Line found!");
+								break mainloop; // startTime =
+												// System.currentTimeMillis();
+							}
+						}
+						//OperatingSystem.displayText("Line after Barcode not found");
+
+					} else if (barcodeCounter >= 3) {
+						// Barcode schräg gelesen
+						Movement.moveDistance(-37, 10);
+						State.waitForMovementMotors();
+						onLine = searchLine();
+						State.waitForMovementMotors();
+					} else {
+						Movement.moveDistance(-33, 10);
+						State.waitForMovementMotors();
+						onLine = searchLine();
+						State.waitForMovementMotors();
+					}
 				}
 			}
 
 			if (onLine)
 				moveAlongLine();
 			else {
+				Movement.moveDistance(-4, 10);
+				State.waitForMovementMotors();
 				OperatingSystem.displayText("Didn't find line. Correcting angle");
 			}
 		}
-		
+
 		State.waitForMovementMotors();
 
-		//new Seesaw().run();
+		// new Seesaw().run();
 	}
 
 	@Override
@@ -194,7 +192,7 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 			keepSearching = !foundInFirstDirection && !foundInSecondDirection;
 		}
 
-		OperatingSystem.displayText("Found line in direction: " + directionToString());
+		//OperatingSystem.displayText("Found line in direction: " + directionToString());
 		Movement.stop();
 		resetSearchRange();
 		State.waitForMovementMotors();
