@@ -1,7 +1,6 @@
 package edu.kit.mindstormer.program.implementation;
 
 import lejos.hardware.Sound;
-import lejos.utility.Delay;
 import edu.kit.mindstormer.Constants;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
@@ -10,7 +9,6 @@ import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.sensor.Sensor;
 
 public class Labyrinth extends AbstractProgram {
-	// distance to Wall 15 speed 30 trunSpeed 20
 	float sampleUltra;
 	float sampleLine;
 	boolean sampleTouch;
@@ -38,6 +36,7 @@ public class Labyrinth extends AbstractProgram {
 			if (sampleTouch) {
 				OperatingSystem.displayText("DETECTED TOUCH");
 				Movement.moveDistance(15, speed);
+				State.waitForMovementMotors();
 				backupAndTurn(true, false);
 			} else if (sampleUltra >= Constants.MAX_WALL_DISTANCE) {
 				OperatingSystem.displayText("DETECTED NO WALL");
@@ -80,7 +79,7 @@ public class Labyrinth extends AbstractProgram {
 	private void driveCurve90d(boolean left) {
 		Movement.moveDistance(-distanceToWall, speed);
 		State.waitForMovementMotors();
-		// speed 15 / 8
+		// speed 22.5 / 12
 		Movement.move(true, 22.5f, true, 12f);
 		updateSensors();
 
