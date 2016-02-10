@@ -78,11 +78,11 @@ public class Sensor {
 	public static boolean sampleTouchBoth() {
 		return sampleTouchLeft() || sampleTouchRight();
 	}
-	
-	public static boolean sampleTouch(){
+
+	public static boolean sampleTouch() {
 		return sampleTouchLeft() && sampleTouchRight();
 	}
-	
+
 	public static float sampleDistance() {
 		DISTANCE.fetchSample(distanceSample, 0);
 		return 100 * distanceSample[0];
@@ -92,4 +92,24 @@ public class Sensor {
 		MEDIAN_FILTER.fetchSample(distanceSampleMean, 0);
 		return 100 * distanceSampleMean[0];
 	}
+
+	public static void setColorMode(ColorMode mode) {
+		COLOR.setCurrentMode(mode.getId());
+	}
+
+	public static enum ColorMode {
+		RED("Red"), RGB("RGB"), AMBIENT("Ambient");
+
+		private final String id;
+
+		private ColorMode(String id) {
+			this.id = id;
+		}
+
+		public String getId() {
+			return id;
+		}
+
+	}
+
 }

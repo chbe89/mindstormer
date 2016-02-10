@@ -13,11 +13,12 @@ import edu.kit.mindstormer.movement.State;
 import edu.kit.mindstormer.program.AbstractProgram;
 import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.sensor.Sensor;
+import edu.kit.mindstormer.sensor.Sensor.ColorMode;
 
 public class Bridge extends AbstractProgram {
 
 	private final ComModule com = Communication.getModule();
-	
+
 	private static final int SPEED = 28;
 	private static final int SENSOR_ROTATION = 75;
 	private static final int ROTATION_SPEED = 30;
@@ -33,9 +34,9 @@ public class Bridge extends AbstractProgram {
 
 		Movement.rotate(180, ROTATION_SPEED);
 		State.waitForMovementMotors();
-		
+
 		Movement.rotateSensorMotor(SENSOR_ROTATION);
-		while (!State.stoppedSensor());
+		State.waitForSensorMotor();
 
 		time = System.currentTimeMillis();
 		search_line: while (!quit.get()) {
@@ -44,7 +45,7 @@ public class Bridge extends AbstractProgram {
 			if (isStartPhase) {
 				long timeDiff = System.currentTimeMillis() - time;
 
-				if (timeDiff > 4_000) {
+				if (timeDiff > 15_000) {
 					isStartPhase = false;
 					OperatingSystem.displayText("Start phase finished");
 				}
@@ -70,15 +71,14 @@ public class Bridge extends AbstractProgram {
 						chancesForLine = 0;
 				}
 			}
-
 			Movement.stop();
-			
+
 			if (chancesForLine >= 3) {
 				OperatingSystem.displayText("Found elevator's line border!");
 				arrivedAtElevator = true;
 				break search_line;
 			}
-			
+
 			Movement.rotate(20, 20);
 			while (!State.stopped(true, true)) {
 			}
@@ -86,35 +86,70 @@ public class Bridge extends AbstractProgram {
 
 		Movement.stop();
 		Movement.rotateSensorMotor(-SENSOR_ROTATION);
-		while (!State.stoppedSensor()) {
-		}
-		
-		
+		State.waitForSensorMotor();
+
+		checkElevatorStatus();
+		requestElevator();
+
+		Movement.rotate(180, ROTATION_SPEED);
+		State.waitForMovementMotors();
+
+		waitForColorSignal();
+		positionInElevator();
+		sendElevatorDown();
+
+		// Call quit, if program terminated successfully (in order to restore
+		// state)
+		if (arrivedAtElevator)
+			Button.ESCAPE.simulateEvent(Key.KEY_RELEASED);
+	}
+
+	private void sendElevatorDown() {
 		try {
-			while(!com.requestStatus()) {
+			while (!com.moveElevatorDown() && !quit.get()) {
 				Delay.msDelay(330);
 			}
-			OperatingSystem.displayText("Elevator is free. Starting request.");
+			OperatingSystem.displayText("Send elevator down");
 		} catch (IOException e) {
 			// do nothing
 		}
-		
+	}
+
+	private void positionInElevator() {
+		Movement.move(true, SPEED);
+		while (!Sensor.sampleTouchBoth());
+		Movement.stop();
+	}
+
+	private void waitForColorSignal() {
+		Sensor.setColorMode(ColorMode.AMBIENT);
+		float color = Sensor.sampleColor();
+		while ((color = Sensor.sampleColor()) < Constants.ELEVATOR_LIGHT_THRESHOLD
+				&& color > 0) {
+			Delay.msDelay(50);
+		}
+		Sensor.setColorMode(ColorMode.RED);
+	}
+
+	private void requestElevator() {
 		try {
-			while(!com.requestElevator()) {
+			while (!com.requestElevator() && !quit.get()) {
 				Delay.msDelay(330);
 			}
 			OperatingSystem.displayText("Requested elevator");
 		} catch (IOException e) {
 			// do nothing
 		}
-		
-		Movement.rotate(180, ROTATION_SPEED);
-		State.waitForMovementMotors();
-		
-//		Movement.moveDistance(10, SPEED);
-		
-		// Call quit, if program terminated successfully (in order to restore state)
-		if (arrivedAtElevator)
-			Button.ESCAPE.simulateEvent(Key.KEY_RELEASED);
+	}
+
+	private void checkElevatorStatus() {
+		try {
+			while (!com.requestStatus() && !quit.get()) {
+				Delay.msDelay(330);
+			}
+			OperatingSystem.displayText("Elevator is free. Starting request.");
+		} catch (IOException e) {
+			// do nothing
+		}
 	}
 }
