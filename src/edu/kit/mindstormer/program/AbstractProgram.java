@@ -20,6 +20,11 @@ public abstract class AbstractProgram implements Program {
 
 	@Override
 	public abstract void run();
+	
+	public void startProgram() {
+		initialize();
+		run();
+	}
 
 	@Override
 	public final String getName() {

@@ -2,8 +2,6 @@ package edu.kit.mindstormer.program.implementation;
 
 import lejos.hardware.Button;
 import lejos.hardware.Key;
-import lejos.hardware.Sound;
-import edu.kit.mindstormer.Constants;
 import edu.kit.mindstormer.movement.Movement;
 import edu.kit.mindstormer.movement.State;
 import edu.kit.mindstormer.program.AbstractProgram;
@@ -15,7 +13,7 @@ public class RollerBox extends AbstractProgram {
 	private final int rotationSpeed = 30;
 
 	public void run() {
-		setBack(10);
+		setBack(15);
 
 		// rotate in order to drive through roller box backwards
 		turnAround();
@@ -42,19 +40,17 @@ public class RollerBox extends AbstractProgram {
 		Sound.beepSequenceUp();
 		Movement.stop();*/
 		
-		Movement.moveCircle(110, false, 10, rotationSpeed);
+		Movement.moveCircle(110, false, 10, 15);
 		State.waitForMovementMotors();
-		Movement.moveDistance(60, 25);
+		Movement.moveDistance(100, 25);
 		State.waitForMovementMotors();
 		Movement.rotate(10, 10);
 		State.waitForMovementMotors();
 		
-		
-		Button.ESCAPE.simulateEvent(Key.KEY_RELEASED);
 	}
 
 	private void driveOut() {
-		Movement.moveDistance(-35, speed);
+		Movement.moveDistance(-30, speed);
 		State.waitForMovementMotors();
 	}
 
