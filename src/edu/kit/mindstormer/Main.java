@@ -8,6 +8,7 @@ import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.program.Program;
 import edu.kit.mindstormer.program.implementation.Bridge;
 import edu.kit.mindstormer.program.implementation.ChainBridge;
+import edu.kit.mindstormer.program.implementation.Endboss;
 import edu.kit.mindstormer.program.implementation.FollowLine;
 import edu.kit.mindstormer.program.implementation.FollowLineAndStop;
 import edu.kit.mindstormer.program.implementation.FollowLineLiftToSeesaw;
@@ -63,6 +64,7 @@ public class Main {
 		programs.add(new NavigatorProgram());
 		programs.add(new ReadjustSensor());
 		programs.add(new ColorSampler());
+		programs.add(new Endboss());
 		
 		/*
 			programs.add(new Parkours(0));
