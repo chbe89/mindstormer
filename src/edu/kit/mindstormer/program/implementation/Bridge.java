@@ -22,6 +22,8 @@ public class Bridge extends AbstractProgram {
 	private static final int SPEED = 28;
 	private static final int SENSOR_ROTATION = 75;
 	private static final int ROTATION_SPEED = 30;
+	
+	private static final int GAP_LIVES = 3;
 
 	private float distanceSample;
 	private float colorSample;
@@ -32,9 +34,15 @@ public class Bridge extends AbstractProgram {
 		boolean isStartPhase = true;
 		boolean arrivedAtElevator = false;
 
+		Movement.moveDistance(-10, SPEED);
+		State.waitForMovementMotors();
+		
 		Movement.rotate(180, ROTATION_SPEED);
 		State.waitForMovementMotors();
 
+		Movement.moveDistance(-20, SPEED);
+		State.waitForMovementMotors();
+		
 		Movement.rotateSensorMotor(SENSOR_ROTATION);
 		State.waitForSensorMotor();
 
@@ -51,11 +59,11 @@ public class Bridge extends AbstractProgram {
 				}
 			}
 
-			Movement.move(false, SPEED, false, SPEED - (SPEED / 5));
+			Movement.move(false, SPEED, false, SPEED - (SPEED / 4.5f));
 			int i = 0;
 			int chancesForLine = 0;
 
-			while (i < 3 && chancesForLine < 3) {
+			while (i < 3 && chancesForLine < GAP_LIVES) {
 				distanceSample = Sensor.sampleDistance();
 				if (distanceSample >= 8) {
 					i++;
@@ -73,7 +81,7 @@ public class Bridge extends AbstractProgram {
 			}
 			Movement.stop();
 
-			if (chancesForLine >= 3) {
+			if (chancesForLine >= GAP_LIVES) {
 				OperatingSystem.displayText("Found elevator's line border!");
 				arrivedAtElevator = true;
 				break search_line;
@@ -95,8 +103,13 @@ public class Bridge extends AbstractProgram {
 		State.waitForMovementMotors();
 
 		waitForColorSignal();
+		Delay.msDelay(1000)
+		;
 		positionInElevator();
 		sendElevatorDown();
+		
+		Movement.moveDistance(10, SPEED);
+		State.waitForMovementMotors();
 
 		// Call quit, if program terminated successfully (in order to restore
 		// state)
@@ -124,9 +137,10 @@ public class Bridge extends AbstractProgram {
 	private void waitForColorSignal() {
 		Sensor.setColorMode(ColorMode.AMBIENT);
 		float color = Sensor.sampleColor();
-		while ((color = Sensor.sampleColor()) < Constants.ELEVATOR_LIGHT_THRESHOLD
-				&& color > 0) {
-			Delay.msDelay(50);
+		OperatingSystem.displayText("C = " + String.valueOf(color));
+		while (color < Constants.ELEVATOR_LIGHT_THRESHOLD){
+			color = Sensor.sampleColor();
+			OperatingSystem.displayText("Loop = " + String.valueOf(color));
 		}
 		Sensor.setColorMode(ColorMode.RED);
 	}
