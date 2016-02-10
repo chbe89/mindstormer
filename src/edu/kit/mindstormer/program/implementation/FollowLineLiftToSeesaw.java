@@ -38,7 +38,8 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 	public void run() {
 		boolean onLine = true;
 		long startTime = System.currentTimeMillis();
-		while (!quit.get() && onLine) {
+		
+		mainloop: while (!quit.get() && onLine) {
 			sample = Sensor.sampleColor();
 			if (sample < Constants.LINE_COLOR_THRESHOLD) {
 				long elapsedTime = System.currentTimeMillis() - startTime;
@@ -46,7 +47,7 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 					// linesearch after elapsed time
 					onLine = miniSearchLine();
 					Sound.buzz();
-					Delay.msDelay(200);
+					Delay.msDelay(30);
 					
 					if (!onLine) {
 						Movement.moveDistance(33, 10);
@@ -77,32 +78,32 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 						}
 
 						Sound.buzz();
-						Delay.msDelay(200);
+						Delay.msDelay(30);
 						
 						
 						if (barcodeCounter >= 4) {
 							OperatingSystem.displayText("Barcode was Found!! " + barcodeCounter);
 							float dif = distanceStart - distanceStop;
 							OperatingSystem.displayText("Count: " + barcodeCounter + "Dif: " + dif);
-							Delay.msDelay(2000);
-							if (dif > 5) {
-								Movement.rotate(15, 15);
-							} else if (dif < -5) {
-								Movement.rotate(-15, 15);
+							Delay.msDelay(100);
+							if (dif > 1.7) {
+								Movement.rotate(-20, 15);
+							} else if (dif < -1.7) {
+								Movement.rotate(20, 15);
 							}
 							State.waitForMovementMotors();
 							
 							if (distanceStart > distanceStop) {
-								Movement.moveCircle(90, false, 10, 15);
+								Movement.moveCircle(90, false, 25, 15);
 							} else {
-								Movement.moveCircle(90, true, 10, 15);
+								Movement.moveCircle(90, true, 25, 15);
 							}
 							
 							while (!State.stopped(true, true)) {
 								if (isSilver(Sensor.sampleColor())) {
 									Movement.stop();
-									OperatingSystem.displayText("Line found - Goodbye!");
-									return;
+									OperatingSystem.displayText("Line found!");
+									break mainloop; //startTime = System.currentTimeMillis();
 								}
 							}
 							OperatingSystem.displayText("Line after Barcode not found");
@@ -130,10 +131,12 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 				moveAlongLine();
 			else {
 				OperatingSystem.displayText("Didn't find line. Correcting angle");
-				// correct position
-				Button.ESCAPE.simulateEvent(Key.KEY_RELEASED);
 			}
 		}
+		
+		State.waitForMovementMotors();
+
+		new Seesaw().run();
 	}
 
 	@Override
@@ -142,73 +145,6 @@ public class FollowLineLiftToSeesaw extends AbstractProgram {
 		Movement.stop();
 	}
 
-	private int searchBarcode() {
-		OperatingSystem.displayText("Searching BarCode");
-		Movement.moveDistance(11, 30);
-		State.waitForMovementMotors();
-		boolean qrFound = false;
-		while (!qrFound) {
-			sample = Sensor.sampleColor();
-			if (sample >= Constants.LINE_COLOR_THRESHOLD) {
-				OperatingSystem.displayText("BarCode Found!");
-				qrFound = true;
-			} else if (State.stopped(true, true)) {
-				OperatingSystem.displayText("BarCode NOT Found!");
-				break;
-			}
-		}
-		int qrNr = 0;
-		if (qrFound) {
-			qrNr = scanBarcodeWhileDriving();
-		} else {
-			// drive back
-			State.waitForMovementMotors();
-			Movement.moveDistance(-11, 30);
-		}
-		State.waitForMovementMotors();
-		return qrNr;
-	}
-
-	private int scanBarcodeWhileDriving() {
-		int qrNr = 0;
-		boolean black = true;
-		boolean silver = true;
-		while (silver && black) {
-			qrNr++;
-			OperatingSystem.displayText("BarCode " + qrNr + " Found!");
-			State.waitForMovementMotors();
-			black = false;
-			silver = false;
-			Movement.moveDistance(6.0f, 20);
-			while (!State.stopped(true, true)) {
-				sample = Sensor.sampleColor();
-				if (isBlack(sample))
-					black = true;
-				if (black && isSilver(sample)) {
-					silver = true;
-					// Movement.stop();
-				}
-			}
-		}
-
-		// Movement.moveDistance(7.5f, 20);
-		State.waitForMovementMotors();
-		return qrNr;
-	}
-
-	/*
-	 * private int scanBarcodeWhileDriving2() { int qrNr = 0; boolean black =
-	 * true; boolean silver = true; while (silver && black) { qrNr++;
-	 * OperatingSystem.displayText("BarCode " + qrNr + " Found!");
-	 * State.waitForMovementMotors(); Movement.moveDistance(6.0f, 30); black =
-	 * false; silver = false; while (!State.stopped(true, true)) { sample =
-	 * Sensor.sampleColor(); if (sample < Constants.LINE_COLOR_THRESHOLD) black
-	 * = true; if (black && sample >= Constants.LINE_COLOR_THRESHOLD) { silver =
-	 * true; Movement.stop(); } } sample = Sensor.sampleColor(); }
-	 * 
-	 * Movement.moveDistance(7.5f, 30); State.waitForMovementMotors(); return
-	 * qrNr; }
-	 */
 	private void moveAlongLine() {
 		OperatingSystem.displayText("Moving along line");
 		Movement.move(true, forwardSpeed, true, forwardSpeed);
