@@ -20,6 +20,11 @@ public abstract class AbstractProgram implements Program {
 
 	@Override
 	public abstract void run();
+	
+	public void startProgram() {
+		initialize();
+		run();
+	}
 
 	@Override
 	public final String getName() {
@@ -30,7 +35,7 @@ public abstract class AbstractProgram implements Program {
 	public void terminate() {
 		quit.set(true);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Program [" + name + "]";

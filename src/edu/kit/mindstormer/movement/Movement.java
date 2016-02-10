@@ -245,7 +245,7 @@ public final class Movement {
 		moveDistance(sampleDistance, centimeterPerSecond);
 		while (!State.stopped(true, true)) {}
 		stop();
-		float sampleDifference = (sample - Sensor.sampleDistance());
+		float sampleDifference = sample - Sensor.sampleDistance();
 		Delay.msDelay(10);
 		float correctionAngle = (float) Math.toDegrees(Math.atan(sampleDifference / sampleDistance));
 		
