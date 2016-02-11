@@ -8,14 +8,14 @@ import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.program.Program;
 import edu.kit.mindstormer.program.implementation.AfterBox;
 import edu.kit.mindstormer.program.implementation.AfterChain;
-import edu.kit.mindstormer.program.implementation.Bridge;
+import edu.kit.mindstormer.program.implementation.Bridge2;
 import edu.kit.mindstormer.program.implementation.ChainBridge;
 import edu.kit.mindstormer.program.implementation.Endboss;
 import edu.kit.mindstormer.program.implementation.FollowLine;
-import edu.kit.mindstormer.program.implementation.FollowLineBasic;
 import edu.kit.mindstormer.program.implementation.FollowLineLiftToSeesaw;
 import edu.kit.mindstormer.program.implementation.Labyrinth;
 import edu.kit.mindstormer.program.implementation.Parkours;
+import edu.kit.mindstormer.program.implementation.Parkours2;
 import edu.kit.mindstormer.program.implementation.Race;
 import edu.kit.mindstormer.program.implementation.RollerBox;
 import edu.kit.mindstormer.program.implementation.Seesaw;
@@ -43,7 +43,7 @@ public class Main {
 	private static void installPrograms() {
 		programs.clear();
 		programs.add(new Labyrinth());
-		programs.add(new Bridge());
+		programs.add(new Bridge2());
 		programs.add(new FollowLineLiftToSeesaw());
 		//programs.add(new FollowLineBasic());
 		programs.add(new Seesaw());
@@ -57,6 +57,10 @@ public class Main {
 		
 		for (int i = 0; i < 8; i++) {
 			programs.add(new Parkours(i));
+		}
+		
+		for (int i = 0; i < 8; i++) {
+			programs.add(new Parkours2(i));
 		}
 		
 		programs.add(new AfterBox());

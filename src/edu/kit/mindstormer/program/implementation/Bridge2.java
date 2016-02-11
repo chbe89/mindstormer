@@ -13,7 +13,7 @@ import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.sensor.Sensor;
 import edu.kit.mindstormer.sensor.Sensor.ColorMode;
 
-public class Bridge extends AbstractProgram {
+public class Bridge2 extends AbstractProgram {
 
 	private final ComModule com = Communication.getModule();
 
@@ -96,9 +96,20 @@ public class Bridge extends AbstractProgram {
 		checkElevatorStatus();
 		requestElevator();
 
-		Movement.rotateSensorMotor(-SENSOR_ROTATION);
-		State.waitForSensorMotor();
-		
+		Movement.moveDistance(-25, SPEED);
+		State.waitForMovementMotors();
+		while (!State.stopped(true, true)) {
+			distanceSample = Sensor.sampleDistance();
+			if (distanceSample > 14f) {
+				Movement.stop();
+				Movement.rotate(20, 20);
+				while (!State.stopped(true, true)) {
+				}
+				break;
+			}
+		}
+		State.waitForMovementMotors();
+		Movement.moveDistance(13, SPEED);
 		State.waitForMovementMotors();
 		
 		Movement.rotate(180, ROTATION_SPEED);
@@ -183,6 +194,8 @@ public class Bridge extends AbstractProgram {
 			}
 		}
 		
+		Movement.rotateSensorMotor(-SENSOR_ROTATION);
+		State.waitForSensorMotor();
 		Movement.move(true, SPEED);
 		while (!Sensor.sampleTouchBoth());
 		Movement.stop();

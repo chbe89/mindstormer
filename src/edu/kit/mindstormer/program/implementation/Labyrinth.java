@@ -50,7 +50,7 @@ public class Labyrinth extends AbstractProgram {
 			}
 		}
 
-		Movement.moveDistance(65, speed);
+		Movement.moveDistance(45, speed);
 		State.waitForMovementMotors();
 	}
 
