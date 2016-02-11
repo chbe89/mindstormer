@@ -19,6 +19,7 @@ import edu.kit.mindstormer.program.implementation.Parkours2;
 import edu.kit.mindstormer.program.implementation.Race;
 import edu.kit.mindstormer.program.implementation.RollerBox;
 import edu.kit.mindstormer.program.implementation.Seesaw;
+import edu.kit.mindstormer.program.implementation.test.ColorSampler;
 import edu.kit.mindstormer.program.implementation.test.NavigatorProgram;
 import edu.kit.mindstormer.program.implementation.test.ReadjustSensor;
 import edu.kit.mindstormer.sensor.Sensor;
@@ -42,6 +43,7 @@ public class Main {
 
 	private static void installPrograms() {
 		programs.clear();
+		programs.add(new ColorSampler());
 		programs.add(new Labyrinth());
 		programs.add(new Bridge2());
 		programs.add(new FollowLineLiftToSeesaw());

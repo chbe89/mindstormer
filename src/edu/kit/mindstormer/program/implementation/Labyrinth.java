@@ -22,6 +22,7 @@ public class Labyrinth extends AbstractProgram {
 	public void run() {
 		OperatingSystem.displayText("E:" + counterLabEnd);
 
+		int turnCounter = 0;
 		while (!quit.get() && (endLabyrinth < 3)) {
 			updateSensors();
 			OperatingSystem.displayText("T:" + String.valueOf(sampleTouch) + "U:" + String.valueOf(sampleUltra));
@@ -39,8 +40,15 @@ public class Labyrinth extends AbstractProgram {
 				State.waitForMovementMotors();
 				backupAndTurn(true, false);
 			} else if (sampleUltra >= Constants.MAX_WALL_DISTANCE) {
-				OperatingSystem.displayText("DETECTED NO WALL");
-				driveCurve90d(false);
+				if (turnCounter == 1) {
+					driveCheat();
+				} else {
+					
+					OperatingSystem.displayText("DETECTED NO WALL");
+					driveCurve90d(false);
+				}
+				turnCounter++;
+				
 			} else if (sampleUltra <= Constants.MIN_WALL_DISTANCE) {
 				OperatingSystem.displayText("DETECTED TOO CLOSE");
 				backupAndTurn(true, true);
@@ -76,6 +84,7 @@ public class Labyrinth extends AbstractProgram {
 		}
 	}
 
+	
 	private void driveCurve90d(boolean left) {
 		Movement.moveDistance(-distanceToWall, speed);
 		State.waitForMovementMotors();
@@ -100,5 +109,42 @@ public class Labyrinth extends AbstractProgram {
 		}
 		Movement.stop();
 
+	}
+	
+	/*
+	private void driveCurve90d(boolean left) {
+		Movement.moveDistance(-distanceToWall - 5, speed);
+		State.waitForMovementMotors();
+		// speed 22.5 / 12
+		//Movement.move(true, 22.5f, true, 12f);
+		Movement.moveCircle(90, true, 20, 25);
+		
+		updateSensors();
+		while (!sampleTouch && !State.stopped(true, true)) {
+			OperatingSystem.displayText("L: " + String.valueOf(sampleLine) + "T: " + String.valueOf(sampleTouch));
+			updateSensors();
+			if (sampleLine > Constants.LINE_COLOR_THRESHOLD_LAB) {
+				counterLabEnd++;
+				if (counterLabEnd >= 3) {
+					silverLineFound = true;
+					Sound.beepSequenceUp();
+				}
+			} else {
+
+				counterLabEnd = 0;
+
+			}
+		}
+		Movement.stop();
+
+	}
+	*/
+	private void driveCheat() {
+		Movement.moveDistance(-distanceToWall, speed);
+		State.waitForMovementMotors();
+		Movement.moveCircle(45, true, 20, 25);
+		State.waitForMovementMotors();
+		Movement.moveCircle(45, false, 20, 25);
+		State.waitForMovementMotors();
 	}
 }

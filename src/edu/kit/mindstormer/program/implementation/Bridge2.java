@@ -2,7 +2,6 @@ package edu.kit.mindstormer.program.implementation;
 
 import java.io.IOException;
 
-import lejos.utility.Delay;
 import edu.kit.mindstormer.Constants;
 import edu.kit.mindstormer.com.ComModule;
 import edu.kit.mindstormer.com.Communication;
@@ -12,36 +11,38 @@ import edu.kit.mindstormer.program.AbstractProgram;
 import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.sensor.Sensor;
 import edu.kit.mindstormer.sensor.Sensor.ColorMode;
+import lejos.hardware.Sound;
+import lejos.utility.Delay;
 
 public class Bridge2 extends AbstractProgram {
 
 	private final ComModule com = Communication.getModule();
 
-	private static final int SPEED = 28;
+	private static final int SPEED = 32;
+	private static final int SPEEDCURVE = 38;
 	private static final int SENSOR_ROTATION = 75;
 	private static final int ROTATION_SPEED = 30;
-	
-	private static final int GAP_LIVES = 3;
+
+	private static final int GAP_LIVES = 7;
 
 	private float distanceSample;
 	private float colorSample;
 
 	private long time;
 
-	public void run() { 
-		
+	public void run() {
+
 		boolean isStartPhase = true;
 
 		Movement.moveDistance(-10, SPEED);
 		State.waitForMovementMotors();
-		
-		Movement.rotate(180, ROTATION_SPEED);
-		State.waitForMovementMotors();
 
-		Movement.moveDistance(-40, SPEED);
+		Movement.rotate(180, ROTATION_SPEED);
 		State.waitForMovementMotors();
 		
 		Movement.rotateSensorMotor(SENSOR_ROTATION);
+		Movement.moveDistance(-50, SPEED);
+		State.waitForMovementMotors();	
 		State.waitForSensorMotor();
 
 		time = System.currentTimeMillis();
@@ -57,11 +58,11 @@ public class Bridge2 extends AbstractProgram {
 				}
 			}
 
-			Movement.move(false, SPEED, false, SPEED - (SPEED / 4.5f));
+			Movement.move(false, SPEEDCURVE, false, SPEEDCURVE - (SPEEDCURVE / 3.7f));
 			int i = 0;
 			int chancesForLine = 0;
 
-			while (i < 3 && chancesForLine < GAP_LIVES) {
+			while (i < 1_200 && chancesForLine < GAP_LIVES) {
 				distanceSample = Sensor.sampleDistance();
 				if (distanceSample >= 8) {
 					i++;
@@ -77,10 +78,12 @@ public class Bridge2 extends AbstractProgram {
 						chancesForLine = 0;
 				}
 			}
+
 			Movement.stop();
 
 			if (chancesForLine >= GAP_LIVES) {
 				OperatingSystem.displayText("Found elevator's line border!");
+				Sound.beep();
 				break search_line;
 			}
 
@@ -90,42 +93,25 @@ public class Bridge2 extends AbstractProgram {
 		}
 
 		Movement.stop();
-	
-		// correct position
-		
-		checkElevatorStatus();
-		requestElevator();
 
-		Movement.moveDistance(-25, SPEED);
-		State.waitForMovementMotors();
-		while (!State.stopped(true, true)) {
-			distanceSample = Sensor.sampleDistance();
-			if (distanceSample > 14f) {
-				Movement.stop();
-				Movement.rotate(20, 20);
-				while (!State.stopped(true, true)) {
-				}
-				break;
-			}
-		}
-		State.waitForMovementMotors();
-		Movement.moveDistance(13, SPEED);
-		State.waitForMovementMotors();
-		
+		// correct position
+		checkForEdge();
+
+		checkElevatorStatus();
 		Movement.rotate(180, ROTATION_SPEED);
+		requestElevator();
 		State.waitForMovementMotors();
 
 		waitForColorSignal();
-		Delay.msDelay(3000);
-		
 		positionInElevator();
 		sendElevatorDown();
-		Delay.msDelay(1000);
+		Movement.moveDistance(-3, 10);
+		Delay.msDelay(1400);
 		Movement.moveDistance(-3, 10);
 		Delay.msDelay(4000);
 		Movement.moveDistance(-15, 10);
 		State.waitForMovementMotors();
-		
+
 		Movement.moveDistance(35, SPEED);
 		State.waitForMovementMotors();
 
@@ -135,13 +121,40 @@ public class Bridge2 extends AbstractProgram {
 				Movement.stop();
 			}
 		}
-		
-		
+
 		// Call quit, if program terminated successfully (in order to restore
 		// state)
+
+		// positionInElevator();
+	}
+
+	private void checkForEdge() {
+		Sound.beepSequenceUp();
+		Movement.moveDistance(-15, 20);
+		boolean droveBack = false;
+		while (!State.stopped(true, true)) {
+			distanceSample = Sensor.sampleDistance();
+
+			if (distanceSample > 8f) {
+				Movement.stop();
+				Movement.moveDistance(8, 20);
+				droveBack = true;
+				State.waitForMovementMotors();
+				Sound.beep();
+				Movement.rotate(20, 20);
+				State.waitForMovementMotors();
+				break;
+			}
+		}
+
+		Movement.rotateSensorMotor(-SENSOR_ROTATION);
+		if (!droveBack) {
+			Movement.moveDistance(8, 20);
+			State.waitForMovementMotors();
+		}
 		
-		
-		//positionInElevator();
+		Movement.moveDistance(6, 20);
+		State.waitForSensorMotor();
 	}
 
 	private void sendElevatorDown() {
@@ -160,53 +173,67 @@ public class Bridge2 extends AbstractProgram {
 		boolean needsCorrection = true;
 		while (needsCorrection) {
 			if (firstTime) {
-				Movement.moveDistance(27, 20);
+				Movement.moveDistance(24, 20);
 				firstTime = false;
 			} else {
 				Movement.moveDistance(22, 20);
 			}
-			
+
 			boolean leftTouch = false;
 			boolean rightTouch = false;
 			while (!State.stopped(true, true)) {
 				if (Sensor.sampleTouchLeft()) {
-					if (!Sensor.sampleTouchRight())
+					if (!Sensor.sampleTouchRight()) {
+						Movement.stop();
 						leftTouch = true;
+					}
+						
 				} else if (Sensor.sampleTouchRight()) {
-					if (!Sensor.sampleTouchLeft())
+					if (!Sensor.sampleTouchLeft()) {
+						Movement.stop();
 						rightTouch = true;
+					}	
 				}
 			}
-			
+
 			if (leftTouch) {
 				Movement.moveDistance(-20, 10);
 				State.waitForMovementMotors();
-				Movement.rotate(15, 10);
+				Movement.rotate(21, 10);
 				State.waitForMovementMotors();
-				
+
 			} else if (rightTouch) {
 				Movement.moveDistance(-20, 10);
 				State.waitForMovementMotors();
-				Movement.rotate(-15, 10);
+				Movement.rotate(-21, 10);
 				State.waitForMovementMotors();
 			} else {
 				needsCorrection = false;
 			}
 		}
-		
-		Movement.rotateSensorMotor(-SENSOR_ROTATION);
-		State.waitForSensorMotor();
+
 		Movement.move(true, SPEED);
-		while (!Sensor.sampleTouchBoth());
+		while (!Sensor.sampleTouchBoth())
+			;
 		Movement.stop();
-		
+
 	}
 
 	private void waitForColorSignal() {
 		Sensor.setColorMode(ColorMode.AMBIENT);
+		
+		Sound.beepSequence();
+
 		float color = Sensor.sampleColor();
-		while (color < Constants.ELEVATOR_LIGHT_THRESHOLD){
+		for (int i = 0; i < 5; i++)
 			color = Sensor.sampleColor();
+		Delay.msDelay(300);
+		color = Sensor.sampleColor();
+		OperatingSystem.displayText("Color: " + color);
+		while (color < Constants.ELEVATOR_LIGHT_THRESHOLD) {
+			color = Sensor.sampleColor();
+			OperatingSystem.displayText("Color: " + color);
+			Delay.msDelay(200);
 		}
 		Sensor.setColorMode(ColorMode.RED);
 		color = Sensor.sampleColor();
@@ -233,7 +260,7 @@ public class Bridge2 extends AbstractProgram {
 			// do nothing
 		}
 	}
-	
+
 	private static boolean isSilver(float sample) {
 		return sample >= Constants.LINE_COLOR_THRESHOLD;
 	}

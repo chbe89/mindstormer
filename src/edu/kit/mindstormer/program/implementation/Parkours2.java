@@ -40,35 +40,35 @@ public class Parkours2 extends AbstractProgram {
 		while (!quit.get()) {
 			switch (skip) {
 			case 0:
-				new Labyrinth().startProgram();
+				new Labyrinth().run();
 				if (!quit.get())
 					break outer;
 			case 1:
-				new Bridge2().startProgram();
+				new Bridge2().run();
 				if (!quit.get())
 					break outer;
 			case 2:	
-				new FollowLineLiftToSeesaw2().startProgram();
+				new FollowLineLiftToSeesaw2().run();
 				if (!quit.get())
 					break outer;
 			case 3:
-				new Seesaw().startProgram();
+				new Seesaw().run();
 				if (!quit.get())
 					break outer;
 			case 4:
-				new ChainBridge().startProgram();
+				new ChainBridge().run();
 				if (!quit.get())
 					break outer;
 			case 5:
-				new RollerBox().startProgram();
+				new RollerBox().run();
 				if (!quit.get())
 					break outer;
 			case 6:
-				new Race().startProgram();
+				new Race().run();
 				if (!quit.get())
 					break outer;
 			case 7:
-				new Endboss().startProgram();
+				new Endboss().run();
 				if (!quit.get())
 					break outer;
 			default:
