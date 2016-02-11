@@ -35,47 +35,41 @@ public class Parkours2 extends AbstractProgram {
 	}
 
 	public void run() {
-
-		outer:
-		while (!quit.get()) {
-			switch (skip) {
-			case 0:
-				new Labyrinth().run();
-				if (!quit.get())
-					break outer;
-			case 1:
-				new Bridge2().run();
-				if (!quit.get())
-					break outer;
-			case 2:	
-				new FollowLineLiftToSeesaw2().run();
-				if (!quit.get())
-					break outer;
-			case 3:
-				new Seesaw().run();
-				if (!quit.get())
-					break outer;
-			case 4:
-				new ChainBridge().run();
-				if (!quit.get())
-					break outer;
-			case 5:
-				new RollerBox().run();
-				if (!quit.get())
-					break outer;
-			case 6:
-				new Race().run();
-				if (!quit.get())
-					break outer;
-			case 7:
-				new Endboss().run();
-				if (!quit.get())
-					break outer;
-			default:
-				break outer;
-			}
-			
-
+		switch (skip) {
+		case 0:
+			new Labyrinth().run();
+			if (!quit.get())
+				break;
+		case 1:
+			new Bridge2().run();
+			if (!quit.get())
+				break;
+		case 2:	
+			new FollowLineLiftToSeesaw2().run();
+			if (!quit.get())
+				break;
+		case 3:
+			new Seesaw().run();
+			if (!quit.get())
+				break;
+		case 4:
+			new ChainBridge().run();
+			if (!quit.get())
+				break;
+		case 5:
+			new RollerBox().run();
+			if (!quit.get())
+				break;
+		case 6:
+			new Race().run();
+			if (!quit.get())
+				break;
+		case 7:
+			new Endboss().run();
+			if (!quit.get())
+				break;
+		default:
+			break;
 		}
 
 	}
