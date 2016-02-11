@@ -38,7 +38,7 @@ public class Bridge2 extends AbstractProgram {
 		Movement.rotate(180, ROTATION_SPEED);
 		State.waitForMovementMotors();
 
-		Movement.moveDistance(-20, SPEED);
+		Movement.moveDistance(-40, SPEED);
 		State.waitForMovementMotors();
 		
 		Movement.rotateSensorMotor(SENSOR_ROTATION);

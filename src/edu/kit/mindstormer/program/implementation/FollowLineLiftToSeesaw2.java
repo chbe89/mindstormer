@@ -36,6 +36,19 @@ public class FollowLineLiftToSeesaw2 extends AbstractProgram {
 	public void run() {
 		boolean onLine = true;
 		
+		if (Sensor.sampleColor() < Constants.LINE_COLOR_THRESHOLD) {
+			Movement.moveDistance(15, 15);
+			while (!State.stopped(true, true)) {
+			}
+			
+			Movement.moveCircle(360, true, 22, 15);
+			while (!State.stopped(true, true)) {
+				if (isSilver(Sensor.sampleColor())) {
+					Movement.stop();
+				}
+			}
+		}
+		
 		new FollowLine().run();
 
 		mainloop: while (!quit.get() && onLine) {

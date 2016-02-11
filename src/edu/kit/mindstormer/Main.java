@@ -8,7 +8,7 @@ import edu.kit.mindstormer.program.OperatingSystem;
 import edu.kit.mindstormer.program.Program;
 import edu.kit.mindstormer.program.implementation.AfterBox;
 import edu.kit.mindstormer.program.implementation.AfterChain;
-import edu.kit.mindstormer.program.implementation.Bridge;
+import edu.kit.mindstormer.program.implementation.Bridge2;
 import edu.kit.mindstormer.program.implementation.ChainBridge;
 import edu.kit.mindstormer.program.implementation.Endboss;
 import edu.kit.mindstormer.program.implementation.FollowLine;
@@ -43,7 +43,7 @@ public class Main {
 	private static void installPrograms() {
 		programs.clear();
 		programs.add(new Labyrinth());
-		programs.add(new Bridge());
+		programs.add(new Bridge2());
 		programs.add(new FollowLineLiftToSeesaw());
 		//programs.add(new FollowLineBasic());
 		programs.add(new Seesaw());
